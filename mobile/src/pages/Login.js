@@ -2,6 +2,12 @@ import {StyleSheet, View, Text, Image, Button, StatusBar} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 
 const Login = ({navigation}) => {
+
+  const handleLogin = () => {
+    // verificar se dados estao estao corretos
+
+  }
+
   return (
     <View style={styles.background}>
       <Image
