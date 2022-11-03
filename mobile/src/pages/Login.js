@@ -54,5 +54,6 @@ const styles = StyleSheet.create({
   text: {
     paddingLeft: 20,
     paddingTop: 10,
+    color: '#262525',
   },
 });
