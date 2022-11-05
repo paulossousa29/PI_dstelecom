@@ -1,21 +1,32 @@
-import Button from "../components/Button";
 import React, { Component } from 'react'
 
-
+import NavBar from '../components/Navbar';
+import { Link } from 'react-router-dom';
 
 
 class Login extends Component {
-  render() {
-	const mystyle = {
-		fontFamily: "Verdana"
-	  }
 
+  handleLogin = (e) => {
+    e.preventDefault();
+    <Link to="/main"></Link>
+    console.log("Cliquei no Login")
+    }
+
+
+  render() {
+      
+      
     return (
-      <form>
+      <React.Fragment>
+        <div>
+          <NavBar/>
+       </div>
+    
+    <form className='mb-10'>
 		<center>
-        <h3>Login</h3>
-		</center>
-        <div className="mb-3">
+      Login
+		
+        <div className="mb-3" style={{width: 500, fontFamily: "Verdana"}}>
           <label>Introduza o seu email</label>
           <input
             type="email"
@@ -23,7 +34,7 @@ class Login extends Component {
             placeholder="Email"
           />
         </div>
-        <div style={mystyle} className="mb-3">
+        <div style={{width: 500, fontFamily: "Verdana"}} className="mb-3">
 		<label>Introduza a sua password</label>
           <input
             type="password"
@@ -43,15 +54,24 @@ class Login extends Component {
             </label>
           </div>
         </div>
+       
         <div className="d-grid">
-          <button style={{ backgroundColor:  "grey"  }} type="submit" className="btn btn-secondary btn-sm">
-            Iniciar Sessão
+        <center>
+          <button style={{width: 500, fontFamily: "Verdana", backgroundColor:  "grey"}} onClick={this.handleLogin} type="submit" className="btn btn-secondary btn-sm">
+          Iniciar Sessão
           </button>
+          </center>
         </div>
+        
         <p className="forgot-password text-right">
           Forgot <a href="#">password?</a>
         </p>
+        </center>
       </form>
+      
+      </React.Fragment>
+
+
     )
   }
 }

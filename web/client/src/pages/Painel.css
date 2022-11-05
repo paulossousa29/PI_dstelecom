@@ -1,0 +1,21 @@
+.row {
+    display: flex;
+    height: 100%;
+}
+.left-panel {
+    flex: 5;
+}
+.middle-panel {
+    flex: 3;
+}
+
+
+.right-panel {
+    flex: 2;
+}
+
+
+.mySide {
+    display: flex;
+    height: 100%;
+}
