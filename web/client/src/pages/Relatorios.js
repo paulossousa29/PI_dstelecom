@@ -8,6 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
+import { GlobalFilter } from "../components/GlobalFilter";
+
 
 import "./Painel.css"
 import Sidebar from '../components/Sidebar';
@@ -56,6 +58,8 @@ const rows = [
 ];
 
 export default function StickyHeadTable() {
+
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -70,13 +74,17 @@ export default function StickyHeadTable() {
 
   return (
     <React.Fragment>
+      
 
     <div className="row">
       
     <Sidebar className ="left-panel"/>
     
 
-    <div className="right-panel">
+    <div className="right-panel" style={{paddingTop: 10, paddingRight: 30}}>
+    <center>
+    <h1>Relatórios</h1>
+    </center>
 
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>

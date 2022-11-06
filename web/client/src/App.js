@@ -5,17 +5,24 @@ import Login from "./pages/Login";
 import Main from "./pages/Main";
 import Relatorios from "./pages/Relatorios"
 import Relatorio from "./pages/Relatorio"
+import Estatistica from "./pages/Estatistica"
+import Pendentes from "./pages/Pendentes"
+import Equipa from "./pages/Equipa"
+
 
 
 const App = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" exact element={<Home />} />
-				<Route path="/login" element={<Login />} />
-				<Route path="/main" element={<Main />} />
-				<Route path="/relatorios" element={<Relatorios />} />
-				<Route path="/relatorio" element={<Relatorio />} />
+				<Route exact path="/" element={<Home />} />
+				<Route exact path="/login" element={<Login />} />
+				<Route exact path="/main" element={<Main />} />
+				<Route exact path="/relatorios" element={<Relatorios />} />
+				<Route exact path="/relatorio" element={<Relatorio />} />
+				<Route exact path="/stats" element={<Estatistica />} />
+				<Route exact path="/pendentes" element={<Pendentes />} />
+				<Route exact path="/equipa" element={<Equipa />} />
 			</Routes>
 		</BrowserRouter>
 	);

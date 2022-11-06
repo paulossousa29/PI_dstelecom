@@ -23,10 +23,10 @@ class Login extends Component {
        </div>
     
     <form className='mb-10'>
-		<center>
+		<center style={{paddingTop: 30, fontFamily: "Verdana"}}>
       Login
 		
-        <div className="mb-3" style={{width: 500, fontFamily: "Verdana"}}>
+        <div className="mb-3" style={{width: 500, fontFamily: "Verdana", paddingTop: 50}}>
           <label>Introduza o seu email</label>
           <input
             type="email"
@@ -34,7 +34,7 @@ class Login extends Component {
             placeholder="Email"
           />
         </div>
-        <div style={{width: 500, fontFamily: "Verdana"}} className="mb-3">
+        <div style={{width: 500, fontFamily: "Verdana", paddingTop: 30}} className="mb-3">
 		<label>Introduza a sua password</label>
           <input
             type="password"
@@ -42,7 +42,7 @@ class Login extends Component {
             placeholder="Password"
           />
         </div>
-        <div className="mb-3">
+        <div className="mb-3" style={{paddingTop: 20}}>
           <div className="custom-control custom-checkbox">
             <input
               type="checkbox"
@@ -57,14 +57,14 @@ class Login extends Component {
        
         <div className="d-grid">
         <center>
-          <button style={{width: 500, fontFamily: "Verdana", backgroundColor:  "grey"}} onClick={this.handleLogin} type="submit" className="btn btn-secondary btn-sm">
+          <button style={{width: 300, fontFamily: "Verdana", backgroundColor:  "grey"}} onClick={this.handleLogin} type="submit" className="btn btn-secondary btn-sm">
           Iniciar Sessão
           </button>
           </center>
         </div>
         
         <p className="forgot-password text-right">
-          Forgot <a href="#">password?</a>
+          Forgot password?
         </p>
         </center>
       </form>
