@@ -11,33 +11,24 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../config/colors';
 
-const Login = ({navigation}) => {
-  const [username, setUsername] = useState(null);
-  const [pass, setPass] = useState(null);
-  const [errorMsgUsername, setErrorMsgUsername] = useState(null);
-  const [errorMsgPass, setErrorMsgPass] = useState(null);
+const Start_Logout = ({navigation}) => {
+  const [workOrder, setWorkOrder] = useState(null);
+  const [errorMsgWorkOrder, setErrorMsgWorkOrder] = useState(null);
 
-  const handleLogin = () => {
-    // verificar se dados estao estao corretos
+  const handleLogout = () => {
+    // redirecionamento
   };
 
   const verification = () => {
-    if (pass == null && username != null) {
-      setErrorMsgPass('Palavra-passe Origatória!');
-    } else if (pass != null && username == null) {
-      setErrorMsgUsername('Utilizador Obrigatório!');
-    } else if (pass == null && username == null) {
-      setErrorMsgPass('Palavra-passe Obrigatória!');
-      setErrorMsgUsername('Utilizador Obrigatório!');
+    if (workOrder == null) {
+      setErrorMsgWorkOrder('ID de Workorder necessário!');
     }
   };
 
   const validationAccount = () => {
-    if (pass != null && username != null) {
-      setUsername(null);
-      setPass(null);
-      setErrorMsgPass(null);
-      setErrorMsgUsername(null);
+    if (workOrder != null) {
+      setWorkOrder(null);
+      setErrorMsgWorkOrder(null);
 
       return;
     }
@@ -50,41 +41,36 @@ const Login = ({navigation}) => {
         style={styles.logo}
         source={require('../assets/logo-black.png')}></Image>
       <View style={styles.container}>
-        <Text style={styles.text}>Utilizador</Text>
-        {errorMsgUsername && (
-          <Text style={styles.errorMessage}>{errorMsgUsername}</Text>
+        <Text style={styles.text}>ID do WorkOrder</Text>
+        {errorMsgWorkOrder && (
+          <Text style={styles.errorMessage}>{errorMsgWorkOrder}</Text>
         )}
 
         <TextInput
-          style={styles.loginInput}
-          onChangeText={setUsername}
-          value={username}
-          placeholder="user@mail.pt"
+          style={styles.workOrderInput}
+          onChangeText={setWorkOrder}
+          value={workOrder}
+          placeholder="FTTH_DST_00263846"
           placeholderTextColor="#ccccb3"></TextInput>
 
-        <Text style={styles.text}>Palavra-passe</Text>
-        {errorMsgPass && (
-          <Text style={styles.errorMessage}>{errorMsgPass}</Text>
-        )}
-
-        <TextInput
-          style={styles.loginInput}
-          onChangeText={setPass}
-          value={pass}
-          placeholder="xxxxxxxxxxx"
-          placeholderTextColor="#c3c3c3"></TextInput>
+        <TouchableOpacity
+          style={styles.startButton}
+          onPress={() => validationAccount()}>
+          <Text style={styles.buttonText}>Começar trabalho</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => validationAccount()}>
-          <Text style={styles.buttonText}>Iniciar Sessão</Text>
+          style={styles.logoutButton}
+          //   onPress={() => validationAccount()}
+        >
+          <Text style={styles.buttonText}>Terminar Sessão</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-export default Login;
+export default Start_Logout;
 
 const styles = StyleSheet.create({
   background: {
@@ -102,7 +88,20 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     backgroundColor: colors.lightGrey,
   },
-  loginButton: {
+  logoutButton: {
+    position: 'absolute',
+    bottom: 0,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%',
+    backgroundColor: colors.logoGreyDark,
+    paddingTop: 14,
+    paddingBottom: 14,
+    marginVertical: 30,
+    marginHorizontal: 20,
+  },
+  startButton: {
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     marginHorizontal: 20,
   },
-  loginInput: {
+  workOrderInput: {
     backgroundColor: colors.white,
     width: '90%',
     borderRadius: 50,
