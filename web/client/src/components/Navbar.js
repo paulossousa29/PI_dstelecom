@@ -1,25 +1,17 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import logo from '../assets/dstelecomlogo.png'
+import React, { Component } from 'react'
 
-
-function NavBar() {
-
-  return (
-    <Navbar className='navbar navbar-expand-lg navbar-light bg-light'>
-        <img style={{ width: 200, height: 100 }} src={logo} alt="Logo" />
-      <Container>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/login">Login</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
+class NavBar extends Component {
+  render() {
+    return (
+      <React.Fragment>
+        <nav className="navbar navbar-light bg-light">
+          <a className="navbar-brand" href="/">
+            <img src="/docs/4.1/assets/brand/bootstrap-solid.svg" width="30" height="30" alt=""/>
+          </a>
+        </nav>
+      </React.Fragment>
+    );
+  }
 }
 
 export default NavBar;
