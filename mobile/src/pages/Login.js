@@ -29,6 +29,8 @@ const Login = ({navigation}) => {
     } else if (pass == null && username == null) {
       setErrorMsgPass('Palavra-passe Obrigatória!');
       setErrorMsgUsername('Utilizador Obrigatório!');
+    } else {
+      navigation.navigate('Start_Logout');
     }
   };
 
