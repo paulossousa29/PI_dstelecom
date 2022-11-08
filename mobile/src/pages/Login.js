@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../config/colors';
+import Start_Logout from './Start_Logout';
 
 const Login = ({navigation}) => {
   const [username, setUsername] = useState(null);
@@ -23,7 +24,7 @@ const Login = ({navigation}) => {
 
   const verification = () => {
     if (pass == null && username != null) {
-      setErrorMsgPass('Palavra-passe Origatória!');
+      setErrorMsgPass('Palavra-passe Obrigatória!');
     } else if (pass != null && username == null) {
       setErrorMsgUsername('Utilizador Obrigatório!');
     } else if (pass == null && username == null) {
@@ -39,9 +40,8 @@ const Login = ({navigation}) => {
       setErrorMsgPass(null);
       setErrorMsgUsername(null);
 
-      return;
+      return 0;
     }
-    verification();
   };
 
   return (
@@ -76,7 +76,12 @@ const Login = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.loginButton}
-          onPress={() => validationAccount()}>
+          onPress={() => {
+            // validationAccount();
+            validationAccount() == 0
+              ? navigation.navigate('Start_Logout')
+              : verification();
+          }}>
           <Text style={styles.buttonText}>Iniciar Sessão</Text>
         </TouchableOpacity>
       </View>

@@ -25,7 +25,7 @@ const Start_Logout = ({navigation}) => {
     }
   };
 
-  const validationAccount = () => {
+  const validationID = () => {
     if (workOrder != null) {
       setWorkOrder(null);
       setErrorMsgWorkOrder(null);
@@ -55,14 +55,13 @@ const Start_Logout = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.startButton}
-          onPress={() => validationAccount()}>
+          onPress={() => validationID()}>
           <Text style={styles.buttonText}>Começar trabalho</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.logoutButton}
-          //   onPress={() => validationAccount()}
-        >
+          onPress={() => navigation.navigate('Login')}>
           <Text style={styles.buttonText}>Terminar Sessão</Text>
         </TouchableOpacity>
       </View>
