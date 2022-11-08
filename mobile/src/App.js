@@ -8,11 +8,7 @@ import Start_Logout from './pages/Start_Logout';
 import Navigator from './routes/HomeStack';
 
 const App = () => {
-  return (
-    // <NavigatorContainer>
-    <Login />
-    // </NavigatorContainer>
-  );
+  return <Start_Logout />;
 };
 
 export default App;
