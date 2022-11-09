@@ -1,16 +1,7 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Button,
-  StatusBar,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../config/colors';
-import Start_Logout from './Start_Logout';
 
 const Login = ({navigation}) => {
   const [username, setUsername] = useState(null);
@@ -25,8 +16,12 @@ const Login = ({navigation}) => {
   const verification = () => {
     if (pass == null && username != null) {
       setErrorMsgPass('Palavra-passe Obrigatória!');
+      // setUsername(null);
+      // setErrorMsgUsername(null);
     } else if (pass != null && username == null) {
       setErrorMsgUsername('Utilizador Obrigatório!');
+      // setPass(null);
+      // setErrorMsgPass(null);
     } else if (pass == null && username == null) {
       setErrorMsgPass('Palavra-passe Obrigatória!');
       setErrorMsgUsername('Utilizador Obrigatório!');
@@ -40,7 +35,17 @@ const Login = ({navigation}) => {
       setErrorMsgPass(null);
       setErrorMsgUsername(null);
 
-      return 0;
+      navigation.navigate('Start_Logout');
+      return;
+    } else {
+      if (pass != null) {
+        setUsername(null);
+        setErrorMsgUsername(null);
+      } else if (username != null) {
+        setPass(null);
+        setErrorMsgPass(null);
+      }
+      verification();
     }
   };
 
@@ -60,7 +65,7 @@ const Login = ({navigation}) => {
           onChangeText={setUsername}
           value={username}
           placeholder="user@mail.pt"
-          placeholderTextColor="#ccccb3"></TextInput>
+          placeholderTextColor={colors.placeholderGrey}></TextInput>
 
         <Text style={styles.text}>Palavra-passe</Text>
         {errorMsgPass && (
@@ -72,15 +77,13 @@ const Login = ({navigation}) => {
           onChangeText={setPass}
           value={pass}
           placeholder="xxxxxxxxxxx"
-          placeholderTextColor="#c3c3c3"></TextInput>
+          secureTextEntry
+          placeholderTextColor={colors.placeholderGrey}></TextInput>
 
         <TouchableOpacity
           style={styles.loginButton}
           onPress={() => {
-            // validationAccount();
-            validationAccount() == 0
-              ? navigation.navigate('Start_Logout')
-              : verification();
+            validationAccount();
           }}>
           <Text style={styles.buttonText}>Iniciar Sessão</Text>
         </TouchableOpacity>
@@ -120,6 +123,7 @@ const styles = StyleSheet.create({
   },
   loginInput: {
     backgroundColor: colors.white,
+    color: colors.logoGreyDark,
     width: '90%',
     borderRadius: 50,
     height: 40,
