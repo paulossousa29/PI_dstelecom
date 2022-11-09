@@ -14,25 +14,17 @@ import colors from '../config/colors';
 const Start_Logout = ({navigation}) => {
   const [workOrder, setWorkOrder] = useState(null);
   const [errorMsgWorkOrder, setErrorMsgWorkOrder] = useState(null);
-
-  const handleLogout = () => {
-    // redirecionamento
-  };
-
-  const verification = () => {
-    if (workOrder == null) {
-      setErrorMsgWorkOrder('ID de Workorder necessário!');
-    }
-  };
+  const invalid = [null, ''];
 
   const validationID = () => {
-    if (workOrder != null) {
+    if (!invalid.includes(workOrder)) {
       setWorkOrder(null);
       setErrorMsgWorkOrder(null);
 
-      return;
+      navigation.navigate('AR');
+    } else {
+      setErrorMsgWorkOrder('ID de Workorder necessário!');
     }
-    verification();
   };
 
   return (
@@ -51,7 +43,7 @@ const Start_Logout = ({navigation}) => {
           onChangeText={setWorkOrder}
           value={workOrder}
           placeholder="FTTH_DST_00263846"
-          placeholderTextColor="#ccccb3"></TextInput>
+          placeholderTextColor={colors.placeholderGrey}></TextInput>
 
         <TouchableOpacity
           style={styles.startButton}
@@ -113,6 +105,7 @@ const styles = StyleSheet.create({
   },
   workOrderInput: {
     backgroundColor: colors.white,
+    color: colors.logoGreyDark,
     width: '90%',
     borderRadius: 50,
     height: 40,

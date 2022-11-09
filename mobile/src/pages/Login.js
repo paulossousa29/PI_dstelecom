@@ -8,45 +8,36 @@ const Login = ({navigation}) => {
   const [pass, setPass] = useState(null);
   const [errorMsgUsername, setErrorMsgUsername] = useState(null);
   const [errorMsgPass, setErrorMsgPass] = useState(null);
+  const invalid = [null, ''];
 
-  const handleLogin = () => {
-    // verificar se dados estao estao corretos
+  const commitDB = () => {
+    // fazer commit a base de dados
   };
 
   const verification = () => {
-    if (pass == null && username != null) {
+    if (invalid.includes(pass) && !invalid.includes(username)) {
       setErrorMsgPass('Palavra-passe Obrigatória!');
-      // setUsername(null);
-      // setErrorMsgUsername(null);
-    } else if (pass != null && username == null) {
+    } else if (!invalid.includes(pass) && invalid.includes(username)) {
       setErrorMsgUsername('Utilizador Obrigatório!');
-      // setPass(null);
-      // setErrorMsgPass(null);
-    } else if (pass == null && username == null) {
+    } else {
       setErrorMsgPass('Palavra-passe Obrigatória!');
       setErrorMsgUsername('Utilizador Obrigatório!');
     }
   };
 
   const validationAccount = () => {
-    if (pass != null && username != null) {
+    if (!invalid.includes(pass) && !invalid.includes(username)) {
       setUsername(null);
       setPass(null);
       setErrorMsgPass(null);
       setErrorMsgUsername(null);
 
+      commitDB();
+
       navigation.navigate('Start_Logout');
       return;
-    } else {
-      if (pass != null) {
-        setUsername(null);
-        setErrorMsgUsername(null);
-      } else if (username != null) {
-        setPass(null);
-        setErrorMsgPass(null);
-      }
-      verification();
     }
+    verification();
   };
 
   return (
