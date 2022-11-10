@@ -13,6 +13,7 @@ import { GlobalFilter } from "../components/GlobalFilter";
 
 import "./Painel.css"
 import Sidebar from '../components/Sidebar';
+import NavBar from '../components/NavBar';
 
 
 const columns = [
@@ -74,35 +75,25 @@ export default function StickyHeadTable() {
 
   return (
     <React.Fragment>
-      
-
-    <div className="row">
-      
-    <Sidebar className ="left-panel"/>
-    
-
-    <div className="right-panel" style={{paddingTop: 10, paddingRight: 30}}>
-    <center>
-    <h1>Relatórios</h1>
-    </center>
-
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
+      <div className="row">
+        <NavBar/>
+        <div className="right-panel" style={{paddingTop: 10, paddingRight: 30}}>
+          <center>
+            <h1>Relatórios</h1>
+          </center>
+          <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map((column) => (
+                      <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+                        {column.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+              <TableBody>
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {

@@ -12,7 +12,6 @@ const Home = () => {
     <React.Fragment>
         <div className="row">
             <NavBar/>
-            <Sidebar className ="left-panel"/>
             <div className="right-panel" style={{paddingTop: 10, paddingRight: 30}}>
 			    <StatsTable />
             </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-import Sidebar from "../components/Sidebar";
+import NavBar from "../components/NavBar";
 import Perfil from "../components/Perfil";
 
 import "./Main.css";
@@ -19,7 +19,7 @@ const Main= () => {
 
     <div className="row">
       
-    <Sidebar className ="left-panel"/>
+    <NavBar/>
     
     
     <div className="right-panel" style={{paddingTop:30}}>
