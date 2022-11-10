@@ -1,11 +1,8 @@
 import React from 'react';
-
-import {StyleSheet, View} from 'react-native';
-
-import Navigator from './routes/homeStack';
+import MyStack from './routes/HomeStack';
 
 const App = () => {
-  return <Navigator />;
+  return <MyStack />;
 };
 
 export default App;
