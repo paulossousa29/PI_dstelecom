@@ -3,7 +3,7 @@ import * as React from 'react';
 
 
 import "./Painel.css"
-import Sidebar from '../components/Sidebar';
+import NavBar from '../components/NavBar';
 import Pend from '../components/Pendentes';
 
 const Pendentes = () => {
@@ -13,8 +13,7 @@ const Pendentes = () => {
       
 
     <div className="row">
-      
-    <Sidebar className ="left-panel"/>
+      <NavBar/>
 		
     <div className="right-panel" style={{paddingTop: 10, paddingRight: 30}}>
 			<Pend />

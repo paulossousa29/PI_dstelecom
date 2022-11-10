@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import Home from "./pages/Home";
-import Login from "./pages/Login";
 import Main from "./pages/Main";
 import Relatorios from "./pages/Relatorios"
 import Relatorio from "./pages/Relatorio"
@@ -16,7 +15,6 @@ const App = () => {
 		<BrowserRouter>
 			<Routes>
 				<Route exact path="/" element={<Home />} />
-				<Route exact path="/login" element={<Login />} />
 				<Route exact path="/main" element={<Main />} />
 				<Route exact path="/relatorios" element={<Relatorios />} />
 				<Route exact path="/relatorio" element={<Relatorio />} />

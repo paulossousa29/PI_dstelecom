@@ -1,0 +1,8 @@
+
+  .navbar .nav-link:hover{
+    color: #C43719 !important;
+  } 
+  .navbar .nav-link{
+    letter-spacing: 1px;
+    font-size: 20px;
+  }
