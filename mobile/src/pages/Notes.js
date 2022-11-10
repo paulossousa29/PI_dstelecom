@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Button,
-  StatusBar,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../config/colors';
 
@@ -23,9 +15,15 @@ const Notes = ({navigation}) => {
       <View style={styles.container}>
         <Text style={styles.text}>Escreva aqui as suas observações:</Text>
         <TextInput
+          multiline={true}
           style={styles.input}
           onChangeText={setNotes}
           value={notes}></TextInput>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Start_Logout')}>
+          <Text style={styles.buttonText}>Submeter observações</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -65,17 +63,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
-    width: '85%',
-    color: '#555555',
-    paddingRight: 20,
-    paddingLeft: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
-    height: '80%',
-    borderColor: '#6E5BAA',
+    borderColor: colors.logoGreyDark,
+    color: colors.logoGreyDark,
+    width: '90%',
     borderWidth: 1,
-    borderRadius: 2,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 30,
+    marginHorizontal: 10,
     alignSelf: 'center',
-    backgroundColor: '#ffffff',
+  },
+  button: {
+    position: 'absolute',
+    bottom: 0,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%',
+    backgroundColor: colors.red,
+    paddingTop: 14,
+    paddingBottom: 14,
+    marginVertical: 30,
+    marginHorizontal: 20,
+  },
+  buttonText: {
+    color: colors.white,
+    fontWeight: 'bold',
   },
 });
