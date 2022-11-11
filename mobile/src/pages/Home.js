@@ -3,7 +3,7 @@ import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../config/colors';
 
-const Start_Logout = ({navigation}) => {
+const Home = ({navigation}) => {
   const [workOrder, setWorkOrder] = useState(null);
   const [errorMsgWorkOrder, setErrorMsgWorkOrder] = useState(null);
   const invalid = [null, ''];
@@ -53,7 +53,7 @@ const Start_Logout = ({navigation}) => {
   );
 };
 
-export default Start_Logout;
+export default Home;
 
 const styles = StyleSheet.create({
   background: {

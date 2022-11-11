@@ -4,7 +4,6 @@ import {
   ViroAmbientLight,
   ViroARTrackingTargets,
   ViroARImageMarker,
-  ViroScene,
 } from '@viro-community/react-viro';
 
 import {StyleSheet} from 'react-native';
@@ -12,23 +11,12 @@ import {StyleSheet} from 'react-native';
 import passos from '../assets/passos.json';
 
 const SceneAR = props => {
-  const data = props.sceneNavigator.viroAppProps;
-
-  const anchorFound = async sceneNavigator => {
-    console.log('anchorFound');
-    // try {
-    //   sceneNavigator._startVideoRecording('picpic', false, console.log('error'));
-    // } catch (e) {
-    //   console.log(e);
-    // }
-  };
+  const data = props.arSceneNavigator.viroAppProps;
 
   return (
     <ViroARScene>
       <ViroAmbientLight color="#ffffff" />
-      <ViroARImageMarker
-        target={'skull'}
-        onAnchorFound={() => anchorFound(props.sceneNavigator)}>
+      <ViroARImageMarker target={'skull'}>
         <ViroText
           text={passos[data.step.toString()]}
           position={[0.25, 0.05, 0]}
