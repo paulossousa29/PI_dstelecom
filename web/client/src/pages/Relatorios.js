@@ -34,8 +34,8 @@ const columns = [
     format: (value) => value.toLocaleString('en-US'),
   },
   {
-    id: 'revisto',
-    label: 'Revisto',
+    id: 'duracao',
+    label: 'Duração',
     minWidth: 170,
     align: 'right',
     format: (value) => value.toFixed(2),
@@ -44,18 +44,18 @@ const columns = [
 
 
 const rows = [
- {equipa: "equipa1", idRel : "R1", data: "1/1/2000", local: "Barcelos", revisto: "SIM"},
- {equipa: "equipa2", idRel : "R2", data: "1/1/2000", local: "Barcelinhos", revisto: "NÃO"},
- {equipa: "equipa1", idRel : "R3", data: "1/1/2000", local: "Caldas da Rainha", revisto: "SIM"},
- {equipa: "equipa6", idRel : "R4", data: "1/1/2000", local: "Taipas", revisto: "SIM"},
- {equipa: "equipa1", idRel : "R5", data: "1/1/2000", local: "Lisboa", revisto: "SIM"},
- {equipa: "equipa3", idRel : "R6", data: "1/1/2000", local: "Castelo do Neiva", revisto: "NÃO"},
- {equipa: "equipa3", idRel : "R7", data: "1/1/2000", local: "Porto", revisto: "NÃO"},
- {equipa: "equipa4", idRel : "R8", data: "1/1/2000", local: "Braga", revisto: "SIM"},
- {equipa: "equipa7", idRel : "R9", data: "1/1/2000", local: "Viana do Castelo", revisto: "NÃO"},
- {equipa: "equipa6", idRel : "R10", data: "1/1/2000", local: "Bragança", revisto: "NÃO"},
- {equipa: "equipa6", idRel : "R11", data: "1/1/2000", local: "Algarve", revisto: "SIM"},
- {equipa: "equipa5", idRel : "R12", data: "1/1/2000", local: "Covilhã", revisto: "SIM"}
+ {equipa: "equipa1", idRel : "R1", data: "1/1/2000", local: "Barcelos", duracao: 12},
+ {equipa: "equipa2", idRel : "R2", data: "1/1/2000", local: "Barcelinhos", duracao: 12},
+ {equipa: "equipa1", idRel : "R3", data: "1/1/2000", local: "Caldas da Rainha" , duracao: 12},
+ {equipa: "equipa6", idRel : "R4", data: "1/1/2000", local: "Taipas", duracao: 12 },
+ {equipa: "equipa1", idRel : "R5", data: "1/1/2000", local: "Lisboa",duracao: 12 },
+ {equipa: "equipa3", idRel : "R6", data: "1/1/2000", local: "Castelo do Neiva",duracao: 12 },
+ {equipa: "equipa3", idRel : "R7", data: "1/1/2000", local: "Porto" ,duracao: 12},
+ {equipa: "equipa4", idRel : "R8", data: "1/1/2000", local: "Braga",duracao: 12 },
+ {equipa: "equipa7", idRel : "R9", data: "1/1/2000", local: "Viana do Castelo",duracao: 12 },
+ {equipa: "equipa6", idRel : "R10", data: "1/1/2000", local: "Bragança",duracao: 12 },
+ {equipa: "equipa6", idRel : "R11", data: "1/1/2000", local: "Algarve",duracao: 12 },
+ {equipa: "equipa5", idRel : "R12", data: "1/1/2000", local: "Covilhã",duracao: 12 }
 ];
 
 export default function StickyHeadTable() {

@@ -121,7 +121,7 @@ export default function Pend(props) {
         accessor: "equipa",
       },
       {
-        Header: "Work Order",
+        Header: "Intervenção",
         accessor: "trabalho",
       },
       {
