@@ -78,9 +78,6 @@ export default function StickyHeadTable() {
       <div className="row">
         <NavBar/>
         <div className="right-panel" style={{paddingTop: 10, paddingRight: 30}}>
-          <center>
-            <h1>Relatórios</h1>
-          </center>
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table stickyHeader aria-label="sticky table">
