@@ -1,6 +1,7 @@
-import {useState, useRef} from 'react';
+import {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import {ViroARSceneNavigator} from '@viro-community/react-viro';
+import {launchCamera} from 'react-native-image-picker'
 
 import SceneAR from '../scenes/SceneAR';
 import colors from '../config/colors';
@@ -9,6 +10,19 @@ const AR = ({navigation}) => {
   const [step, setStep] = useState(1);
 
   const handleNextStep = async () => {
+    if(step % 2 == 1) {
+      const result = await launchCamera()
+
+      if(result.didCancel) 
+        return;
+
+      // Envia para o AI e guarda na base de dados
+
+      // Recebe do AI e avisa se não estiver correto
+
+      // Se no step 1 a referencia estiver mal, navigate nova pagina
+    }
+
     if (step < 13) {
       setStep(step + 1);
     } else {
