@@ -7,10 +7,8 @@ import colors from '../config/colors';
 
 const AR = ({navigation}) => {
   const [step, setStep] = useState(1);
-  const arSceneRef = useRef(null);
 
   const handleNextStep = async () => {
-    //arSceneRef.current.takeScreenshot('picpic', true);
     if (step < 13) {
       setStep(step + 1);
     } else {
@@ -35,7 +33,6 @@ const AR = ({navigation}) => {
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{scene: SceneAR}}
-        ref={arSceneRef}
         viroAppProps={{step: step}}
         style={styles.ar}
       />
