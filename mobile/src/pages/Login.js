@@ -34,7 +34,7 @@ const Login = ({navigation}) => {
 
       commitDB();
 
-      navigation.navigate('Start_Logout');
+      navigation.navigate('Home');
       return;
     }
     verification();

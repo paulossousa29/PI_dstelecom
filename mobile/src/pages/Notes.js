@@ -1,10 +1,29 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../config/colors';
 
 const Notes = ({navigation}) => {
   const [notes, setNotes] = useState(null);
+
+  const handleSubmit = () => {
+    Alert.alert('Concluir', 'Pretende mesmo concluir?', [
+      {
+        text: 'Cancelar',
+      },
+      {
+        text: 'Concluir',
+        onPress: () => navigation.navigate('Home'),
+      },
+    ]);
+  };
 
   return (
     <View style={styles.background}>
@@ -19,9 +38,7 @@ const Notes = ({navigation}) => {
           style={styles.input}
           onChangeText={setNotes}
           value={notes}></TextInput>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Start_Logout')}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Submeter observações</Text>
         </TouchableOpacity>
       </View>

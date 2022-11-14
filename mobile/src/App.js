@@ -1,5 +1,5 @@
 import React from 'react';
-import MyStack from './routes/HomeStack';
+import MyStack from './routes/MyStack';
 
 const App = () => {
   return <MyStack />;
