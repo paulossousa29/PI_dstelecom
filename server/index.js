@@ -9,8 +9,6 @@ app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
 
 
-
-
 app.get("/todos", async (req, res) => {
   try {
     const allTodos = await pool.query("SELECT * FROM equipas");
