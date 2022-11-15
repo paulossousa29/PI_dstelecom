@@ -6,28 +6,25 @@ import Perfil from "../components/Perfil";
 import "./Main.css";
 
 
-
-
-
 import "./Painel.css"
 
 
-const Main= () => {
+const Main = () => {
 
   return (
     <React.Fragment>
 
-    <div className="row">
-      
-    <NavBar/>
-    
-    
-    <div className="right-panel" style={{paddingTop:30}}>
-       <Perfil/>
+      <div className="row">
+
+        <NavBar />
+
+
+        <div className="right-panel" style={{ paddingTop: 30 }}>
+          <Perfil />
+        </div>
       </div>
-    </div>
-    
-    
+
+
     </React.Fragment>
   );
 };
