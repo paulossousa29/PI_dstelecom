@@ -4,6 +4,9 @@ import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import tw from "twin.macro";
 import { GlobalFilter } from "./GlobalFilter";
 import TablePagination from '@mui/material/TablePagination';
+import { MDBBtn } from 'mdb-react-ui-kit';
+import { TableContainer } from "@mui/material";
+import Paper from '@mui/material/Paper';
 
 
  const Table = tw.table`
@@ -165,17 +168,17 @@ export default function Pend(props) {
       {
         id: "Aut",
         Cell: ({ row }) => (
-          <Button onClick={() => alert("Editing: " + row.values.pedido)}>
+          <MDBBtn rippleColor='dark' color='light' onClick={() => alert("Editing: " + row.values.pedido)}>
             Autorizar
-          </Button>
+          </MDBBtn>
         ),
       },
       {
         id: "Naut",
         Cell: ({ row }) => (
-          <Button onClick={() => alert("Editing: " + row.values.pedido)}>
+          <MDBBtn rippleColor='dark' color='light' onClick={() => alert("Editing: " + row.values.pedido)}>
             Não Autorizar
-          </Button>
+          </MDBBtn>
         ),
       },
     ]);
@@ -212,54 +215,62 @@ export default function Pend(props) {
 
   return (
     <>
-      <GlobalFilter
-        preGlobalFilteredRows={preGlobalFilteredRows}
-        setGlobalFilter={setGlobalFilter}
-        globalFilter={state.globalFilter}
-      />
-      <Table {...getTableProps()}>
-        <TableHead>
-          {headerGroups.map((headerGroup) => (
-            <TableRow {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <TableHeader
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  {column.render("Header")}
-                  {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
-                </TableHeader>
+      <div className="table-responsive" style={{marginLeft:10}}>
+        <GlobalFilter
+          preGlobalFilteredRows={preGlobalFilteredRows}
+          setGlobalFilter={setGlobalFilter}
+          globalFilter={state.globalFilter}
+        />
+      </div>
+      <div className="right-panel" style={{paddingTop: 10, paddingRight: 30, marginLeft:20}}>
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table" {...getTableProps()}>
+            <TableHead>
+              {headerGroups.map((headerGroup) => (
+                <TableRow {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <TableHeader key={column.id} align={column.align} style={{ minWidth: column.minWidth }}
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                    >
+                      {column.render("Header")}
+                      {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
+                      
+                    </TableHeader>
+                  ))}
+                </TableRow>
               ))}
-            </TableRow>
-          ))}
-        </TableHead>
-        <TableBody {...getTableBodyProps()}>
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
-            prepareRow(row);
+            </TableHead>
+            <TableBody {...getTableBodyProps()}>
+              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
+                prepareRow(row);
 
-            return (
-              <TableRow tabIndex={-1}
-                {...row.getRowProps()}
-                className={isEven(idx) ? "bg-gray-400 bg-opacity-30" : ""}
-              >
-                {row.cells.map((cell, idx) => (
-                  <TableData {...cell.getCellProps()}>
-                    {cell.render("Cell")}
-                  </TableData>
-                ))}
-              </TableRow>
-            );
-          })}
-        </TableBody>
-        <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      </Table>
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1}
+                    {...row.getRowProps()}
+                  >
+                    {row.cells.map((cell, idx) => (
+                      <TableData {...cell.getCellProps()}>
+                        {cell.render("Cell")}
+                      </TableData>
+                    ))}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+            <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+          </Table>
+        </TableContainer>
+        </Paper>
+      </div>
     </>
   );
 

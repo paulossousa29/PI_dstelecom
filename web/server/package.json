@@ -12,6 +12,7 @@
     "dotenv": "^16.0.3",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "mdb-ui-kit": "^6.0.0",
     "morgan": "~1.9.1",
     "pg": "^8.8.0",
     "pug": "2.0.0-beta11"
