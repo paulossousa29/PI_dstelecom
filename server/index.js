@@ -3,20 +3,24 @@ const app = express();
 const cors = require("cors");
 const pool = require("./db");
 
+
 //middleware
 app.use(cors());
 app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
 
 
+
 app.get("/todos", async (req, res) => {
   try {
+    pool.connect()
     const allTodos = await pool.query("SELECT * FROM equipas");
     res.json(allTodos.rows);
   } catch (err) {
     console.error(err.message);
   }
 });
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
