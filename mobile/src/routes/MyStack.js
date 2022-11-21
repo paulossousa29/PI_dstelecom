@@ -5,6 +5,8 @@ import AR from '../pages/AR';
 import Home from '../pages/Home';
 import Notes from '../pages/Notes';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import NewReference from '../pages/NewReference';
+import Done from '../pages/Done';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,12 +14,14 @@ const MyStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="Notes"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="AR" component={AR} />
         <Stack.Screen name="Notes" component={Notes} />
+        <Stack.Screen name="NewReference" component={NewReference} />
+        <Stack.Screen name="Done" component={Done} />
       </Stack.Navigator>
     </NavigationContainer>
   );
