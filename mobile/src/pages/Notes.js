@@ -20,7 +20,7 @@ const Notes = ({navigation}) => {
       },
       {
         text: 'Concluir',
-        onPress: () => navigation.navigate('Home'),
+        onPress: () => navigation.navigate('Done'),
       },
     ]);
   };
