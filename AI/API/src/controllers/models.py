@@ -30,6 +30,11 @@ class ObjectDetection(Resource):
         model = models[0]
         results = model(img)
 
-        print(results.pandas().xyxy[0])
+        outputs = results.pandas().xyxy[0]
+        outputs['class'] = outputs.index
+        labels = outputs[['class','name']]
+        outputs_json = labels.to_json(orient='records')
+        print(outputs_json)
+        #output_names_json = label_outputs['name']
 
-        return {'nice': 'you did it'}, 201
+        return outputs_json, 200
