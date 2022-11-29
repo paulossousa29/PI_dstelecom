@@ -1,16 +1,20 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import React, { useState } from "react";
 
 import Home from "./pages/Home";
 import Main from "./pages/Main";
-import Relatorios from "./pages/Relatorios"
-import Relatorio from "./pages/Relatorio"
-import Estatistica from "./pages/Estatistica"
-import Pendentes from "./pages/Pendentes"
-import Equipa from "./pages/Equipa"
-
-
+import Relatorios from "./pages/Relatorios";
+import Relatorio from "./pages/Relatorio";
+import Estatistica from "./pages/Estatistica";
+import Pendentes from "./pages/Pendentes";
+import Equipa from "./pages/Equipa";
+import Login from "./components/Login";
 
 const App = () => {
+	const [token, setToken] = useState();
+	if (!token) {
+		return <Login setToken={setToken} />;
+	}
 	return (
 		<BrowserRouter>
 			<Routes>

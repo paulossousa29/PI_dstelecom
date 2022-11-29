@@ -1,51 +1,48 @@
 import React, { Fragment, useState, useEffect } from "react";
 
-
 const Pendentes = () => {
-  const [todos, setTodos] = useState([]);
+	const [todos, setTodos] = useState([]);
 
+	async function getTodos() {
+		const res = await fetch("http://localhost:3000/todos");
 
-  async function getTodos() {
-    const res = await fetch("http://localhost:3000/todos");
+		const todoArray = await res.json();
+		setTodos(todoArray);
+	}
 
-    const todoArray = await res.json();
+	useEffect(() => {
+		getTodos();
+	}, []);
 
-    setTodos(todoArray);
-  }
+	console.log(todos);
 
-  useEffect(() => {
-    getTodos();
-  }, []);
-
-  console.log(todos);
-
-  return (
-    <Fragment>
-      {" "}
-      <table class="table mt-5">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/*<tr>
+	return (
+		<Fragment>
+			{" "}
+			<table class="table mt-5">
+				<thead>
+					<tr>
+						<th>User</th>
+						<th>Role</th>
+					</tr>
+				</thead>
+				<tbody>
+					{/*<tr>
             <td>John</td>
             <td>Doe</td>
             <td>john@example.com</td>
           </tr> */}
 
-          {todos.map((todo) => (
-            <tr key={todo.id}>
-              <td>{todo.id}</td>
-              <td>{todo.role}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </Fragment>
-  );
+					{todos.map((todo) => (
+						<tr key={todo.id}>
+							<td>{todo.id}</td>
+							<td>{todo.role}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</Fragment>
+	);
 };
 
 export default Pendentes;
