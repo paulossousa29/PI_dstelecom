@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState, useEffect } from "react";
+import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -7,7 +7,7 @@ import logo from "../assets/dstelecomlogo.png";
 import PropTypes from "prop-types";
 
 async function loginUser(credentials) {
-	return fetch("http://localhost:3000/login", {
+	return fetch("http://localhost:3001/login", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -19,10 +19,6 @@ async function loginUser(credentials) {
 export default function Login({ setToken }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-
-	function validateForm() {
-		return email.length > 0 && password.length > 0;
-	}
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -124,9 +120,7 @@ export default function Login({ setToken }) {
 											</div>
 											<Button
 												type="submit"
-												disabled={!validateForm()}
 												className="btn btn-secondary btn-block mb-4"
-												onClick={this.handleLogin}
 											>
 												Iniciar Sessão
 											</Button>
@@ -140,8 +134,8 @@ export default function Login({ setToken }) {
 			</section>
 		</React.Fragment>
 	);
-
-	Login.propTypes = {
-		setToken: PropTypes.func.isRequired,
-	};
 }
+
+Login.propTypes = {
+	setToken: PropTypes.func.isRequired,
+};

@@ -13,7 +13,7 @@ import { GlobalFilter } from "../components/GlobalFilter";
 
 import "./Painel.css"
 import Sidebar from '../components/Sidebar';
-import NavBar from '../components/NavBar';
+import NavBar from '../components/Navbar';
 
 
 const columns = [

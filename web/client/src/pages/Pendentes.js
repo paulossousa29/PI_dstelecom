@@ -3,7 +3,7 @@ import * as React from 'react';
 
 
 import "./Painel.css"
-import NavBar from '../components/NavBar';
+import NavBar from '../components/Navbar';
 import Pend from '../components/Pendentes';
 
 const Pendentes = () => {

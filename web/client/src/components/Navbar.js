@@ -18,7 +18,7 @@ class NavBar extends Component {
             <div className='navbar-nav ml-auto'>
               <a className="nav-link"  href="/relatorios">Relatórios</a>
               <a className="nav-link" href="/pendentes">Pedidos</a>
-              <a className="nav-link" href="/stats">Estatisticas</a>
+              <a className="nav-link" href="/">Estatisticas</a>
             </div>
           </div>
           <a style={{paddingRight:30}} className="nav-link" href="#">
