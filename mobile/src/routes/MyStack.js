@@ -7,6 +7,7 @@ import Notes from '../pages/Notes';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import NewReference from '../pages/NewReference';
 import Done from '../pages/Done';
+import UserExperience from '../pages/UserExperience';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +15,7 @@ const MyStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Notes"
+        initialRouteName="UserExperience"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />
@@ -22,6 +23,7 @@ const MyStack = () => {
         <Stack.Screen name="Notes" component={Notes} />
         <Stack.Screen name="NewReference" component={NewReference} />
         <Stack.Screen name="Done" component={Done} />
+        <Stack.Screen name="UserExperience" component={UserExperience} />
       </Stack.Navigator>
     </NavigationContainer>
   );
