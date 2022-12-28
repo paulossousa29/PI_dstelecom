@@ -1,6 +1,6 @@
 import React from "react";
 
-import NavBar from "../components/NavBar";
+import NavBar from "../components/Navbar";
 import Perfil from "../components/Perfil";
 
 import "./Main.css";

@@ -5,7 +5,7 @@ import "./Painel.css"
 import Sidebar from '../components/Sidebar';
 import Pie from '../components/PieChartTeam';
 import Perfil from '../components/Perfil';
-import NavBar from '../components/NavBar';
+import NavBar from '../components/Navbar';
 
 const Equipa = () => {
 	return (

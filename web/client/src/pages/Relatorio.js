@@ -1,6 +1,6 @@
 import React from "react";
 import SlideShow from "../components/SlideShow";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/Navbar";
 
 
 import "./Painel.css"
