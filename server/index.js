@@ -9,7 +9,6 @@ app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/login", async (req, res) => {
-	console.log("OLA");
 	res.send({
 		token: "test123",
 	});
@@ -22,6 +21,21 @@ app.get("/todos", async (req, res) => {
 		res.json(allTodos.rows);
 	} catch (err) {
 		console.error(err.message);
+	}
+});
+
+app.get('/equipa/:id', async (req,res) => {
+	console.log("Estou cá")
+	const id = req.params.id 
+	console.log(id)
+	try{
+		pool.connect();
+		const equipa = await pool.query("SELECT * FROM skill where id_equipa='" + id + "';");
+		console.log(equipa.rows);
+		res.json(equipa.rows);
+	}
+	catch (err){
+		console.log(err.message)
 	}
 });
 

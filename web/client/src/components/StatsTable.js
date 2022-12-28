@@ -55,7 +55,7 @@ const Button = tw.button`
 
 export default function StatsTable(props) {
 
- 
+
     const [products, setProducts] = useState([]);
 
     const [page, setPage] = React.useState(0);
@@ -164,14 +164,14 @@ export default function StatsTable(props) {
     [products]
   );
 
-  const tableHooks = (hooks) => {
+  const tableHooks = (hooks,id) => {
     hooks.visibleColumns.push((columns) => [
       ...columns,
       {
         id: "Edit",
         Header: "Consultar Equipa",
         Cell: ({ row }) => (
-          <Button onClick={() => alert("Editing: " + row.values.price)}>
+          <Button onClick={() => 'http://'}>
             Informação
           </Button>
         ),
