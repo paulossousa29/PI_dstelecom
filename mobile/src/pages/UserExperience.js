@@ -12,10 +12,60 @@ import {TextInput} from 'react-native-gesture-handler';
 import colors from '../config/colors';
 
 const UserExperience = ({navigation}) => {
-  const [defaultRating, setDefaultRating] = useState(1);
+  const [defaultRating, setDefaultRating] = useState(0);
+  const [defaultUsabilityRating, setUsabilityRating] = useState(0);
+  const [defaultVisibilityRating, setVisibilityRating] = useState(0);
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
 
-  const RatingBar = () => {
+  const RatingBarUsability = () => {
+    return (
+      <View style={styles.ratingBarStyle}>
+        {maxRating.map((item, key) => {
+          return (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              key={item}
+              onPress={() => setUsabilityRating(item)}>
+              <Image
+                style={styles.starImageStyle}
+                source={
+                  item <= defaultUsabilityRating
+                    ? require('../assets/starFilled.png')
+                    : require('../assets/starEmpty.png')
+                }
+              />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
+  };
+
+  const RatingBarVisibility = () => {
+    return (
+      <View style={styles.ratingBarStyle}>
+        {maxRating.map((item, key) => {
+          return (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              key={item}
+              onPress={() => setVisibilityRating(item)}>
+              <Image
+                style={styles.starImageStyle}
+                source={
+                  item <= defaultVisibilityRating
+                    ? require('../assets/starFilled.png')
+                    : require('../assets/starEmpty.png')
+                }
+              />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
+  };
+
+  const RatingBarDefault = () => {
     return (
       <View style={styles.ratingBarStyle}>
         {maxRating.map((item, key) => {
@@ -58,11 +108,18 @@ const UserExperience = ({navigation}) => {
         source={require('../assets/logo-black.png')}></Image>
 
       <View style={styles.container}>
-        <Text style={styles.text}>Classifique a sua experiência:</Text>
-        <RatingBar />
         <Text style={styles.text}>
-          {defaultRating} / {Math.max.apply(null, maxRating)}
+          Classifique a sua experiência em relação à utilização da aplicação:
         </Text>
+        <RatingBarUsability />
+        <Text style={styles.text}>
+          Classifique a sua experiência em relação ao aspeto da aplicação:
+        </Text>
+        <RatingBarVisibility />
+        <Text style={styles.text}>
+          Classifique a sua experiência global da aplicação:
+        </Text>
+        <RatingBarDefault />
         <TouchableOpacity style={styles.startButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Obter o valor selecionado</Text>
         </TouchableOpacity>
@@ -75,8 +132,8 @@ export default UserExperience;
 
 const styles = StyleSheet.create({
   starImageStyle: {
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
     resizeMode: 'cover',
   },
   background: {
@@ -108,6 +165,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   startButton: {
+    position: 'absolute',
+    bottom: 0,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -142,6 +201,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     color: colors.logoGreyDark,
     fontWeight: 'bold',
+    marginHorizontal: 10,
   },
   buttonText: {
     color: colors.white,
@@ -152,5 +212,10 @@ const styles = StyleSheet.create({
     color: colors.red,
     fontWeight: 'bold',
     paddingLeft: 30,
+  },
+  ratingBarStyle: {
+    flexDirection: 'row',
+    marginTop: 30,
+    justifyContent: 'center',
   },
 });
