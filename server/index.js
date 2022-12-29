@@ -15,11 +15,55 @@ app.use("/login", async (req, res) => {
 	});
 });
 
+app.get("/", (req, res) => {
+	res.send({ success: true, message: "Welcome to the backend" });
+});
+
 app.get("/todos", async (req, res) => {
 	try {
 		pool.connect();
 		const allTodos = await pool.query("SELECT * FROM equipas");
 		res.json(allTodos.rows);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.post("/intervention", async (req, res) => {
+	try {
+		pool.connect();
+
+		const { intervention, username } = req.body;
+
+		query =
+			"SELECT * FROM intervencoes WHERE intervencoes.id = '" +
+			intervention +
+			"' AND intervencoes.id_equipa = '" +
+			username +
+			"'";
+
+		const result = await pool.query(query);
+
+		res.json(result.rows);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.get("/access", async (req, res) => {
+	try {
+		pool.connect();
+
+		const { intervention } = req.body;
+
+		query =
+			"SELECT intervencoes.acesso FROM intervencoes WHERE intervencoes.id = '" +
+			intervention +
+			"'";
+
+		const result = await pool.query(query);
+
+		res.json(result.rows);
 	} catch (err) {
 		console.error(err.message);
 	}

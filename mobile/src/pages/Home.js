@@ -2,18 +2,39 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../config/colors';
+import ip from '../config/ip';
+import axios from 'axios';
 
 const Home = ({navigation}) => {
   const [workOrder, setWorkOrder] = useState(null);
   const [errorMsgWorkOrder, setErrorMsgWorkOrder] = useState(null);
   const invalid = [null, ''];
 
+  const fetchIntervencoes = async () => {
+    try {
+      const res = await axios.post(ip.backend_ip + 'intervention', {
+        intervention: '#2021041965000118_2',
+        username: 'CGO0027',
+      });
+
+      return res.data.length !== 0;
+    } catch (error) {
+      console.log(error.message);
+
+      return false;
+    }
+  };
+
   const validationID = () => {
     if (!invalid.includes(workOrder)) {
-      setWorkOrder(null);
-      setErrorMsgWorkOrder(null);
+      if (fetchIntervencoes()) {
+        setWorkOrder(null);
+        setErrorMsgWorkOrder(null);
 
-      navigation.navigate('AR');
+        navigation.navigate('AR');
+      } else {
+        setErrorMsgWorkOrder('ID de Workorder inválido!');
+      }
     } else {
       setErrorMsgWorkOrder('ID de Workorder necessário!');
     }

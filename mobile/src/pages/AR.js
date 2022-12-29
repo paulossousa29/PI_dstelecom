@@ -1,26 +1,67 @@
 import {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import {ViroARSceneNavigator} from '@viro-community/react-viro';
-import {launchCamera} from 'react-native-image-picker'
+import {launchCamera} from 'react-native-image-picker';
+import axios from 'axios';
 
 import SceneAR from '../scenes/SceneAR';
 import colors from '../config/colors';
+import ip from '../config/ip';
 
 const AR = ({navigation}) => {
   const [step, setStep] = useState(1);
 
+  const fetchAccess = async () => {
+    try {
+      const res = axios.get(ip.backend_ip + 'access', {
+        intervention: '#2021041965000118_2',
+      });
+
+      return res.data;
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const fetchAI = async image => {
+    const imageData = new FormData();
+    imageData.append('image', {
+      uri: image.uri,
+      type: image.type,
+      name: image.filename,
+    });
+
+    try {
+      const res = await axios.post(ip.api_ip + 'detect', imageData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleNextStep = async () => {
-    if(step % 2 == 1) {
-      const result = await launchCamera()
+    if (step == 1) {
+      // Vai buscar o acesso ao backend
+      res = await fetchAccess();
+      console.log(res);
 
-      if(result.didCancel) 
-        return;
+      // Virica o acesso pelo ai
 
-      // Envia para o AI e guarda na base de dados
+      // Compara, se der mal navigate new reference
+    } else if (step % 2 == 1) {
+      const image = await launchCamera();
 
-      // Recebe do AI e avisa se não estiver correto
+      // Se não tirou foto, não avançar
+      if (image.didCancel) return;
 
-      // Se no step 1 a referencia estiver mal, navigate nova pagina
+      // Envia para IA e verifica o resultado
+      res = await fetchAI(image);
+      console.log(res);
     }
 
     if (step < 13) {
