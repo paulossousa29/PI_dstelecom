@@ -6,7 +6,12 @@
 
 var app = require('../index.js');
 var debug = require('debug')('server:server');
+var fs = require("fs");
+var https = require('https');
 var http = require('http');
+
+const cors = require("cors");
+app.use(cors());
 
 /**
  * Get port from environment and store in Express.
@@ -81,7 +86,21 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
+/* https
+  .createServer(
+    {
+      key: fs.readFileSync("server.key"),
+      cert: fs.readFileSync("server.cert"),
+    },
+    app
+  )
+  .listen(port, function () {
+    console.log(
+      "Example app listening on port 3001!"
+    );
+  }); */
+
+
 function onListening() {
   console.log("APP SERVER à escuta na porta " + port)
-}
-
+} 

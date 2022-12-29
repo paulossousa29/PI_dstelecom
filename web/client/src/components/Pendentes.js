@@ -4,7 +4,7 @@ const Pendentes = () => {
 	const [todos, setTodos] = useState([]);
 
 	async function getTodos() {
-		const res = await fetch("http://localhost:3000/todos");
+		const res = await fetch("http://localhost:3001/todos");
 
 		const todoArray = await res.json();
 		setTodos(todoArray);
@@ -17,31 +17,30 @@ const Pendentes = () => {
 	console.log(todos);
 
 	return (
-		<Fragment>
-			{" "}
-			<table class="table mt-5">
-				<thead>
-					<tr>
-						<th>User</th>
-						<th>Role</th>
-					</tr>
-				</thead>
-				<tbody>
-					{/*<tr>
+
+		<table class="table mt-5">
+			<thead>
+				<tr>
+					<th>User</th>
+					<th>Role</th>
+				</tr>
+			</thead>
+			<tbody>
+				{/*<tr>
             <td>John</td>
             <td>Doe</td>
             <td>john@example.com</td>
           </tr> */}
 
-					{todos.map((todo) => (
-						<tr key={todo.id}>
-							<td>{todo.id}</td>
-							<td>{todo.role}</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</Fragment>
+				{todos.map((todo) => (
+					<tr key={todo.id}>
+						<td>{todo.id}</td>
+						<td>{todo.role}</td>
+					</tr>
+				))}
+			</tbody>
+		</table>
+
 	);
 };
 

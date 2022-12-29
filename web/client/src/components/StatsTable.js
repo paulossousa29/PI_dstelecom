@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import tw from "twin.macro";
-import { GlobalFilter } from "./GlobalFilter";
 import TablePagination from '@mui/material/TablePagination';
 import TableCell from '@mui/material/TableCell';
 
@@ -10,7 +9,7 @@ function ccyFormat(num) {
   return `${num.toFixed(2)}`;
 }
 
- const Table = tw.table`
+const Table = tw.table`
   table-fixed
   text-base
   text-gray-900
@@ -55,22 +54,22 @@ const Button = tw.button`
 
 export default function StatsTable(props) {
 
- 
-    const [products, setProducts] = useState([]);
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [products, setProducts] = useState([]);
 
-    const handleChangePage = (event, newPage) => {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-    const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
-    // Vai buscar os dados à API
+  // Vai buscar os dados à API
   const fetchProducts = async () => {
     const response = await axios
       .get("https://fakestoreapi.com/products")
@@ -148,30 +147,30 @@ export default function StatsTable(props) {
     () =>
       products[0]
         ? Object.keys(products[0])
-            .filter((key) => key !== "rating")
-            .map((key) => {
-              if (key === "image")
-                return {
-                  Header: key,
-                  accessor: key,
-                  Cell: ({ value }) => <img style={{ width: 200, height: 100 }} src={value} />,
-                  maxWidth: 10,
-                };
+          .filter((key) => key !== "rating")
+          .map((key) => {
+            if (key === "image")
+              return {
+                Header: key,
+                accessor: key,
+                Cell: ({ value }) => <img style={{ width: 200, height: 100 }} src={value} />,
+                maxWidth: 10,
+              };
 
-              return { Header: key, accessor: key };
-            })
+            return { Header: key, accessor: key };
+          })
         : [],
     [products]
   );
 
-  const tableHooks = (hooks) => {
+  const tableHooks = (hooks, id) => {
     hooks.visibleColumns.push((columns) => [
       ...columns,
       {
         id: "Edit",
         Header: "Consultar Equipa",
         Cell: ({ row }) => (
-          <Button onClick={() => alert("Editing: " + row.values.price)}>
+          <Button onClick={() => 'http://'}>
             Informação
           </Button>
         ),
@@ -179,7 +178,7 @@ export default function StatsTable(props) {
     ]);
   };
 
-  
+
 
   const tableInstance = useTable(
     {
@@ -210,11 +209,6 @@ export default function StatsTable(props) {
 
   return (
     <>
-      <GlobalFilter
-        preGlobalFilteredRows={preGlobalFilteredRows}
-        setGlobalFilter={setGlobalFilter}
-        globalFilter={state.globalFilter}
-      />
       <Table {...getTableProps()}>
         <TableHead>
           {headerGroups.map((headerGroup) => (
@@ -247,29 +241,29 @@ export default function StatsTable(props) {
               </TableRow>
             );
           })}
-          
+
 
         </TableBody>
         <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+
 
       </Table>
 
-      <div style={{paddingLeft:900}}>
-            <TableCell align="right">Total Alterações</TableCell>
-            <TableCell align="right">{ccyFormat(10)}</TableCell>
+      <div style={{ paddingLeft: 900 }}>
+        <TableCell align="right">Total Alterações</TableCell>
+        <TableCell align="right">{ccyFormat(10)}</TableCell>
       </div>
-      <div style={{paddingLeft:830}}>
-            <TableCell align="right">Total Desencaminhamentos</TableCell>
-            <TableCell align="right">{ccyFormat(10)}</TableCell>
+      <div style={{ paddingLeft: 830 }}>
+        <TableCell align="right">Total Desencaminhamentos</TableCell>
+        <TableCell align="right">{ccyFormat(10)}</TableCell>
       </div>
     </>
   );

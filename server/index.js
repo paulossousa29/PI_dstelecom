@@ -4,24 +4,62 @@ const cors = require("cors");
 const pool = require("./db");
 
 //middleware
-app.use(cors());
+//app.use(cors());
+app.use(cors({ withCredentials: true }));
 app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/login", async (req, res) => {
-	console.log("OLA");
-	res.send({
-		token: "test123",
-	});
+
+function generateToken() {
+	const crypto = require('crypto');
+	return crypto.randomBytes(64).toString('hex');
+}
+
+app.post("/login", async (req, res) => {
+	console.log(req.body)
+	const { username, password } = req.body
+	try {
+		pool.connect();
+		const allTodos = await pool.query("SELECT * FROM equipas where id='" + username + "';");
+		if (allTodos.rows.length > 0) {
+			if (password == allTodos.rows[0].password) {
+				token = generateToken();
+				res.json({ token });
+				console.log(token)
+			}
+		}
+		else {
+			res.status(401).json({ error: 'Invalid username or password' });
+		}
+	} catch (err) {
+		console.error(err.message);
+	}
+
 });
 
 app.get("/todos", async (req, res) => {
+	console.log('request')
 	try {
 		pool.connect();
 		const allTodos = await pool.query("SELECT * FROM equipas");
 		res.json(allTodos.rows);
 	} catch (err) {
 		console.error(err.message);
+	}
+});
+
+app.get('/equipa/:id', async (req, res) => {
+	console.log("Estou cá")
+	const id = req.params.id
+	console.log(id)
+	try {
+		pool.connect();
+		const equipa = await pool.query("SELECT * FROM skill where id_equipa='" + id + "';");
+		console.log(equipa.rows);
+		res.json(equipa.rows);
+	}
+	catch (err) {
+		console.log(err.message)
 	}
 });
 
