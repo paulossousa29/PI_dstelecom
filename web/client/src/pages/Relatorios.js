@@ -8,11 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-import { GlobalFilter } from "../components/GlobalFilter";
-
 
 import "./Painel.css"
-import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 
 
@@ -44,18 +41,18 @@ const columns = [
 
 
 const rows = [
- {equipa: "equipa1", idRel : "R1", data: "1/1/2000", local: "Barcelos", revisto: "SIM"},
- {equipa: "equipa2", idRel : "R2", data: "1/1/2000", local: "Barcelinhos", revisto: "NÃO"},
- {equipa: "equipa1", idRel : "R3", data: "1/1/2000", local: "Caldas da Rainha", revisto: "SIM"},
- {equipa: "equipa6", idRel : "R4", data: "1/1/2000", local: "Taipas", revisto: "SIM"},
- {equipa: "equipa1", idRel : "R5", data: "1/1/2000", local: "Lisboa", revisto: "SIM"},
- {equipa: "equipa3", idRel : "R6", data: "1/1/2000", local: "Castelo do Neiva", revisto: "NÃO"},
- {equipa: "equipa3", idRel : "R7", data: "1/1/2000", local: "Porto", revisto: "NÃO"},
- {equipa: "equipa4", idRel : "R8", data: "1/1/2000", local: "Braga", revisto: "SIM"},
- {equipa: "equipa7", idRel : "R9", data: "1/1/2000", local: "Viana do Castelo", revisto: "NÃO"},
- {equipa: "equipa6", idRel : "R10", data: "1/1/2000", local: "Bragança", revisto: "NÃO"},
- {equipa: "equipa6", idRel : "R11", data: "1/1/2000", local: "Algarve", revisto: "SIM"},
- {equipa: "equipa5", idRel : "R12", data: "1/1/2000", local: "Covilhã", revisto: "SIM"}
+  { equipa: "equipa1", idRel: "R1", data: "1/1/2000", local: "Barcelos", revisto: "SIM" },
+  { equipa: "equipa2", idRel: "R2", data: "1/1/2000", local: "Barcelinhos", revisto: "NÃO" },
+  { equipa: "equipa1", idRel: "R3", data: "1/1/2000", local: "Caldas da Rainha", revisto: "SIM" },
+  { equipa: "equipa6", idRel: "R4", data: "1/1/2000", local: "Taipas", revisto: "SIM" },
+  { equipa: "equipa1", idRel: "R5", data: "1/1/2000", local: "Lisboa", revisto: "SIM" },
+  { equipa: "equipa3", idRel: "R6", data: "1/1/2000", local: "Castelo do Neiva", revisto: "NÃO" },
+  { equipa: "equipa3", idRel: "R7", data: "1/1/2000", local: "Porto", revisto: "NÃO" },
+  { equipa: "equipa4", idRel: "R8", data: "1/1/2000", local: "Braga", revisto: "SIM" },
+  { equipa: "equipa7", idRel: "R9", data: "1/1/2000", local: "Viana do Castelo", revisto: "NÃO" },
+  { equipa: "equipa6", idRel: "R10", data: "1/1/2000", local: "Bragança", revisto: "NÃO" },
+  { equipa: "equipa6", idRel: "R11", data: "1/1/2000", local: "Algarve", revisto: "SIM" },
+  { equipa: "equipa5", idRel: "R12", data: "1/1/2000", local: "Covilhã", revisto: "SIM" }
 ];
 
 export default function StickyHeadTable() {
@@ -76,8 +73,8 @@ export default function StickyHeadTable() {
   return (
     <React.Fragment>
       <div className="row">
-        <NavBar/>
-        <div className="right-panel" style={{paddingTop: 10, paddingRight: 30}}>
+        <NavBar />
+        <div className="right-panel" style={{ paddingTop: 10, paddingRight: 30 }}>
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table stickyHeader aria-label="sticky table">
@@ -90,40 +87,40 @@ export default function StickyHeadTable() {
                     ))}
                   </TableRow>
                 </TableHead>
-              <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
+                <TableBody>
+                  {rows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
                       return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
+                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                          {columns.map((column) => {
+                            const value = row[column.id];
+                            return (
+                              <TableCell key={column.id} align={column.align}>
+                                {column.format && typeof value === 'number'
+                                  ? column.format(value)
+                                  : value}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
                       );
                     })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
-    </div>
-    </div>
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </div>
+      </div>
 
     </React.Fragment>
   );

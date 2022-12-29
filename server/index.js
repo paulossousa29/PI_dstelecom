@@ -8,14 +8,29 @@ app.use(cors());
 app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/login", async (req, res) => {
-	console.log("OLA");
-	res.send({
-		token: "test123",
-	});
+
+
+app.post("/login", async (req, res) => {
+	console.log(req.body)
+	try {
+		const { username, password } = req.body
+		if (username == "ole") {
+			res.json({
+				token: "test123",
+			});
+		}
+		else {
+			res.status(401).json({ error: 'Invalid username or password' });
+		}
+	} catch (err) {
+		console.error(err.message);
+	}
+
 });
 
+
 app.get("/todos", async (req, res) => {
+	console.log('request')
 	try {
 		pool.connect();
 		const allTodos = await pool.query("SELECT * FROM equipas");
