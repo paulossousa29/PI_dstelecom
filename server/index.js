@@ -28,7 +28,6 @@ app.post("/login", async (req, res) => {
 
 });
 
-
 app.get("/todos", async (req, res) => {
 	console.log('request')
 	try {
@@ -37,6 +36,21 @@ app.get("/todos", async (req, res) => {
 		res.json(allTodos.rows);
 	} catch (err) {
 		console.error(err.message);
+	}
+});
+
+app.get('/equipa/:id', async (req, res) => {
+	console.log("Estou cá")
+	const id = req.params.id
+	console.log(id)
+	try {
+		pool.connect();
+		const equipa = await pool.query("SELECT * FROM skill where id_equipa='" + id + "';");
+		console.log(equipa.rows);
+		res.json(equipa.rows);
+	}
+	catch (err) {
+		console.log(err.message)
 	}
 });
 
