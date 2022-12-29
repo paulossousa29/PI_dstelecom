@@ -19,7 +19,7 @@ const Login = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		axios
-			.post("https://localhost:3001/login", {
+			.post("http://localhost:3001/login", {
 				headers: { "Accept": "application/json, text/plain, /", "Content-Type": "application/json" },
 				username: values.username,
 				password: values.pass,
@@ -97,25 +97,7 @@ const Login = () => {
 												/>
 											</Form.Group>
 
-											<div className="row mb-4">
-												<div className="col d-flex justify-content-center">
-													<div className="form-check">
-														<input
-															className="form-check-input"
-															type="checkbox"
-															value=""
-															id="form2Example31"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="form2Example31"
-														>
-															{" "}
-															Remember me{" "}
-														</label>
-													</div>
-												</div>
-											</div>
+
 											<Button
 												type="submit"
 												className="btn btn-secondary btn-block mb-4"

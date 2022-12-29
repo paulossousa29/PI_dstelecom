@@ -10,16 +10,23 @@ app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
 
 
+function generateToken() {
+	const crypto = require('crypto');
+	return crypto.randomBytes(64).toString('hex');
+}
 
 app.post("/login", async (req, res) => {
 	console.log(req.body)
+	const { username, password } = req.body
 	try {
-		const { username, password } = req.body
-		const t = true
-		if (t) {
-			res.json({
-				token: "test123",
-			});
+		pool.connect();
+		const allTodos = await pool.query("SELECT * FROM equipas where id='" + username + "';");
+		if (allTodos.rows.length > 0) {
+			if (password == allTodos.rows[0].password) {
+				token = generateToken();
+				res.json({ token });
+				console.log(token)
+			}
 		}
 		else {
 			res.status(401).json({ error: 'Invalid username or password' });
