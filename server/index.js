@@ -4,7 +4,8 @@ const cors = require("cors");
 const pool = require("./db");
 
 //middleware
-app.use(cors());
+//app.use(cors());
+app.use(cors({ withCredentials: true }));
 app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
 

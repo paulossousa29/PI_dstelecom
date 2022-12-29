@@ -21,7 +21,7 @@ function App() {
 				<Route exact path="/relatorios" element={<Protected> <Relatorios /> </Protected>} />
 				<Route exact path="/relatorio" element={<Protected>  <Relatorio /> </Protected>} />
 				<Route exact path="/pendentes" element={<Protected> <Pendentes /> </Protected>} />
-				<Route exact path="/equipa" element={<Protected><Equipa /></Protected>} />
+				<Route exact path="/equipa" element={<Protected> <Equipa /></Protected>} />
 			</Routes>
 		</BrowserRouter>
 	);

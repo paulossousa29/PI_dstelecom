@@ -19,7 +19,8 @@ const Login = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		axios
-			.post("http://localhost:3001/login", {
+			.post("https://localhost:3001/login", {
+				headers: { "Accept": "application/json, text/plain, /", "Content-Type": "application/json" },
 				username: values.username,
 				password: values.pass,
 			})
