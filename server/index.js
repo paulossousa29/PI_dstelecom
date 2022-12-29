@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
@@ -48,20 +49,27 @@ app.get("/todos", async (req, res) => {
 	}
 });
 
-app.get('/equipa/:id', async (req, res) => {
-	console.log("Estou cá")
+app.get('/equipa/delete/:id', async(req,res) => {
+	console.log("Estou cá!")
 	const id = req.params.id
-	console.log(id)
+	axios.delete('http://localhost:3001/equipa/delete/' + id)
+		.then(dados => {res.redirect('/equipa')})
+		.catch(err => console.log(err))
+})
+
+app.get('/equipa/:id', async (req, res) => {
+	const id = req.params.id
 	try {
 		pool.connect();
 		const equipa = await pool.query("SELECT * FROM skill where id_equipa='" + id + "';");
-		console.log(equipa.rows);
 		res.json(equipa.rows);
 	}
 	catch (err) {
 		console.log(err.message)
 	}
 });
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
