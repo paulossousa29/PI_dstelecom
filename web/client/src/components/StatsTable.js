@@ -268,6 +268,7 @@ function StatsTable() {
                 <tr>
                   <th scope="col">Equipa</th>
                   <th scope="col">Total de Trabalhos</th>
+                  <th scope="col">Total de Erros</th>
                   <th scope="col">Média de Erros</th>
                   <th scope="col">Média de Tempo/Trabalho</th>
                   <th scope="col"></th>
@@ -288,7 +289,9 @@ function StatsTable() {
                       <td>{item.id}</td>
                       <td>{item.total_jobs}</td>
                       <td>{item.total_mistakes}</td>
+                      <td></td>
                       <td>{item.media_tempo}</td>
+
                       <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Consultar Equipa </button>
 
                     </tr>

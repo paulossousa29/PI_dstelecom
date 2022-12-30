@@ -57,6 +57,21 @@ app.get('/equipa/delete/:id', async (req, res) => {
 		.catch(err => console.log(err))
 })
 
+function calculateDuration(ini, fini) {
+
+	const iniMinutes = parseInt(ini.split(':')[0]) * 60 + parseInt(ini.split(':')[1]);
+	const finiMinutes = parseInt(fini.split(':')[0]) * 60 + parseInt(fini.split(':')[1]);
+
+
+	let duration = finiMinutes - iniMinutes;
+
+	const hours = Math.floor(duration / 60);
+	const minutes = duration % 60;
+
+	//return `${hours}:${minutes.toString().padStart(2, '0')}`;
+	return duration
+}
+
 app.get("/relatorios", async (req, res) => {
 	console.log('request')
 	obj = []
@@ -64,7 +79,27 @@ app.get("/relatorios", async (req, res) => {
 		pool.connect();
 		const allTodos = await pool.query("SELECT * FROM relatorios");
 		console.log(allTodos.rows[0])
-		allTodos.rows.forEach(c => { obj.push({ "id": c.id_intervencao, "total": c.passo_1 + c.passo_3 + c.passo_5 + c.passo_7 + c.passo_9 + c.passo_11 + c.passo_13, "inicio": c.data_inicio, "fim": c.data_fim }) })
+
+
+
+		allTodos.rows.forEach(c => {
+
+			const str = c.data_inicio.toISOString();
+			const start = str.indexOf('T');
+			const end = str.indexOf('Z');
+			const ini = str.substring(start, end).match(/\d+/g)[0];
+
+			const str2 = c.data_fim.toISOString();
+			const start2 = str2.indexOf('T');
+			const end2 = str2.indexOf('Z');
+			const fini = str2.substring(start2, end2).match(/\d+/g)[0];
+			console.log(fini)
+
+			const dur = calculateDuration(ini, fini)
+			console.log(dur)
+
+			obj.push({ "id": c.id_intervencao, "total": c.passo_1 + c.passo_3 + c.passo_5 + c.passo_7 + c.passo_9 + c.passo_11 + c.passo_13, "inicio": c.data_inicio, "fim": c.data_fim, "duracao": c.dur })
+		})
 		res.json(obj);
 	} catch (err) {
 		console.error(err.message);

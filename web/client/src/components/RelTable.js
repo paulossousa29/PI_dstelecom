@@ -270,6 +270,7 @@ function RelTable() {
                                     <th scope="col">Total de Erros</th>
                                     <th scope="col">Data de Início</th>
                                     <th scope="col">Data do Fim</th>
+                                    <th scope="col">Duração Total</th>
                                     <th scope="col"></th>
                                 </tr>
                             </MDBTableHead>
@@ -289,6 +290,7 @@ function RelTable() {
                                             <td>{item.total}</td>
                                             <td>{item.inicio}</td>
                                             <td>{item.fim}</td>
+                                            <td>{item.duracao}</td>
                                             <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Consultar </button>
 
                                         </tr>
