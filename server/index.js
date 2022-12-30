@@ -85,6 +85,19 @@ app.get("/pedidos", async (req, res) => {
 	}
 });
 
+app.get("/stats", async (req, res) => {
+	console.log('request')
+	obj = []
+	try {
+		pool.connect();
+		const allTodos = await pool.query("SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3) as total_mistakes, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id;");
+		console.log(allTodos.rows)
+		res.json(allTodos.rows);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
 app.get('/equipa/:id', async (req, res) => {
 	const id = req.params.id
 	try {

@@ -76,7 +76,7 @@ function StatsTable() {
           .catch((err) => console.log(err));
       default:
         return await axios
-          .get(`http://localhost:3001/relatorios`)
+          .get(`http://localhost:3001/stats`)
           .then((response) => {
             setData(response.data);
             setCurrentPage(currentPage + increase);
@@ -286,9 +286,9 @@ function StatsTable() {
                   <MDBTableBody key={index}>
                     <tr>
                       <td>{item.id}</td>
-                      <td>{item.total}</td>
-                      <td>{item.inicio}</td>
-                      <td>{item.fim}</td>
+                      <td>{item.total_jobs}</td>
+                      <td>{item.total_mistakes}</td>
+                      <td>{item.media_tempo}</td>
                       <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Consultar Equipa </button>
 
                     </tr>
