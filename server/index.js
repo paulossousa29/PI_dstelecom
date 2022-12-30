@@ -48,6 +48,34 @@ app.get("/todos", async (req, res) => {
 	}
 });
 
+app.get("/relatorios", async (req, res) => {
+	console.log('request')
+	obj = []
+	try {
+		pool.connect();
+		const allTodos = await pool.query("SELECT * FROM relatorios");
+		console.log(allTodos.rows[0])
+		allTodos.rows.forEach(c => { obj.push({ "id": c.id_intervencao, "total": c.passo_1 + c.passo_3 + c.passo_5 + c.passo_7 + c.passo_9 + c.passo_11 + c.passo_13, "inicio": c.data_inicio, "fim": c.data_fim }) })
+		res.json(obj);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.get("/pedidos", async (req, res) => {
+	console.log('request')
+	obj = []
+	try {
+		pool.connect();
+		const allTodos = await pool.query("SELECT * FROM pedidos");
+		console.log(allTodos.rows)
+		allTodos.rows.forEach(c => { obj.push({ "id_intervencao": c.id_intervencao, "estado": "Suspenso", "descricao": c.descricao }) })
+		res.json(obj);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
 app.get('/equipa/:id', async (req, res) => {
 	console.log("Estou cá")
 	const id = req.params.id

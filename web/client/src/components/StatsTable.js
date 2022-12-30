@@ -1,273 +1,316 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
-import { useGlobalFilter, useSortBy, useTable } from "react-table";
-import tw from "twin.macro";
-import TablePagination from '@mui/material/TablePagination';
-import TableCell from '@mui/material/TableCell';
-
-function ccyFormat(num) {
-  return `${num.toFixed(2)}`;
-}
-
-const Table = tw.table`
-  table-fixed
-  text-base
-  text-gray-900
-`;
-
-const TableHead = tw.thead`
-  p-2
-`;
-
-const TableRow = tw.tr`
-border
-border-gray-500
-`;
-
-const TableHeader = tw.th`
-border
-border-gray-500
-p-2
-`;
-
-const TableBody = tw.tbody`
-`;
-
-const TableData = tw.td`
-border
-border-gray-500
-p-5
-`;
+import {
+  MDBTable,
+  MDBTableHead,
+  MDBTableBody,
+  MDBRow,
+  MDBCol,
+  MDBContainer,
+  MDBBtn,
+  MDBBtnGroup,
+  MDBPagination,
+  MDBPaginationItem,
+  MDBPaginationLink,
+} from "mdb-react-ui-kit";
 
 
-const Button = tw.button`
-  pl-4
-  pr-4
-  pt-2
-  pb-2
-  text-black
-  rounded-md
-  bg-red-300
-  hover:bg-red-200
-  transition-colors
-`;
+function StatsTable() {
+  const [data, setData] = useState([]);
+  const [value, setValue] = useState("");
+  const [sortValue, setSortValue] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageLimit] = useState(4);
+  const [sortFilterValue, setSortFilterValue] = useState("");
+  const [operation, setOperation] = useState("");
 
-export default function StatsTable(props) {
+  const sortOptions = ["Total de Trabalhos", "Média de Erros", "Média de Tempo/Trabalho"];
 
+  useEffect(() => {
+    loadUsersData(0, 4, 0);
+  }, []);
 
-  const [products, setProducts] = useState([]);
-
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  // Vai buscar os dados à API
-  const fetchProducts = async () => {
-    const response = await axios
-      .get("https://fakestoreapi.com/products")
-      .catch((err) => console.log(err));
-
-    if (response) {
-      const products = response.data;
-
-      console.log("Products: ", products);
-      setProducts(products);
+  const loadUsersData = async (
+    start,
+    end,
+    increase,
+    optType = null,
+    filterOrSortValue
+  ) => {
+    switch (optType) {
+      case "search":
+        setOperation(optType);
+        setSortValue("");
+        return await axios
+          .get(
+            `http://localhost:3001/users?q=${value}&_start=${start}&_end=${end}`
+          )
+          .then((response) => {
+            setData(response.data);
+            setCurrentPage(currentPage + increase);
+          })
+          .catch((err) => console.log(err));
+      case "sort":
+        setOperation(optType);
+        setSortFilterValue(filterOrSortValue);
+        return await axios
+          .get(
+            `http://localhost:5000/users?_sort=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
+          )
+          .then((response) => {
+            setData(response.data);
+            setCurrentPage(currentPage + increase);
+          })
+          .catch((err) => console.log(err));
+      case "filter":
+        setOperation(optType);
+        setSortFilterValue(filterOrSortValue);
+        return await axios
+          .get(
+            `http://localhost:5000/users?status=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
+          )
+          .then((response) => {
+            setData(response.data);
+            setCurrentPage(currentPage + increase);
+          })
+          .catch((err) => console.log(err));
+      default:
+        return await axios
+          .get(`http://localhost:3001/relatorios`)
+          .then((response) => {
+            setData(response.data);
+            setCurrentPage(currentPage + increase);
+          })
+          .catch((err) => console.log(err));
     }
   };
 
+  console.log("data", data);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  // Dados:
-  const data = useMemo(
-    () => [
-      {
-        id: 1,
-        equipa: "equipa1",
-        total: 10,
-        ordens: 2,
-        erros: 5
-      },
-      {
-        id: 2,
-        equipa: "equipa2",
-        total: 20,
-        ordens: 5,
-        erros: 1
-
-      },
-      {
-        id: 2,
-        equipa: "equipa3",
-        total: 15,
-        ordens: 7,
-        erros: 12
-      },
-    ],
-    []
-  );
-
-  //Colunas:
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Equipa",
-        accessor: "equipa",
-      },
-      {
-        Header: "Total de Trabalhos",
-        accessor: "total",
-      },
-      {
-        Header: "Trabalhos Com Alterações",
-        accessor: "ordens",
-      },
-      {
-        Header: "Média de Erros por Trabalho",
-        accessor: "erros",
-      },
-    ],
-    []
-  );
-
-
-  const productsData = useMemo(() => [...products], [products]);
-
-  const productsColumns = useMemo(
-    () =>
-      products[0]
-        ? Object.keys(products[0])
-          .filter((key) => key !== "rating")
-          .map((key) => {
-            if (key === "image")
-              return {
-                Header: key,
-                accessor: key,
-                Cell: ({ value }) => <img style={{ width: 200, height: 100 }} src={value} />,
-                maxWidth: 10,
-              };
-
-            return { Header: key, accessor: key };
-          })
-        : [],
-    [products]
-  );
-
-  const tableHooks = (hooks, id) => {
-    hooks.visibleColumns.push((columns) => [
-      ...columns,
-      {
-        id: "Edit",
-        Header: "Consultar Equipa",
-        Cell: ({ row }) => (
-          <Button onClick={() => 'http://'}>
-            Informação
-          </Button>
-        ),
-      },
-    ]);
+  const handleReset = () => {
+    setOperation("");
+    setValue("");
+    setSortFilterValue("");
+    setSortValue("");
+    loadUsersData(0, 4, 0);
+  };
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    loadUsersData(0, 4, 0, "search");
+    // return await axios
+    //   .get(`http://localhost:5000/users?q=${value}`)
+    //   .then((response) => {
+    //     setData(response.data);
+    //     setValue("");
+    //   })
+    //   .catch((err) => console.log(err));
   };
 
+  const handleSort = async (e) => {
+    let value = e.target.value;
+    loadUsersData(0, 4, 0, "sort", value);
+    setSortValue(value);
 
+    // return await axios
+    //   .get(`http://localhost:5000/users?_sort=${value}&_order=asc`)
+    //   .then((response) => {
+    //     setData(response.data);
+    //   })
+    //   .catch((err) => console.log(err));
+  };
 
-  const tableInstance = useTable(
-    {
-      columns,
-      data,
-    },
-    useGlobalFilter,
-    tableHooks,
-    useSortBy
-  );
+  const handleFilter = async (value) => {
+    loadUsersData(0, 4, 0, "filter", value);
+    // return await axios
+    //   .get(`http://localhost:5000/users?status=${value}`)
+    //   .then((response) => {
+    //     setData(response.data);
+    //   })
+    //   .catch((err) => console.log(err));
+  };
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    preGlobalFilteredRows,
-    setGlobalFilter,
-    state,
-  } = tableInstance;
+  const renderPagination = () => {
+    if (data.length < 4 && currentPage === 0) return null;
+    if (currentPage === 0) {
+      return (
+        <MDBPagination className="mb-0">
+          <MDBPaginationItem>
+            <MDBPaginationLink>1</MDBPaginationLink>
+          </MDBPaginationItem>
+          <MDBPaginationItem>
+            <MDBBtn onClick={() => loadUsersData(4, 8, 1, operation)}>
+              Next
+            </MDBBtn>
+          </MDBPaginationItem>
+        </MDBPagination>
+      );
+    } else if (currentPage < pageLimit - 1 && data.length === pageLimit) {
+      return (
+        <MDBPagination className="mb-0">
+          <MDBPaginationItem>
+            <MDBBtn
+              onClick={() =>
+                loadUsersData(
+                  (currentPage - 1) * 4,
+                  currentPage * 4,
+                  -1,
+                  operation,
+                  sortFilterValue
+                )
+              }
+            >
+              Prev
+            </MDBBtn>
+          </MDBPaginationItem>
+          <MDBPaginationItem>
+            <MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
+          </MDBPaginationItem>
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const isEven = (idx) => idx % 2 === 0;
+          <MDBPaginationItem>
+            <MDBBtn
+              onClick={() =>
+                loadUsersData(
+                  (currentPage + 1) * 4,
+                  (currentPage + 2) * 4,
+                  1,
+                  operation,
+                  sortFilterValue
+                )
+              }
+            >
+              Next
+            </MDBBtn>
+          </MDBPaginationItem>
+        </MDBPagination>
+      );
+    } else {
+      return (
+        <MDBPagination className="mb-0">
+          <MDBPaginationItem>
+            <MDBBtn
+              onClick={() =>
+                loadUsersData(
+                  (currentPage - 1) * 4,
+                  currentPage * 4,
+                  -1,
+                  operation
+                )
+              }
+            >
+              Prev
+            </MDBBtn>
+          </MDBPaginationItem>
+          <MDBPaginationItem>
+            <MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
+          </MDBPaginationItem>
+        </MDBPagination>
+      );
+    }
+  };
 
   return (
-    <>
-      <Table {...getTableProps()}>
-        <TableHead>
-          {headerGroups.map((headerGroup) => (
-            <TableRow {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <TableHeader
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  {column.render("Header")}
-                  {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
-                </TableHeader>
-              ))}
-            </TableRow>
-          ))}
-        </TableHead>
-        <TableBody {...getTableBodyProps()}>
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
-            prepareRow(row);
-
-            return (
-              <TableRow tabIndex={-1}
-                {...row.getRowProps()}
-                className={isEven(idx) ? "bg-gray-400 bg-opacity-30" : ""}
-              >
-                {row.cells.map((cell, idx) => (
-                  <TableData {...cell.getCellProps()}>
-                    {cell.render("Cell")}
-                  </TableData>
-                ))}
-              </TableRow>
-            );
-          })}
-
-
-        </TableBody>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+    <MDBContainer>
+      <form
+        style={{
+          width: "50%", borderRadius: "2px", height: "35px", marginBottom: "20px",
+          margin: "auto",
+          padding: "30px",
+          maxWidth: "500px",
+          alignContent: "start",
+        }}
+        className="d-flex input-group w-auto"
+        onSubmit={handleSearch}
+      >
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Pesquisa "
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
         />
+        <div class='parent'>
+          <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" type="submit" color="light">
+            Search
+          </button>
+          <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" color="info" onClick={() => handleReset()}>
+            Reset
+          </button>
 
+        </div>
+      </form>
+      <div style={{
+        marginTop: "50px",
+        padding: "20px"
+      }}>
+        {data.length > 0 && (
+          <MDBRow>
+            <MDBCol size="8">
+              <h5>Filtrar por:</h5>
+              <select
+                style={{ width: "50%", borderRadius: "12px", height: "35px", marginBottom: "20px" }}
+                onChange={handleSort}
+                value={sortValue}
+              >
+                <option>Selecione um Valor</option>
+                {sortOptions.map((item, index) => (
+                  <option value={item} key={index}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </MDBCol>
+          </MDBRow>
+        )}
+        <MDBRow>
+          <MDBCol size="12">
+            <MDBTable>
+              <MDBTableHead light>
+                <tr>
+                  <th scope="col">Equipa</th>
+                  <th scope="col">Total de Trabalhos</th>
+                  <th scope="col">Média de Erros</th>
+                  <th scope="col">Média de Tempo/Trabalho</th>
+                  <th scope="col"></th>
+                </tr>
+              </MDBTableHead>
+              {data.length === 0 ? (
+                <MDBTableBody className="align-center mb-0">
+                  <tr>
+                    <td colSpan={8} className="text-center mb-0">
+                      No Data Found
+                    </td>
+                  </tr>
+                </MDBTableBody>
+              ) : (
+                data.map((item, index) => (
+                  <MDBTableBody key={index}>
+                    <tr>
+                      <td>{item.id}</td>
+                      <td>{item.total}</td>
+                      <td>{item.inicio}</td>
+                      <td>{item.fim}</td>
+                      <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Consultar Equipa </button>
 
-      </Table>
-
-      <div style={{ paddingLeft: 900 }}>
-        <TableCell align="right">Total Alterações</TableCell>
-        <TableCell align="right">{ccyFormat(10)}</TableCell>
+                    </tr>
+                  </MDBTableBody>
+                ))
+              )}
+            </MDBTable>
+          </MDBCol>
+        </MDBRow>
+        <div
+          style={{
+            margin: "auto",
+            padding: "15px",
+            maxWidth: "250px",
+            alignContent: "center",
+          }}
+        >
+          {renderPagination()}
+        </div>
       </div>
-      <div style={{ paddingLeft: 830 }}>
-        <TableCell align="right">Total Desencaminhamentos</TableCell>
-        <TableCell align="right">{ccyFormat(10)}</TableCell>
-      </div>
-    </>
+    </MDBContainer >
   );
-
-
-
 }
+
+export default StatsTable;
