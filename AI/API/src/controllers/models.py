@@ -21,9 +21,13 @@ class ObjectDetection(Resource):
 
     def post(self,): 
         parser = reqparse.RequestParser()
+        print(f'Parser: {parser}')
         parser.add_argument('file', location='files', type=FileStorage, required=True)
         args = parser.parse_args()
+        print(f'Args: {args}')
         uploaded_file = args['file']  # This is FileStorage instance
+
+        print(f'Uploaded file: {uploaded_file}')
 
         img = Image.open(uploaded_file)
         
