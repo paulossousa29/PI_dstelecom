@@ -17,6 +17,7 @@ function generateToken() {
 }
 
 app.post("/login", async (req, res) => {
+	console.log('request login')
 	console.log(req.body)
 	const { username, password } = req.body
 	try {
@@ -39,7 +40,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/todos", async (req, res) => {
-	console.log('request')
+	console.log('request todos')
 	try {
 		pool.connect();
 		const allTodos = await pool.query("SELECT * FROM equipas");
@@ -73,15 +74,12 @@ function calculateDuration(ini, fini) {
 }
 
 app.get("/relatorios", async (req, res) => {
-	console.log('request')
+	console.log('request relatorios')
 	obj = []
 	try {
 		pool.connect();
 		const allTodos = await pool.query("SELECT * FROM relatorios");
 		console.log(allTodos.rows[0])
-
-
-
 		allTodos.rows.forEach(c => {
 
 			const str = c.data_inicio.toISOString();
@@ -107,7 +105,7 @@ app.get("/relatorios", async (req, res) => {
 });
 
 app.get("/pedidos", async (req, res) => {
-	console.log('request')
+	console.log('request pedidos')
 	obj = []
 	try {
 		pool.connect();
@@ -121,7 +119,7 @@ app.get("/pedidos", async (req, res) => {
 });
 
 app.get("/stats", async (req, res) => {
-	console.log('request')
+	console.log('request stats')
 	obj = []
 	try {
 		pool.connect();
