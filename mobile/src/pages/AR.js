@@ -8,13 +8,21 @@ import SceneAR from '../scenes/SceneAR';
 import colors from '../config/colors';
 import ip from '../config/ip';
 
-const AR = ({navigation}) => {
+const AR = ({route, navigation}) => {
+  const {intervention} = route.params;
+  const [step1Result, setStep1Result] = useState(null);
+  const [step3Result, setStep3Result] = useState(null);
+  const [step5Result, setStep5Result] = useState(null);
+  const [step7Result, setStep7Result] = useState(null);
+  const [step9Result, setStep9Result] = useState(null);
+  const [step11Result, setStep11Result] = useState(null);
+  const [step13Result, setStep13Result] = useState(null);
   const [step, setStep] = useState(1);
 
   const fetchAccess = async () => {
     try {
       const res = axios.get(ip.backend_ip + 'access', {
-        intervention: '#2021041965000118_2',
+        intervention: intervention,
       });
 
       return res.data;
@@ -25,10 +33,10 @@ const AR = ({navigation}) => {
 
   const fetchAI = async image => {
     const imageData = new FormData();
-    imageData.append('image', {
-      uri: image.uri,
-      type: image.type,
-      name: image.filename,
+    imageData.append('file', {
+      uri: image.assets[0].uri,
+      type: image.assets[0].type,
+      name: image.assets[0].filename,
     });
 
     try {
@@ -45,30 +53,48 @@ const AR = ({navigation}) => {
   };
 
   const handleNextStep = async () => {
-    if (step == 1) {
-      // Vai buscar o acesso ao backend
-      res = await fetchAccess();
-      console.log(res);
-
-      // Virica o acesso pelo ai
-
-      // Compara, se der mal navigate new reference
-    } else if (step % 2 == 1) {
+    if (step % 2 == 1) {
       const image = await launchCamera();
-
-      // Se não tirou foto, não avançar
       if (image.didCancel) return;
 
-      // Envia para IA e verifica o resultado
-      res = await fetchAI(image);
-      console.log(res);
+      // res = await fetchAI(image);
+      res = true;
+
+      if (step == 1) {
+        resAccess = await fetchAccess();
+
+        if (compare) {
+          setStep1Result(true);
+        } else {
+          navigation.navigate('NewReference');
+        }
+      } else if (step == 3) {
+        setStep3Result(res);
+      } else if (step == 5) {
+        setStep5Result(res);
+      } else if (step == 7) {
+        setStep7Result(res);
+      } else if (step == 9) {
+        setStep9Result(res);
+      } else if (step == 11) {
+        setStep11Result(res);
+      } else if (step == 13) {
+        setStep13Result(res);
+
+        navigation.navigate('Notes', {
+          intervention: intervention,
+          step1: step1Result,
+          step3: step3Result,
+          step5: step5Result,
+          step7: step7Result,
+          step9: step9Result,
+          step11: step11Result,
+          step13: step13Result,
+        });
+      }
     }
 
-    if (step < 13) {
-      setStep(step + 1);
-    } else {
-      navigation.navigate('Notes');
-    }
+    setStep(step + 1);
   };
 
   const handleQuit = () => {

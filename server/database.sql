@@ -9,7 +9,4 @@ CREATE TABLE relatorios(id INT GENERATED ALWAYS AS IDENTITY,id_intervencao VARCH
 
 CREATE TABLE pedidos(id INT GENERATED ALWAYS AS IDENTITY, id_intervencao VARCHAR(255) NOT NULL, estado INT NOT NULL, descricao VARCHAR(1000), CONSTRAINT fk_equipa FOREIGN KEY(id_intervencao) REFERENCES intervencoes(id),PRIMARY KEY(id));
 
-
-
-
-
+CREATE TABLE avaliacoes(id INT GENERATED ALWAYS AS IDENTITY, avaliacao_usabilidade INT NOT NULL, avaliacao_aspeto INT NOT NULL, avaliacao_global INT NOT NULL, PRIMARY KEY(id));

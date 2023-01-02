@@ -69,6 +69,97 @@ app.get("/access", async (req, res) => {
 	}
 });
 
+app.post("/new_request", async (req, res) => {
+	try {
+		pool.connect();
+		const { id_intervention, state, description } = req.body;
+
+		query =
+			"INSERT INTO pedidos(id_intervencao, estado, descricao) VALUES ('" +
+			id_intervention +
+			"', " +
+			state +
+			", '" +
+			description +
+			"')";
+		const result = await pool.query(query);
+
+		res.json(result.rows);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.post("/report", async (req, res) => {
+	try {
+		pool.connect();
+		const {
+			id_intervention,
+			step_1,
+			step_3,
+			step_5,
+			step_7,
+			step_9,
+			step_11,
+			step_13,
+			observations,
+			date_start,
+			date_end,
+		} = req.body;
+
+		query =
+			"INSERT INTO relatorios(id_intervencao, passo_1, passo_3, passo_5, passo_7, passo_9, passo_11, passo_13, observacoes, data_inicio, data_fim) VALUES ('" +
+			id_intervention +
+			"', " +
+			step_1 +
+			", " +
+			step_3 +
+			", " +
+			step_5 +
+			", " +
+			step_7 +
+			", " +
+			step_9 +
+			", " +
+			step_11 +
+			", " +
+			step_13 +
+			", '" +
+			observations +
+			"', '" +
+			date_start +
+			"', '" +
+			date_end +
+			"')";
+		const result = await pool.query(query);
+
+		res.json(result.rows);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.post("/user_experience", async (req, res) => {
+	try {
+		pool.connect();
+		const { usability_rate, visibility_rate, global_rate } = req.body;
+
+		query =
+			"INSERT INTO avaliacoes(avaliacao_usabilidade, avaliacao_aspeto, avaliacao_global) VALUES (" +
+			usability_rate +
+			", " +
+			visibility_rate +
+			", " +
+			global_rate +
+			")";
+		const result = await pool.query(query);
+
+		res.json(result.rows);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
 	next(createError(404));

@@ -9,8 +9,12 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import colors from '../config/colors';
+import ip from '../config/ip';
+import axios from 'axios';
 
-const Notes = ({navigation}) => {
+const Notes = ({route, navigation}) => {
+  const {intervention, step1, step3, step5, step7, step9, step11, step13} =
+    route.params;
   const [notes, setNotes] = useState(null);
 
   const handleSubmit = () => {
@@ -20,7 +24,24 @@ const Notes = ({navigation}) => {
       },
       {
         text: 'Concluir',
-        onPress: () => navigation.navigate('Done'),
+        onPress: async () => {
+          try {
+            await axios.post(ip.backend_ip + 'report', {
+              id_intervention: intervention,
+              observations: notes,
+              step_1: step1,
+              step_3: step3,
+              step_5: step5,
+              step_7: step7,
+              step_9: step9,
+              step_11: step11,
+              step_13: step13,
+            });
+            navigation.navigate('Done');
+          } catch (error) {
+            console.log(error.message);
+          }
+        },
       },
     ]);
   };

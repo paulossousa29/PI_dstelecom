@@ -6,8 +6,8 @@ import ip from '../config/ip';
 import axios from 'axios';
 
 const Home = ({navigation}) => {
-  const [workOrder, setWorkOrder] = useState(null);
-  const [errorMsgWorkOrder, setErrorMsgWorkOrder] = useState(null);
+  const [intervention, setIntervention] = useState('#2021041965000118_2');
+  const [errorMsgIntervention, setErrorMsgIntervention] = useState(null);
   const invalid = [null, ''];
 
   const fetchIntervencoes = async () => {
@@ -17,26 +17,29 @@ const Home = ({navigation}) => {
         username: 'CGO0027',
       });
 
-      return res.data.length !== 0;
+      return res;
+      //return res.data.length !== 0;
     } catch (error) {
       console.log(error.message);
-
-      return false;
     }
   };
 
-  const validationID = () => {
-    if (!invalid.includes(workOrder)) {
-      if (fetchIntervencoes()) {
-        setWorkOrder(null);
-        setErrorMsgWorkOrder(null);
+  const validationID = async () => {
+    if (!invalid.includes(intervention)) {
+      const res = await fetchIntervencoes();
 
-        navigation.navigate('AR');
+      if (res) {
+        setIntervention(null);
+        setErrorMsgIntervention(null);
+
+        navigation.navigate('AR', {
+          intervention: intervention,
+        });
       } else {
-        setErrorMsgWorkOrder('ID de Workorder inválido!');
+        setErrorMsgIntervention('ID da Intervenção inválido!');
       }
     } else {
-      setErrorMsgWorkOrder('ID de Workorder necessário!');
+      setErrorMsgIntervention('ID da Intervenção necessário!');
     }
   };
 
@@ -46,16 +49,16 @@ const Home = ({navigation}) => {
         style={styles.logo}
         source={require('../assets/logo-black.png')}></Image>
       <View style={styles.container}>
-        <Text style={styles.text}>ID do WorkOrder</Text>
-        {errorMsgWorkOrder && (
-          <Text style={styles.errorMessage}>{errorMsgWorkOrder}</Text>
+        <Text style={styles.text}>ID da Intervenção</Text>
+        {errorMsgIntervention && (
+          <Text style={styles.errorMessage}>{errorMsgIntervention}</Text>
         )}
 
         <TextInput
-          style={styles.workOrderInput}
-          onChangeText={setWorkOrder}
-          value={workOrder}
-          placeholder="FTTH_DST_00263846"
+          style={styles.interventionInput}
+          onChangeText={setIntervention}
+          value={intervention}
+          placeholder="#2021041965000118_2"
           placeholderTextColor={colors.placeholderGrey}></TextInput>
 
         <TouchableOpacity
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     marginHorizontal: 20,
   },
-  workOrderInput: {
+  interventionInput: {
     backgroundColor: colors.white,
     color: colors.logoGreyDark,
     width: '90%',

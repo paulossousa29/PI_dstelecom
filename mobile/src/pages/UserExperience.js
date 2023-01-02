@@ -1,20 +1,25 @@
 import React, {useState} from 'react';
 import {
   StyleSheet,
-  SafeAreaView,
   View,
   Text,
   Image,
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+
 import colors from '../config/colors';
+import ip from '../config/ip';
+import axios from 'axios';
 
 const UserExperience = ({navigation}) => {
   const [defaultRating, setDefaultRating] = useState(0);
+  const [errorMsgRating, setErrorMsgRating] = useState(null);
   const [defaultUsabilityRating, setUsabilityRating] = useState(0);
+  const [errorMsgUsabilityRating, setErrorMsgUsabilityRating] = useState(null);
   const [defaultVisibilityRating, setVisibilityRating] = useState(0);
+  const [errorMsgVisibilityRating, setErrorMsgVisibilityRating] =
+    useState(null);
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
 
   const RatingBarUsability = () => {
@@ -90,13 +95,44 @@ const UserExperience = ({navigation}) => {
   };
 
   const handleSubmit = () => {
+    defaultUsabilityRating === 0
+      ? setErrorMsgUsabilityRating('Avaliação necessária')
+      : setErrorMsgUsabilityRating(null);
+    defaultVisibilityRating === 0
+      ? setErrorMsgVisibilityRating('Avaliação necessária')
+      : setErrorMsgVisibilityRating(null);
+    defaultRating === 0
+      ? setErrorMsgRating('Avaliação necessária')
+      : setErrorMsgRating(null);
+
+    if (
+      defaultUsabilityRating === 0 ||
+      defaultVisibilityRating === 0 ||
+      defaultRating === 0
+    )
+      return;
+
     Alert.alert('Concluir', 'Pretende submeter a sua resposta?', [
       {
         text: 'Cancelar',
       },
       {
-        text: 'Sim, confirmo.',
-        onPress: () => navigation.navigate('Home'),
+        text: 'Sim, confirmo',
+        onPress: async () => {
+          try {
+            const res = await axios.post(ip.backend_ip + 'user_experience', {
+              usability_rate: defaultUsabilityRating,
+              visibility_rate: defaultVisibilityRating,
+              global_rate: defaultRating,
+            });
+
+            console.log(res.data);
+
+            navigation.navigate('Home');
+          } catch (err) {
+            console.error(err.message);
+          }
+        },
       },
     ]);
   };
@@ -111,17 +147,31 @@ const UserExperience = ({navigation}) => {
         <Text style={styles.text}>
           Classifique a sua experiência em relação à utilização da aplicação:
         </Text>
+        {errorMsgUsabilityRating && (
+          <Text style={styles.errorMessage}>{errorMsgUsabilityRating}</Text>
+        )}
         <RatingBarUsability />
         <Text style={styles.text}>
           Classifique a sua experiência em relação ao aspeto da aplicação:
         </Text>
+        {errorMsgVisibilityRating && (
+          <Text style={styles.errorMessage}>{errorMsgVisibilityRating}</Text>
+        )}
         <RatingBarVisibility />
         <Text style={styles.text}>
           Classifique a sua experiência global da aplicação:
         </Text>
+        {errorMsgRating && (
+          <Text style={styles.errorMessage}>{errorMsgRating}</Text>
+        )}
         <RatingBarDefault />
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.buttonText}>Cancelar</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.startButton} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Obter o valor selecionado</Text>
+          <Text style={styles.buttonText}>Submeter avaliação</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -153,7 +203,7 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     position: 'absolute',
-    bottom: 0,
+    bottom: -15,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -166,7 +216,7 @@ const styles = StyleSheet.create({
   },
   startButton: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 40,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -197,7 +247,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   text: {
-    paddingLeft: 30,
+    paddingLeft: 20,
     paddingTop: 15,
     color: colors.logoGreyDark,
     fontWeight: 'bold',
@@ -215,7 +265,7 @@ const styles = StyleSheet.create({
   },
   ratingBarStyle: {
     flexDirection: 'row',
-    marginTop: 30,
+    marginTop: 20,
     justifyContent: 'center',
   },
 });
