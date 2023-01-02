@@ -12,4 +12,7 @@ CREATE TABLE pedidos(id INT GENERATED ALWAYS AS IDENTITY, id_intervencao VARCHAR
 
 
 
+INSERT INTO relatorios (id_intervencao,passo_1 ,passo_3 ,passo_5 ,passo_7 ,passo_9 ,passo_11 ,passo_13 ,observacoes ,data_inicio,data_fim) VALUES ('#2021041965000118_3',1,1,0,1,0,0,0,'nada a acrescentar','2022-01-12','2022-07-14');
+INSERT INTO relatorios (id_intervencao,passo_1 ,passo_3 ,passo_5 ,passo_7 ,passo_9 ,passo_11 ,passo_13 ,observacoes ,data_inicio,data_fim) VALUES ('ULO18Y',1,1,1,1,0,1,0,'correu tudo bem','2022-01-17','2022-07-19');
 
+INSERT INTO pedidos (id_intervencao,estado,descricao) VALUES ('ULO18Y',0,'Mudar PDO de localização');
