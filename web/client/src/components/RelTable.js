@@ -267,7 +267,9 @@ function RelTable() {
                             <MDBTableHead light>
                                 <tr>
                                     <th scope="col">Id da Intervenção</th>
+                                    <th scope="col">Equipa</th>
                                     <th scope="col">Total de Erros</th>
+                                    <th scope="col">Observações</th>
                                     <th scope="col">Data de Início</th>
                                     <th scope="col">Data do Fim</th>
                                     <th scope="col">Duração Total</th>
@@ -286,10 +288,12 @@ function RelTable() {
                                 data.map((item, index) => (
                                     <MDBTableBody key={index}>
                                         <tr>
-                                            <td>{item.id}</td>
-                                            <td>{item.total}</td>
-                                            <td>{item.inicio}</td>
-                                            <td>{item.fim}</td>
+                                            <td>{item.id_intervencao}</td>
+                                            <td>{item.id_equipa}</td>
+                                            <td>{item.total_erros}</td>
+                                            <td>{item.observacoes}</td>
+                                            <td>{item.data_inicio}</td>
+                                            <td>{item.data_fim}</td>
                                             <td>{item.duracao}</td>
                                             <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Consultar </button>
 

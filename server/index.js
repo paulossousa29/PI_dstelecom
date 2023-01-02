@@ -58,47 +58,16 @@ app.get('/equipa/delete/:id', async (req, res) => {
 		.catch(err => console.log(err))
 })
 
-function calculateDuration(ini, fini) {
 
-	const iniMinutes = parseInt(ini.split(':')[0]) * 60 + parseInt(ini.split(':')[1]);
-	const finiMinutes = parseInt(fini.split(':')[0]) * 60 + parseInt(fini.split(':')[1]);
-
-
-	let duration = finiMinutes - iniMinutes;
-
-	const hours = Math.floor(duration / 60);
-	const minutes = duration % 60;
-
-	//return `${hours}:${minutes.toString().padStart(2, '0')}`;
-	return duration
-}
 
 app.get("/relatorios", async (req, res) => {
 	console.log('request relatorios')
 	obj = []
 	try {
 		pool.connect();
-		const allTodos = await pool.query("SELECT * FROM relatorios");
+		const allTodos = await pool.query(" SELECT r.id_intervencao, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao;");
 		console.log(allTodos.rows[0])
-		allTodos.rows.forEach(c => {
-
-			const str = c.data_inicio.toISOString();
-			const start = str.indexOf('T');
-			const end = str.indexOf('Z');
-			const ini = str.substring(start, end).match(/\d+/g)[0];
-
-			const str2 = c.data_fim.toISOString();
-			const start2 = str2.indexOf('T');
-			const end2 = str2.indexOf('Z');
-			const fini = str2.substring(start2, end2).match(/\d+/g)[0];
-			console.log(fini)
-
-			const dur = calculateDuration(ini, fini)
-			console.log(dur)
-
-			obj.push({ "id": c.id_intervencao, "total": c.passo_1 + c.passo_3 + c.passo_5 + c.passo_7 + c.passo_9 + c.passo_11 + c.passo_13, "inicio": c.data_inicio, "fim": c.data_fim, "duracao": c.dur })
-		})
-		res.json(obj);
+		res.json(allTodos.rows);
 	} catch (err) {
 		console.error(err.message);
 	}
@@ -123,7 +92,7 @@ app.get("/stats", async (req, res) => {
 	obj = []
 	try {
 		pool.connect();
-		const allTodos = await pool.query("SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3) as total_mistakes, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id;");
+		const allTodos = await pool.query("SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3) as total_mistakes, (SUM(r.passo_1 + r.passo_3)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id");
 		console.log(allTodos.rows)
 		res.json(allTodos.rows);
 	} catch (err) {
