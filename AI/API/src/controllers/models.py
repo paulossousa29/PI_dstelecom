@@ -14,18 +14,19 @@ app, api = server.app, server.api
 models = db.getModels()
 models_info = db.getModelsInfo()
 
+parser = api.parser()
+parser.add_argument('image', type=FileStorage, location='files', required=True)
+
 @api.route('/detect')
 class ObjectDetection(Resource):
     def get(self,):
         return models_info
 
+    @api.expect(parser)
     def post(self,): 
-        parser = reqparse.RequestParser()
-        print(f'Parser: {parser}')
-        parser.add_argument('file', type=str, required=True)
         args = parser.parse_args()
         print(f'Args: {args}')
-        uploaded_file = args['file']  # This is FileStorage instance
+        uploaded_file = args['image']  # This is FileStorage instance
 
         print(f'Uploaded file: {uploaded_file}')
 
