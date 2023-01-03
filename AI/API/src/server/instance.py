@@ -6,14 +6,14 @@ class Server():
         self.app = Flask(__name__)
         self.api = Api(self.app,
             version='1.0',
-            title='Object Detection API',
+            title='Object Detecion API',
             description='API with Machine Learning models deployed',
             doc='/docs'
         )
 
-    def run(self,):
+    '''def run(self,):
         self.app.run(
             debug=True
-        )
+        )'''
 
 server = Server()

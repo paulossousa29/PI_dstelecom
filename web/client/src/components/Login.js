@@ -1,32 +1,34 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-
-import { Link } from "react-router-dom";
 import logo from "../assets/dstelecomlogo.png";
-import PropTypes from "prop-types";
 
-async function loginUser(credentials) {
-	return fetch("http://localhost:3001/login", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(credentials),
-	}).then((data) => data.json());
-}
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
-export default function Login({ setToken }) {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 
-	const handleSubmit = async (e) => {
+
+
+const Login = () => {
+	const navigate = useNavigate();
+	const [values, setValues] = useState({
+		username: "",
+		pass: ""
+	});
+
+	const handleSubmit = (e) => {
 		e.preventDefault();
-		const token = await loginUser({
-			email,
-			password,
-		});
-		setToken(token);
+		axios
+			.post("http://localhost:3001/login", {
+				headers: { "Accept": "application/json, text/plain, /", "Content-Type": "application/json" },
+				username: values.username,
+				password: values.pass,
+			})
+			.then((res) => {
+				localStorage.setItem("token", res.data.token);
+				navigate("/stats")
+			})
+			.catch((err) => console.error(err));
 	};
 
 	return (
@@ -54,7 +56,7 @@ export default function Login({ setToken }) {
 										<Form onSubmit={handleSubmit}>
 											{/* Email */}
 											<Form.Group
-												controlId="email"
+												controlId="user"
 												className="form-outline mb-4"
 											>
 												<Form.Label
@@ -64,19 +66,18 @@ export default function Login({ setToken }) {
 													Email
 												</Form.Label>
 												<Form.Control
-													type="email"
+													type="username"
 													id="form2Example1"
 													className="form-control"
 													placeholder="Email"
-													value={email}
-													onChange={(e) =>
-														setEmail(e.target.value)
+													required
+													onChange={(e) => setValues({ ...values, username: e.target.value })
 													}
 												/>
 											</Form.Group>
 											{/* Password */}
 											<Form.Group
-												controlId="password"
+												controlId="pass"
 												className="form-outline mb-4"
 											>
 												<Form.Label
@@ -90,34 +91,13 @@ export default function Login({ setToken }) {
 													id="form2Example1"
 													className="form-control"
 													placeholder="Password"
-													value={password}
-													onChange={(e) =>
-														setPassword(
-															e.target.value
-														)
+													required
+													onChange={(e) => setValues({ ...values, pass: e.target.value })
 													}
 												/>
 											</Form.Group>
 
-											<div className="row mb-4">
-												<div className="col d-flex justify-content-center">
-													<div className="form-check">
-														<input
-															className="form-check-input"
-															type="checkbox"
-															value=""
-															id="form2Example31"
-														/>
-														<label
-															className="form-check-label"
-															htmlFor="form2Example31"
-														>
-															{" "}
-															Remember me{" "}
-														</label>
-													</div>
-												</div>
-											</div>
+
 											<Button
 												type="submit"
 												className="btn btn-secondary btn-block mb-4"
@@ -136,6 +116,4 @@ export default function Login({ setToken }) {
 	);
 }
 
-Login.propTypes = {
-	setToken: PropTypes.func.isRequired,
-};
+export default Login;

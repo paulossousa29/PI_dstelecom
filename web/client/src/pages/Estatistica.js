@@ -3,23 +3,23 @@ import StatsTable from "../components/StatsTable";
 
 
 import "./Painel.css"
-import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 
-const Home = () => {
-	return (
 
-    <React.Fragment>
-        <div className="row">
-            <NavBar/>
-            <div className="right-panel" style={{paddingTop: 10, paddingRight: 30}}>
-			    <StatsTable />
+const Home = () => {
+    return (
+
+        <React.Fragment>
+            <div className="row">
+                <NavBar />
+                <div className="right-panel" style={{ paddingTop: 10, paddingRight: 30 }}>
+                    <StatsTable />
+                </div>
             </div>
-        </div>
-    </React.Fragment>
-			
-		
-	);
+        </React.Fragment>
+
+
+    );
 };
 
 export default Home;

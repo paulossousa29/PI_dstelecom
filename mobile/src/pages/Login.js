@@ -1,7 +1,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+
 import colors from '../config/colors';
+import ip from '../config/ip';
+import axios from 'axios';
 
 const Login = ({navigation}) => {
   const [username, setUsername] = useState(null);
@@ -10,7 +13,7 @@ const Login = ({navigation}) => {
   const [errorMsgPass, setErrorMsgPass] = useState(null);
   const invalid = [null, ''];
 
-  const commitDB = () => {
+  const fetchLogin = () => {
     // fazer commit a base de dados
   };
 

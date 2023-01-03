@@ -3,7 +3,7 @@ import torch
 class Database():
     def __init__(self,):
         self.models = [
-            torch.hub.load('ultralytics/yolov5', 'custom', path='static/weights/best.pt')
+            torch.hub.load('ultralytics/yolov5', 'custom', path='static/weights/best.pt', device='cpu', force_reload=True)
         ]
         self.models_info = [
             {
