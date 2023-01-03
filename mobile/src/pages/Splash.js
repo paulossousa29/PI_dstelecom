@@ -1,32 +1,7 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import colors from '../config/colors';
-import ip from '../config/ip';
-import axios from 'axios';
 
-const ResultReference = ({route, navigation}) => {
-  const {intervention} = route.params;
-
-  const fetchNewReferenceStatus = async () => {
-    try {
-      const res = await axios.post(ip.backend_ip + 'new_reference_status', {
-        id_intervention: intervention,
-      });
-
-      return res.data.status;
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const handleVerify = async () => {
-    const status = await fetchNewReferenceStatus();
-
-    if (status === 0) {
-      // if (status === 1 || status === 2) {
-      navigation.pop(); // Tem que voltar dois pops mas estoura
-    }
-  };
-
+const Splash = () => {
   return (
     <View style={styles.background}>
       <Image
@@ -34,17 +9,8 @@ const ResultReference = ({route, navigation}) => {
         source={require('../assets/logo-black.png')}></Image>
       <View style={styles.container}>
         <View style={styles.resultReference}>
-          <Image
-            source={require('../assets/clock.png')}
-            style={{width: 40, height: 40}}
-          />
-          <Text style={styles.text}>Aguarde pela resposta do adminstrador</Text>
+          <Text style={styles.text}>A carregar</Text>
         </View>
-        <TouchableOpacity
-          style={styles.startButton}
-          onPress={() => handleVerify()}>
-          <Text style={styles.buttonText}>Verificar estado do pedido</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -102,4 +68,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ResultReference;
+export default Splash;
