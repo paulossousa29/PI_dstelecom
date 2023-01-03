@@ -28,10 +28,11 @@ app.post("/login", async (req, res) => {
 			if (password == allTodos.rows[0].password) {
 				token = generateToken();
 				res.json({ token });
-				console.log(token);
+				console.log("Status: 200 Token: " + token);
 			}
 		} else {
 			res.status(401).json({ error: "Invalid username or password" });
+			console.log("Status: 401 Error");
 		}
 	} catch (err) {
 		console.error(err.message);
@@ -54,10 +55,12 @@ app.get("/todos", async (req, res) => {
 });
 
 app.post("/intervention", async (req, res) => {
+	console.log("request intervention");
+	console.log(req.body);
+	const { intervention, username } = req.body;
+
 	try {
 		pool.connect();
-
-		const { intervention, username } = req.body;
 
 		query =
 			"SELECT * FROM intervencoes WHERE intervencoes.id = '" +
@@ -71,7 +74,7 @@ app.post("/intervention", async (req, res) => {
 		if (result.rows.length === 0) {
 			res.status(401).json({ error: "Intervention Not Found" });
 		} else {
-			res.status(200).json({ success: true });
+			res.json({ success: true });
 		}
 	} catch (err) {
 		console.error(err.message);
@@ -104,20 +107,27 @@ app.get("/relatorios", async (req, res) => {
 	}
 });
 
-app.get("/access", async (req, res) => {
+app.post("/access", async (req, res) => {
+	console.log("request access");
+	console.log(req.body);
+	const { intervention } = req.body;
 	try {
 		pool.connect();
 
-		const { intervention } = req.body;
-
 		query =
-			"SELECT intervencoes.acesso FROM intervencoes WHERE intervencoes.id = '" +
+			"SELECT * FROM intervencoes WHERE intervencoes.id = '" +
 			intervention +
 			"'";
 
 		const result = await pool.query(query);
 
-		res.json(result.rows);
+		if (result.rows.length > 0) {
+			res.json({ access: result.rows[0].acesso });
+			console.log("Status: 200 Access: " + result.rows[0].acesso);
+		} else {
+			res.status(404).json({ error: "Not Found" });
+			console.log("Status: 404 Not Found");
+		}
 	} catch (err) {
 		console.error(err.message);
 	}
@@ -143,10 +153,13 @@ app.get("/pedidos", async (req, res) => {
 	}
 });
 
-app.post("/new_request", async (req, res) => {
+app.post("/new_reference", async (req, res) => {
+	console.log("request new reference");
+	console.log(req.body);
+	const { id_intervention, description } = req.body;
+
 	try {
 		pool.connect();
-		const { id_intervention, description } = req.body;
 
 		query =
 			"INSERT INTO pedidos(id_intervencao, estado, descricao) VALUES ('" +
@@ -157,6 +170,34 @@ app.post("/new_request", async (req, res) => {
 		const result = await pool.query(query);
 
 		res.json(result.rows);
+		console.log("Status: 200");
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.post("/new_reference_status", async (req, res) => {
+	console.log("request new reference status");
+	console.log(req.body);
+	const { id_intervention } = req.body;
+
+	try {
+		pool.connect();
+
+		query =
+			"SELECT * FROM pedidos WHERE id_intervencao = '" +
+			id_intervention +
+			"'";
+
+		const result = await pool.query(query);
+
+		if (result.rows.length > 0) {
+			res.json({ status: result.rows[0].estado });
+			console.log("Status: 200 Result: " + result.rows[0].estado);
+		} else {
+			res.status(404).json({ error: "Not Found" });
+			console.log("Status: 404 Not Found");
+		}
 	} catch (err) {
 		console.error(err.message);
 	}
@@ -178,21 +219,24 @@ app.get("/stats", async (req, res) => {
 });
 
 app.post("/report", async (req, res) => {
+	console.log("request report");
+	console.log(req.body);
+	const {
+		id_intervention,
+		step_1,
+		step_3,
+		step_5,
+		step_7,
+		step_9,
+		step_11,
+		step_13,
+		observations,
+		date_start,
+		date_end,
+	} = req.body;
+
 	try {
 		pool.connect();
-		const {
-			id_intervention,
-			step_1,
-			step_3,
-			step_5,
-			step_7,
-			step_9,
-			step_11,
-			step_13,
-			observations,
-			date_start,
-			date_end,
-		} = req.body;
 
 		query =
 			"INSERT INTO relatorios(id_intervencao, passo_1, passo_3, passo_5, passo_7, passo_9, passo_11, passo_13, observacoes, data_inicio, data_fim) VALUES ('" +

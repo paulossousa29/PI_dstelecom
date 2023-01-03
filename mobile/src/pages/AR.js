@@ -9,7 +9,8 @@ import colors from '../config/colors';
 import ip from '../config/ip';
 
 const AR = ({route, navigation}) => {
-  const {intervention} = route.params;
+  const {intervention, username} = route.params;
+  const [startDate, setStartDate] = useState(new Date());
   const [step1Result, setStep1Result] = useState(null);
   const [step3Result, setStep3Result] = useState(null);
   const [step5Result, setStep5Result] = useState(null);
@@ -18,23 +19,22 @@ const AR = ({route, navigation}) => {
   const [step11Result, setStep11Result] = useState(null);
   const [step13Result, setStep13Result] = useState(null);
   const [step, setStep] = useState(1);
-  const [image, setImage] = useState(null);
 
   const fetchAccess = async () => {
     try {
-      const res = axios.get(ip.backend_ip + 'access', {
+      const res = await axios.post(ip.backend_ip + 'access', {
         intervention: intervention,
       });
 
-      return res.data;
+      return res.data.access;
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  const fetchAI = async () => {
+  const fetchAI = async image => {
     const imageData = new FormData();
-    imageData.append('file', {
+    imageData.append('image', {
       uri: image.assets[0].uri,
       type: image.assets[0].type,
       name: image.assets[0].filename,
@@ -58,20 +58,19 @@ const AR = ({route, navigation}) => {
       const image = await launchCamera();
       if (image.didCancel) return;
 
-      setImage(image);
-
-      // res = await fetchAI();
+      //res = await fetchAI(image);
+      //console.log(res);
       res = true;
 
       if (step == 1) {
-        resAccess = await fetchAccess();
+        access = await fetchAccess();
 
-        compare = false;
+        compare = true;
 
         if (compare) {
           setStep1Result(true);
         } else {
-          navigation.push('NewReference');
+          navigation.push('NewReference', {intervention: intervention});
         }
       } else if (step == 3) {
         setStep3Result(res);
@@ -86,8 +85,18 @@ const AR = ({route, navigation}) => {
       } else if (step == 13) {
         setStep13Result(res);
 
-        navigation.navigate('Notes', {
+        var pad = function (num) {
+          return ('00' + num).slice(-2);
+        };
+
+        navigation.push('Notes', {
           intervention: intervention,
+          startDate:
+            startDate.getUTCFullYear() +
+            '-' +
+            pad(startDate.getUTCMonth() + 1) +
+            '-' +
+            pad(startDate.getUTCDate()),
           step1: step1Result,
           step3: step3Result,
           step5: step5Result,
@@ -109,7 +118,7 @@ const AR = ({route, navigation}) => {
       },
       {
         text: 'Sair',
-        onPress: () => navigation.navigate('Home'),
+        onPress: () => navigation.pop(),
       },
     ]);
   };

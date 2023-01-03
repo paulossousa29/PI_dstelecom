@@ -1,4 +1,4 @@
-import {useState, useRef} from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,6 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import ResultReference from './ResultReference';
 
 import colors from '../config/colors';
 import ip from '../config/ip';
@@ -17,25 +16,31 @@ const NewReference = ({route, navigation}) => {
   const {intervention} = route.params;
   const [reference, setReference] = useState(null);
   const [errorMsgRef, setErrorMsgRef] = useState(null);
-  const [messageToWait, setMessageToWait] = useState(null);
   const invalid = [null, ''];
 
   const fetchNewReference = async () => {
-    const res = await axios.post(ip.backend_ip + 'new_request', {
-      id_intervention: intervention,
-      description: reference,
-    });
+    try {
+      const res = await axios.post(ip.backend_ip + 'new_reference', {
+        id_intervention: intervention,
+        description: reference,
+      });
+
+      return res.status === 200;
+    } catch (err) {
+      console.log(error.message);
+    }
   };
 
-  const validationRef = () => {
+  const validationRef = async () => {
     if (!invalid.includes(reference)) {
       setReference(null);
-      setMessageToWait('Vai ter de aguardar que o administrador valide...');
+      const status = await fetchNewReference();
 
-      fetchNewReference();
+      if (status) {
+        navigation.push('ResultReference', {intervention: intervention});
+      }
     } else {
       setErrorMsgRef('Necessário o nº da referência');
-      setMessageToWait(null);
     }
   };
 
@@ -63,8 +68,6 @@ const NewReference = ({route, navigation}) => {
           }}>
           <Text style={styles.buttonText}>Confirmar</Text>
         </TouchableOpacity>
-
-        {messageToWait && <ResultReference messageToWait={messageToWait} />}
       </View>
     </View>
   );

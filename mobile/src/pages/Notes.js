@@ -13,9 +13,19 @@ import ip from '../config/ip';
 import axios from 'axios';
 
 const Notes = ({route, navigation}) => {
-  const {intervention, step1, step3, step5, step7, step9, step11, step13} =
-    route.params;
+  const {
+    intervention,
+    startDate,
+    step1,
+    step3,
+    step5,
+    step7,
+    step9,
+    step11,
+    step13,
+  } = route.params;
   const [notes, setNotes] = useState(null);
+  const [endDate, setEndDate] = useState(new Date());
 
   const handleSubmit = () => {
     Alert.alert('Concluir', 'Pretende mesmo concluir?', [
@@ -25,19 +35,32 @@ const Notes = ({route, navigation}) => {
       {
         text: 'Concluir',
         onPress: async () => {
+          console.log(startDate);
           try {
+            var pad = function (num) {
+              return ('00' + num).slice(-2);
+            };
+
             await axios.post(ip.backend_ip + 'report', {
               id_intervention: intervention,
               observations: notes,
-              step_1: step1,
-              step_3: step3,
-              step_5: step5,
-              step_7: step7,
-              step_9: step9,
-              step_11: step11,
-              step_13: step13,
+              step_1: step1 ? 1 : 0,
+              step_3: step3 ? 1 : 0,
+              step_5: step5 ? 1 : 0,
+              step_7: step7 ? 1 : 0,
+              step_9: step9 ? 1 : 0,
+              step_11: step11 ? 1 : 0,
+              step_13: step13 ? 1 : 0,
+              date_start: startDate,
+              date_end:
+                endDate.getUTCFullYear() +
+                '-' +
+                pad(endDate.getUTCMonth() + 1) +
+                '-' +
+                pad(endDate.getUTCDate()),
             });
-            navigation.navigate('Done');
+
+            navigation.push('Done');
           } catch (error) {
             console.log(error.message);
           }

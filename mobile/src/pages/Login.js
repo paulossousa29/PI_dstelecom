@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+
+import {AuthContext} from '../components/AuthContext';
 
 import colors from '../config/colors';
 import ip from '../config/ip';
@@ -13,24 +15,27 @@ const Login = ({navigation}) => {
   const [errorMsgPass, setErrorMsgPass] = useState(null);
   const invalid = [null, ''];
 
-  const fetchLogin = async () => {
-    const res = await axios.post(ip.backend_ip + 'login', {
-      username: username,
-      password: pass,
-    });
+  const {login} = useContext(AuthContext);
 
-    return res.status;
+  const fetchLogin = async () => {
+    try {
+      const res = await axios.post(ip.backend_ip + 'login', {
+        username: username,
+        password: pass,
+      });
+
+      return res.data.token;
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
-  const validationAccount = () => {
+  const validationAccount = async () => {
     if (!invalid.includes(pass) && !invalid.includes(username)) {
-      //const status = fetchLogin();
-      const status = 200;
+      const token = await fetchLogin();
 
-      if (status === 200) {
-        navigation.navigate('Home', {
-          username: username,
-        });
+      if (token) {
+        login({token: token, username: username});
       } else {
         setErrorMsgUsername('Utilizador ou Palavra-pass Inválidos!');
         setErrorMsgPass(null);

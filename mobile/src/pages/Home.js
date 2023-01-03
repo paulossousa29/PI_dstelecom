@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+
+import {AuthContext} from '../components/AuthContext';
 
 import colors from '../config/colors';
 import ip from '../config/ip';
@@ -8,9 +10,11 @@ import axios from 'axios';
 
 const Home = ({route, navigation}) => {
   const {username} = route.params;
-  const [intervention, setIntervention] = useState('#2021041965000118_2');
+  const [intervention, setIntervention] = useState(null);
   const [errorMsgIntervention, setErrorMsgIntervention] = useState(null);
   const invalid = [null, ''];
+
+  const {logout} = useContext(AuthContext);
 
   const fetchIntervencoes = async () => {
     try {
@@ -19,7 +23,7 @@ const Home = ({route, navigation}) => {
         username: username,
       });
 
-      return res.status;
+      return res.status === 200;
     } catch (error) {
       console.log(error.message);
     }
@@ -29,9 +33,10 @@ const Home = ({route, navigation}) => {
     if (!invalid.includes(intervention)) {
       const status = await fetchIntervencoes();
 
-      if (status === 200) {
-        navigation.navigate('AR', {
+      if (status) {
+        navigation.push('AR', {
           intervention: intervention,
+          username: username,
         });
       } else {
         setErrorMsgIntervention('ID da Intervenção inválido!');
@@ -65,9 +70,7 @@ const Home = ({route, navigation}) => {
           <Text style={styles.buttonText}>Começar trabalho</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
           <Text style={styles.buttonText}>Terminar Sessão</Text>
         </TouchableOpacity>
       </View>
