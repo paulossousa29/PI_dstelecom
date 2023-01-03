@@ -68,7 +68,11 @@ app.post("/intervention", async (req, res) => {
 
 		const result = await pool.query(query);
 
-		res.json(result.rows);
+		if (result.rows.length === 0) {
+			res.status(401).json({ error: "Intervention Not Found" });
+		} else {
+			res.status(200).json({ success: true });
+		}
 	} catch (err) {
 		console.error(err.message);
 	}
@@ -142,14 +146,12 @@ app.get("/pedidos", async (req, res) => {
 app.post("/new_request", async (req, res) => {
 	try {
 		pool.connect();
-		const { id_intervention, state, description } = req.body;
+		const { id_intervention, description } = req.body;
 
 		query =
 			"INSERT INTO pedidos(id_intervencao, estado, descricao) VALUES ('" +
 			id_intervention +
-			"', " +
-			state +
-			", '" +
+			"', 0, '" +
 			description +
 			"')";
 		const result = await pool.query(query);

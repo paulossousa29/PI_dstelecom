@@ -13,34 +13,38 @@ const Login = ({navigation}) => {
   const [errorMsgPass, setErrorMsgPass] = useState(null);
   const invalid = [null, ''];
 
-  const fetchLogin = () => {
-    // fazer commit a base de dados
+  const fetchLogin = async () => {
+    const res = await axios.post(ip.backend_ip + 'login', {
+      username: username,
+      password: pass,
+    });
+
+    return res.status;
   };
 
-  const verification = () => {
-    if (invalid.includes(pass) && !invalid.includes(username)) {
+  const validationAccount = () => {
+    if (!invalid.includes(pass) && !invalid.includes(username)) {
+      //const status = fetchLogin();
+      const status = 200;
+
+      if (status === 200) {
+        navigation.navigate('Home', {
+          username: username,
+        });
+      } else {
+        setErrorMsgUsername('Utilizador ou Palavra-pass Inválidos!');
+        setErrorMsgPass(null);
+      }
+    } else if (invalid.includes(pass) && !invalid.includes(username)) {
       setErrorMsgPass('Palavra-passe Obrigatória!');
+      setErrorMsgUsername(null);
     } else if (!invalid.includes(pass) && invalid.includes(username)) {
+      setErrorMsgPass(null);
       setErrorMsgUsername('Utilizador Obrigatório!');
     } else {
       setErrorMsgPass('Palavra-passe Obrigatória!');
       setErrorMsgUsername('Utilizador Obrigatório!');
     }
-  };
-
-  const validationAccount = () => {
-    if (!invalid.includes(pass) && !invalid.includes(username)) {
-      setUsername(null);
-      setPass(null);
-      setErrorMsgPass(null);
-      setErrorMsgUsername(null);
-
-      commitDB();
-
-      navigation.navigate('Home');
-      return;
-    }
-    verification();
   };
 
   return (

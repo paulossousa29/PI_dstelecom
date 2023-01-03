@@ -18,6 +18,7 @@ const AR = ({route, navigation}) => {
   const [step11Result, setStep11Result] = useState(null);
   const [step13Result, setStep13Result] = useState(null);
   const [step, setStep] = useState(1);
+  const [image, setImage] = useState(null);
 
   const fetchAccess = async () => {
     try {
@@ -31,7 +32,7 @@ const AR = ({route, navigation}) => {
     }
   };
 
-  const fetchAI = async image => {
+  const fetchAI = async () => {
     const imageData = new FormData();
     imageData.append('file', {
       uri: image.assets[0].uri,
@@ -57,16 +58,20 @@ const AR = ({route, navigation}) => {
       const image = await launchCamera();
       if (image.didCancel) return;
 
-      // res = await fetchAI(image);
+      setImage(image);
+
+      // res = await fetchAI();
       res = true;
 
       if (step == 1) {
         resAccess = await fetchAccess();
 
+        compare = false;
+
         if (compare) {
           setStep1Result(true);
         } else {
-          navigation.navigate('NewReference');
+          navigation.push('NewReference');
         }
       } else if (step == 3) {
         setStep3Result(res);

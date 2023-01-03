@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+
 import colors from '../config/colors';
 import ip from '../config/ip';
 import axios from 'axios';
 
-const Home = ({navigation}) => {
+const Home = ({route, navigation}) => {
+  const {username} = route.params;
   const [intervention, setIntervention] = useState('#2021041965000118_2');
   const [errorMsgIntervention, setErrorMsgIntervention] = useState(null);
   const invalid = [null, ''];
@@ -13,12 +15,11 @@ const Home = ({navigation}) => {
   const fetchIntervencoes = async () => {
     try {
       const res = await axios.post(ip.backend_ip + 'intervention', {
-        intervention: '#2021041965000118_2',
-        username: 'CGO0027',
+        intervention: intervention,
+        username: username,
       });
 
-      return res;
-      //return res.data.length !== 0;
+      return res.status;
     } catch (error) {
       console.log(error.message);
     }
@@ -26,12 +27,9 @@ const Home = ({navigation}) => {
 
   const validationID = async () => {
     if (!invalid.includes(intervention)) {
-      const res = await fetchIntervencoes();
+      const status = await fetchIntervencoes();
 
-      if (res) {
-        setIntervention(null);
-        setErrorMsgIntervention(null);
-
+      if (status === 200) {
         navigation.navigate('AR', {
           intervention: intervention,
         });
