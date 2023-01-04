@@ -57,24 +57,25 @@ app.get('/equipa/delete/:id/:idEquipa', async (req, res) => {
 	try {
 		pool.connect();
 		await pool.query("DELETE FROM skill where (id = '" + id + "' AND id_equipa = '" + idEquipa + "');")
-		const skillUpdate = await pool.query("SELECT * FROM skill;") 
+		const skillUpdate = await pool.query("SELECT * FROM skill;")
 		res.json(skillUpdate.rows)
 
-	} catch(err) {
+	} catch (err) {
 		console.error(err.message)
 	}
 })
 
-app.get('/equipa/add/:ap/:idEquipa', async (req,res) => {
+app.get('/equipa/add/:ap/:idEquipa', async (req, res) => {
 	const ap = req.params.ap;
 	const idEquipa = req.params.idEquipa;
 	try {
 		pool.connect();
-		await pool.query("INSERT INTO skill (id_equipa,ap) VALUES ('" + idEquipa + "', '" + ap + "');" )
-		const skillUpdate = await pool.query("SELECT * FROM skill;") 
-		console.log(skillUpdate.rows)
-		res.json(skillUpdate.rows)
-	} catch(err) {
+		await pool.query("INSERT INTO skill (id_equipa,ap) VALUES ('" + idEquipa + "', '" + ap + "');")
+		const skillUpdate = await pool.query("SELECT * FROM skill;")
+		//console.log(skillUpdate.rows)
+		//team = idEquipa
+		res.json({ idEquipa })
+	} catch (err) {
 		console.error(err.message)
 	}
 })

@@ -3,14 +3,18 @@ import "./Painel.css"
 import NavBar from '../components/Navbar';
 
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const Equipa = ({ route, navigate }) => {
+const Equipa = ({ route }) => {
     const location = useLocation();
+    const navigate = useNavigate();
+
 
     const id = location.state.id
 
     const [equipaID, setEquipa] = React.useState([]);
     const [value, setValue] = React.useState("");
+
 
     async function getSkills(id) {
         const res = await fetch("http://localhost:3001/equipa/" + id);
@@ -18,17 +22,22 @@ const Equipa = ({ route, navigate }) => {
         setEquipa(equipaAux);
     }
 
-    async function deleteSkill(id, idEquipa) {
-        console.log("O id é: " + id)
-        const res = await fetch("http://localhost:3001/equipa/delete/" + id + "/" + idEquipa);
-        const skills = await res.json();
-        setEquipa(skills)
+    const deleteSkill = (id, idEquipa) => {
+        return axios
+            .get("http://localhost:3001/equipa/delete/" + id + "/" + idEquipa)
+            .then((response) => {
+                setEquipa(response.data);
+                //setCurrentPage(currentPage + increase);
+            })
+            .catch((err) => console.log(err));
     }
 
-    async function handleAdd(ap, idEquipa) {
-        const res = await fetch("http://localhost:3001/equipa/add/" + ap + "/" + idEquipa);
-        const skills = await res.json();
-        setEquipa(skills)
+    const handleAdd = (ap, idEquipa) => {
+        axios.get("http://localhost:3001/equipa/add/" + ap + "/" + idEquipa)
+            .then(
+                navigate('/stats')
+            )
+            .catch((err) => console.log(err));
     }
 
     React.useEffect(() => {
@@ -61,7 +70,9 @@ const Equipa = ({ route, navigate }) => {
                                                         }}>Eliminar</button>
                                                     </div>
                                                 </div>
+
                                             </li>))}
+
                                     </ul>
                                 </div>
                             </div>
