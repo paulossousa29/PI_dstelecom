@@ -284,16 +284,15 @@ function StatsTable() {
                 </MDBTableBody>
               ) : (
                 data.map((item, index) => (
+
                   <MDBTableBody key={index}>
                     <tr>
                       <td>{item.id}</td>
                       <td>{item.total_jobs}</td>
                       <td>{item.total_mistakes}</td>
                       <td>{item.media_erro}</td>
-                      <td>{item.media_tempo}</td>
-
+                      <td>{item.media_tempo.hours}:{item.media_tempo.minutes}:{item.media_tempo.seconds} </td>
                       <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Consultar Equipa </button>
-
                     </tr>
                   </MDBTableBody>
                 ))

@@ -24,6 +24,7 @@ function RelTable() {
 	const [sortFilterValue, setSortFilterValue] = useState("");
 	const [operation, setOperation] = useState("");
 
+
 	const sortOptions = ["Data de Início", "Data Fim", "Total de Erros"];
 
 	useEffect(() => {
@@ -87,12 +88,24 @@ function RelTable() {
 
 	console.log("data", data);
 
-	const handleAceitar = () => {
-		alert("Carregaste no botão de aceitar")
+	const handleAceitar = (p) => {
+		return axios
+			.get(`http://localhost:3001/pedidosaceites/` + p)
+			.then((response) => {
+				setData(response.data);
+				//setCurrentPage(currentPage + increase);
+			})
+			.catch((err) => console.log(err));
 	}
 
-	const handleRecusar = () => {
-		alert("Carregaste no botão de recusa")
+	const handleRecusar = (p) => {
+		return axios
+			.get(`http://localhost:3001/pedidosrecusados/` + p)
+			.then((response) => {
+				setData(response.data);
+				//setCurrentPage(currentPage + increase);
+			})
+			.catch((err) => console.log(err));
 	}
 
 	const handleReset = () => {
@@ -269,8 +282,8 @@ function RelTable() {
 											<td>{item.id_intervencao}</td>
 											<td>{item.estado}</td>
 											<td>{item.descricao}</td>
-											<button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={handleAceitar}> Aceitar </button>
-											<button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={handleRecusar}> Recusar </button>
+											<button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleAceitar(item.id)}> Aceitar </button>
+											<button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleRecusar(item.id)}> Recusar </button>
 
 										</tr>
 									</MDBTableBody>

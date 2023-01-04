@@ -78,9 +78,9 @@ app.get("/pedidos", async (req, res) => {
 	obj = []
 	try {
 		pool.connect();
-		const allTodos = await pool.query("SELECT * FROM pedidos");
+		const allTodos = await pool.query("SELECT * FROM pedidos WHERE estado = 0;");
 		console.log(allTodos.rows)
-		allTodos.rows.forEach(c => { obj.push({ "id_intervencao": c.id_intervencao, "estado": "Suspenso", "descricao": c.descricao }) })
+		allTodos.rows.forEach(c => { obj.push({ "id_intervencao": c.id_intervencao, "estado": "Suspenso", "descricao": c.descricao, "id": c.id }) })
 		res.json(obj);
 	} catch (err) {
 		console.error(err.message);
@@ -109,6 +109,34 @@ app.get('/equipa/:id', async (req, res) => {
 	}
 	catch (err) {
 		console.log(err.message)
+	}
+});
+
+app.get("/pedidosaceites/:id", async (req, res) => {
+	console.log('request pedidos aceites')
+	const id = req.params.id
+	try {
+		pool.connect();
+		const allTodos = await pool.query("UPDATE pedidos SET estado = 1 WHERE id = " + id + ";");
+		const final = await pool.query("SELECT * FROM pedidos WHERE estado = 0;");
+		res.json(final.rows);
+		console.log(final)
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.get("/pedidosrecusados/:id", async (req, res) => {
+	console.log('request pedidos recusados')
+	const id = req.params.id
+	try {
+		pool.connect();
+		const allTodos = await pool.query("UPDATE pedidos SET estado = 2 WHERE id = " + id + ";");
+		const final = await pool.query("SELECT * FROM pedidos WHERE estado = 0;");
+		res.json(final.rows);
+		console.log(final)
+	} catch (err) {
+		console.error(err.message);
 	}
 });
 
