@@ -31,9 +31,12 @@ class ObjectDetection(Resource):
         print(f'Uploaded file: {uploaded_file}')
 
         img = Image.open(uploaded_file)
+        print(img)
         
         model = models[0]
         results = model(img)
+
+        print(results)
 
         outputs = results.pandas().xyxy[0]
         outputs['class'] = outputs.index
