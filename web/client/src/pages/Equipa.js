@@ -4,7 +4,7 @@ import NavBar from '../components/Navbar';
 import axios from "axios";
 
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+
 
 const Equipa = ({ route }) => {
     const location = useLocation();
@@ -87,7 +87,7 @@ const Equipa = ({ route }) => {
                                 alignContent: "start",
                             }}
                             className="d-flex input-group w-auto"
-                            onSubmit={() => handleAceita(value, id)}>
+                            onSubmit={() => handleAdd(value, id)}>
                             <div>
                                 <textarea
                                     type="text"
