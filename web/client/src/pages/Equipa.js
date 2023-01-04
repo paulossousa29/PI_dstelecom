@@ -1,16 +1,20 @@
 import * as React from 'react';
 import "./Painel.css"
 import NavBar from '../components/Navbar';
+import axios from "axios";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Equipa = ({ route, navigate }) => {
+    const [equipaID, setEquipa] = React.useState([]);
+    const [value, setValue] = React.useState("");
+
     const location = useLocation();
 
     const id = location.state.id
+    console.log(id)
 
-    const [equipaID, setEquipa] = React.useState([]);
-    const [value, setValue] = React.useState("");
+  
 
     async function getSkills(id) {
         const res = await fetch("http://localhost:3001/equipa/" + id);
@@ -18,24 +22,34 @@ const Equipa = ({ route, navigate }) => {
         setEquipa(equipaAux);
     }
 
+    const handleAceita = (ap, idEquipa) => {
+        return axios
+			.get(`http://localhost:3001/equipa/add/` + ap + "/" + idEquipa)
+			.then((response) => {
+                id = response.data.state.id
+                console.log(id)
+				setEquipa(response.data);
+			})
+            
+			.catch((err) => console.log(err));
+    }
+
     async function deleteSkill(id, idEquipa) {
-        console.log("O id é: " + id)
         const res = await fetch("http://localhost:3001/equipa/delete/" + id + "/" + idEquipa);
         const skills = await res.json();
-        setEquipa(skills)
+        setEquipa(skills);
     }
 
     async function handleAdd(ap, idEquipa) {
         const res = await fetch("http://localhost:3001/equipa/add/" + ap + "/" + idEquipa);
         const skills = await res.json();
-        setEquipa(skills)
+        setEquipa(skills);
     }
 
     React.useEffect(() => {
         getSkills(id);
     }, []);
 
-    console.log(value);
     return (
 
         <React.Fragment>
@@ -77,7 +91,7 @@ const Equipa = ({ route, navigate }) => {
                                 alignContent: "start",
                             }}
                             className="d-flex input-group w-auto"
-                            onSubmit={() => handleAdd(value, id)}>
+                            onSubmit={() => handleAceita(value,id)}>
                             <div>
                                 <textarea
                                     type="text"
