@@ -1,6 +1,7 @@
 import * as React from 'react';
 import "./Painel.css"
 import NavBar from '../components/Navbar';
+import axios from "axios";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -14,7 +15,6 @@ const Equipa = ({ route }) => {
 
     const [equipaID, setEquipa] = React.useState([]);
     const [value, setValue] = React.useState("");
-
 
     async function getSkills(id) {
         const res = await fetch("http://localhost:3001/equipa/" + id);
@@ -44,7 +44,6 @@ const Equipa = ({ route }) => {
         getSkills(id);
     }, []);
 
-    console.log(value);
     return (
 
         <React.Fragment>
@@ -88,7 +87,7 @@ const Equipa = ({ route }) => {
                                 alignContent: "start",
                             }}
                             className="d-flex input-group w-auto"
-                            onSubmit={() => handleAdd(value, id)}>
+                            onSubmit={() => handleAceita(value, id)}>
                             <div>
                                 <textarea
                                     type="text"

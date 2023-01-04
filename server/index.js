@@ -51,13 +51,13 @@ app.get("/todos", async (req, res) => {
 });
 
 app.get('/equipa/delete/:id/:idEquipa', async (req, res) => {
-	console.log("Estou cá!")
 	const id = req.params.id
+	console.log("request delete skill")
 	const idEquipa = req.params.idEquipa
 	try {
 		pool.connect();
 		await pool.query("DELETE FROM skill where (id = '" + id + "' AND id_equipa = '" + idEquipa + "');")
-		const skillUpdate = await pool.query("SELECT * FROM skill;")
+		const skillUpdate = await pool.query("SELECT * FROM skill where (id_equipa = '" + idEquipa + "');")
 		res.json(skillUpdate.rows)
 
 	} catch (err) {
@@ -67,7 +67,9 @@ app.get('/equipa/delete/:id/:idEquipa', async (req, res) => {
 
 app.get('/equipa/add/:ap/:idEquipa', async (req, res) => {
 	const ap = req.params.ap;
+	console.log("request add skill")
 	const idEquipa = req.params.idEquipa;
+	obj = []
 	try {
 		pool.connect();
 		await pool.query("INSERT INTO skill (id_equipa,ap) VALUES ('" + idEquipa + "', '" + ap + "');")
