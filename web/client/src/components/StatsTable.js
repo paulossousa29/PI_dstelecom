@@ -15,6 +15,9 @@ import {
 } from "mdb-react-ui-kit";
 
 
+import { useNavigate } from "react-router-dom";
+
+
 function StatsTable() {
   const [data, setData] = useState([]);
   const [value, setValue] = useState("");
@@ -23,6 +26,10 @@ function StatsTable() {
   const [pageLimit] = useState(4);
   const [sortFilterValue, setSortFilterValue] = useState("");
   const [operation, setOperation] = useState("");
+
+
+  const navigate = useNavigate();
+
 
   const sortOptions = ["Total de Trabalhos", "Média de Erros", "Média de Tempo/Trabalho"];
 
@@ -86,6 +93,10 @@ function StatsTable() {
   };
 
   console.log("data", data);
+
+  const handleConsulta = (p) => {
+    navigate('/equipa', { state: { id: p } })
+  }
 
   const handleReset = () => {
     setOperation("");
@@ -292,7 +303,7 @@ function StatsTable() {
                       <td>{item.total_mistakes}</td>
                       <td>{item.media_erro}</td>
                       <td>{item.media_tempo.hours}:{item.media_tempo.minutes}:{item.media_tempo.seconds} </td>
-                      <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Consultar Equipa </button>
+                      <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar Equipa </button>
                     </tr>
                   </MDBTableBody>
                 ))

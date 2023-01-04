@@ -14,7 +14,6 @@ import {
     MDBPaginationLink,
 } from "mdb-react-ui-kit";
 
-import { useNavigate } from "react-router-dom";
 
 
 function RelTable() {
@@ -25,8 +24,6 @@ function RelTable() {
     const [pageLimit] = useState(4);
     const [sortFilterValue, setSortFilterValue] = useState("");
     const [operation, setOperation] = useState("");
-    const navigate = useNavigate();
-
     const sortOptions = ["Data de Início", "Data Fim", "Total de Erros"];
 
     useEffect(() => {
@@ -90,9 +87,6 @@ function RelTable() {
 
     console.log("data", data);
 
-    const handleConsulta = (p) => {
-        navigate('/equipa', { state: { id: p } })
-    }
 
     const handleReset = () => {
         setOperation("");
@@ -303,7 +297,7 @@ function RelTable() {
                                             <td>{item.data_inicio}</td>
                                             <td>{item.data_fim}</td>
                                             <td>{item.duracao.seconds} segundos</td>
-                                            <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
+                                            <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Consultar </button>
 
                                         </tr>
                                     </MDBTableBody>

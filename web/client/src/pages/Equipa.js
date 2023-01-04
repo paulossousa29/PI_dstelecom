@@ -2,15 +2,15 @@ import * as React from 'react';
 import "./Painel.css"
 import NavBar from '../components/Navbar';
 
+import { useLocation, useNavigate } from "react-router-dom";
 
+const Equipa = ({ route, navigate }) => {
+    const location = useLocation();
 
-
-const Equipa = () => {
-
-    const id = "CGO0001"
+    const id = location.state.id
 
     const [equipaID, setEquipa] = React.useState([]);
-    const [value,setValue] = React.useState("");
+    const [value, setValue] = React.useState("");
 
     async function getSkills(id) {
         const res = await fetch("http://localhost:3001/equipa/" + id);
@@ -18,14 +18,14 @@ const Equipa = () => {
         setEquipa(equipaAux);
     }
 
-    async function deleteSkill (id, idEquipa){
+    async function deleteSkill(id, idEquipa) {
         console.log("O id é: " + id)
-        const res = await fetch ("http://localhost:3001/equipa/delete/" + id + "/" + idEquipa);
+        const res = await fetch("http://localhost:3001/equipa/delete/" + id + "/" + idEquipa);
         const skills = await res.json();
         setEquipa(skills)
     }
 
-    async function handleAdd(ap, idEquipa){
+    async function handleAdd(ap, idEquipa) {
         const res = await fetch("http://localhost:3001/equipa/add/" + ap + "/" + idEquipa);
         const skills = await res.json();
         setEquipa(skills)
@@ -50,18 +50,18 @@ const Equipa = () => {
                                     <h5 className="card-title">Aptidões</h5>
                                     <ul className="list-group">
                                         {equipaID.map((e) => (
-                                        <li className="list-group-item">
-                                            <div className='row'>
-                                                <div className='col-8'>
-                                                    {e.ap} 
+                                            <li className="list-group-item">
+                                                <div className='row'>
+                                                    <div className='col-8'>
+                                                        {e.ap}
+                                                    </div>
+                                                    <div className='col-4'>
+                                                        <button style={{ borderRadius: "12px", backgroundColor: "gray" }} onClick={(aux) => {
+                                                            deleteSkill(e.id, e.id_equipa)
+                                                        }}>Eliminar</button>
+                                                    </div>
                                                 </div>
-                                                <div className='col-4'>
-                                                    <button style={{ borderRadius: "12px", backgroundColor: "gray" }} onClick={(aux) => {
-                                                        deleteSkill(e.id, e.id_equipa)
-                                                    }}>Eliminar</button>
-                                                </div>
-                                            </div>
-                                        </li>))}
+                                            </li>))}
                                     </ul>
                                 </div>
                             </div>
@@ -77,25 +77,25 @@ const Equipa = () => {
                                 alignContent: "start",
                             }}
                             className="d-flex input-group w-auto"
-                            onSubmit={() => handleAdd(value,id)}>
+                            onSubmit={() => handleAdd(value, id)}>
                             <div>
                                 <textarea
                                     type="text"
                                     className="form-control"
                                     placeholder="Ex: Pontual "
-                                    value = {value}
-                                    cols = "80"
-                                    rows = "5"
+                                    value={value}
+                                    cols="80"
+                                    rows="5"
                                     onChange={(e) => setValue(e.target.value)}
                                 />
                             </div>
-                            <div style={{paddingTop: "10pt"}} className='parent'>
+                            <div style={{ paddingTop: "10pt" }} className='parent'>
                                 <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" type="submit" color="light">
                                     Adicionar
                                 </button>
                             </div>
                         </form>
-                    </div>         
+                    </div>
                 </div>
             </div>
         </React.Fragment>
