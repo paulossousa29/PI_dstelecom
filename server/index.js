@@ -50,12 +50,33 @@ app.get("/todos", async (req, res) => {
 	}
 });
 
-app.get('/equipa/delete/:id', async (req, res) => {
+app.get('/equipa/delete/:id/:idEquipa', async (req, res) => {
 	console.log("Estou cá!")
 	const id = req.params.id
-	axios.delete('http://localhost:3001/equipa/delete/' + id)
-		.then(dados => { res.redirect('/equipa') })
-		.catch(err => console.log(err))
+	const idEquipa = req.params.idEquipa
+	try {
+		pool.connect();
+		await pool.query("DELETE FROM skill where (id = '" + id + "' AND id_equipa = '" + idEquipa + "');")
+		const skillUpdate = await pool.query("SELECT * FROM skill;") 
+		res.json(skillUpdate.rows)
+
+	} catch(err) {
+		console.error(err.message)
+	}
+})
+
+app.get('/equipa/add/:ap/:idEquipa', async (req,res) => {
+	const ap = req.params.ap;
+	const idEquipa = req.params.idEquipa;
+	try {
+		pool.connect();
+		await pool.query("INSERT INTO skill (id_equipa,ap) VALUES ('" + idEquipa + "', '" + ap + "');" )
+		const skillUpdate = await pool.query("SELECT * FROM skill;") 
+		console.log(skillUpdate.rows)
+		res.json(skillUpdate.rows)
+	} catch(err) {
+		console.error(err.message)
+	}
 })
 
 
