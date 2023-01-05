@@ -128,7 +128,7 @@ const UserExperience = ({navigation}) => {
 
             console.log(res.data);
 
-            navigation.navigate('Home');
+            navigation.pop();
           } catch (err) {
             console.error(err.message);
           }
@@ -167,7 +167,7 @@ const UserExperience = ({navigation}) => {
         <RatingBarDefault />
         <TouchableOpacity
           style={styles.logoutButton}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() => navigation.pop()}>
           <Text style={styles.buttonText}>Cancelar</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.startButton} onPress={handleSubmit}>

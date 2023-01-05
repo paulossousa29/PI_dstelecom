@@ -203,6 +203,27 @@ app.post("/new_reference_status", async (req, res) => {
 	}
 });
 
+app.post("/conetor", async (req, res) => {
+	console.log("request conetor");
+	console.log(req.body);
+	const { id_intervention } = req.body;
+
+	try {
+		pool.connect();
+
+		query =
+			"SELECT conetor FROM intervencoes WHERE id='" +
+			id_intervention +
+			"'";
+
+		const result = await pool.query(query);
+
+		res.json({ connector: result.rows[0].conetor });
+	} catch (err) {
+		console.error(err.messag);
+	}
+});
+
 app.get("/stats", async (req, res) => {
 	console.log("request stats");
 	obj = [];

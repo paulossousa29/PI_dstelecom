@@ -1,7 +1,24 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import colors from '../config/colors';
 
 const Done = ({navigation}) => {
+  Alert.alert('Avaliação', 'Quer avaliar a aplicação?', [
+    {
+      text: 'Mais tarde',
+    },
+    {
+      text: 'Sim',
+      onPress: () => navigation.push('UserExperience'),
+    },
+  ]);
+
   return (
     <View style={styles.background}>
       <Image
@@ -41,15 +58,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   container: {
+    alignItems: 'center',
     flex: 1,
     width: '100%',
     height: '100%',
     justifyContent: 'flex-start',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     backgroundColor: colors.lightGrey,
-    marginTop: 15,
-    paddingTop: 60,
-    borderRadius: 50,
-    alignItems: 'center',
   },
   logo: {
     width: '90%',

@@ -21,8 +21,7 @@ const ResultReference = ({route, navigation}) => {
   const handleVerify = async () => {
     const status = await fetchNewReferenceStatus();
 
-    if (status === 0) {
-      // if (status === 1 || status === 2) {
+    if (status === 1 || status === 2) {
       navigation.pop(); // Tem que voltar dois pops mas estoura
     }
   };

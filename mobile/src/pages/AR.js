@@ -36,8 +36,8 @@ const AR = ({route, navigation}) => {
     const imageData = new FormData();
     imageData.append('image', {
       uri: image.assets[0].uri,
-      type: image.assets[0].type,
-      name: image.assets[0].filename,
+      type: 'image/jpeg',
+      name: 'image.jpg',
     });
 
     try {
@@ -54,35 +54,36 @@ const AR = ({route, navigation}) => {
   };
 
   const handleNextStep = async () => {
-    if (step % 2 == 1) {
+    if (step % 2 === 1) {
       const image = await launchCamera();
+
       if (image.didCancel) return;
 
-      //res = await fetchAI(image);
-      //console.log(res);
+      res = await fetchAI(image);
+      console.log(res);
       res = true;
 
-      if (step == 1) {
+      if (step === 1) {
         access = await fetchAccess();
 
-        compare = true;
+        compare = false;
 
         if (compare) {
           setStep1Result(true);
         } else {
           navigation.push('NewReference', {intervention: intervention});
         }
-      } else if (step == 3) {
+      } else if (step === 3) {
         setStep3Result(res);
-      } else if (step == 5) {
+      } else if (step === 5) {
         setStep5Result(res);
-      } else if (step == 7) {
+      } else if (step === 7) {
         setStep7Result(res);
-      } else if (step == 9) {
+      } else if (step === 9) {
         setStep9Result(res);
-      } else if (step == 11) {
+      } else if (step === 11) {
         setStep11Result(res);
-      } else if (step == 13) {
+      } else if (step === 13) {
         setStep13Result(res);
 
         var pad = function (num) {
@@ -96,7 +97,13 @@ const AR = ({route, navigation}) => {
             '-' +
             pad(startDate.getUTCMonth() + 1) +
             '-' +
-            pad(startDate.getUTCDate()),
+            pad(startDate.getUTCDate()) +
+            ' ' +
+            pad(startDate.getUTCHours()) +
+            ':' +
+            pad(startDate.getUTCMinutes()) +
+            ':' +
+            pad(startDate.getUTCSeconds()),
           step1: step1Result,
           step3: step3Result,
           step5: step5Result,
