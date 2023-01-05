@@ -14,7 +14,7 @@ import axios from 'axios';
 
 const NewReference = ({route, navigation}) => {
   const {intervention} = route.params;
-  const [reference, setReference] = useState(null);
+  const [reference, setReference] = useState('mudar depois');
   const [errorMsgRef, setErrorMsgRef] = useState(null);
   const invalid = [null, ''];
 
@@ -27,7 +27,7 @@ const NewReference = ({route, navigation}) => {
 
       return res.status === 200;
     } catch (err) {
-      console.log(error.message);
+      console.log(err.message);
     }
   };
 
@@ -68,6 +68,13 @@ const NewReference = ({route, navigation}) => {
           }}>
           <Text style={styles.buttonText}>Confirmar</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={() => {
+            navigation.pop();
+          }}>
+          <Text style={styles.buttonText}>Cancelar</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -95,6 +102,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '90%',
     backgroundColor: colors.red,
+    paddingTop: 14,
+    paddingBottom: 14,
+    marginVertical: 30,
+    marginHorizontal: 20,
+  },
+  logoutButton: {
+    position: 'absolute',
+    bottom: -15,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%',
+    backgroundColor: colors.logoGreyDark,
     paddingTop: 14,
     paddingBottom: 14,
     marginVertical: 30,

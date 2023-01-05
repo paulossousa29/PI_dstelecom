@@ -35,7 +35,6 @@ const Notes = ({route, navigation}) => {
       {
         text: 'Concluir',
         onPress: async () => {
-          console.log(startDate);
           try {
             var pad = function (num) {
               return ('00' + num).slice(-2);
@@ -57,7 +56,13 @@ const Notes = ({route, navigation}) => {
                 '-' +
                 pad(endDate.getUTCMonth() + 1) +
                 '-' +
-                pad(endDate.getUTCDate()),
+                pad(endDate.getUTCDate()) +
+                ' ' +
+                pad(endDate.getUTCHours()) +
+                ':' +
+                pad(endDate.getUTCMinutes()) +
+                ':' +
+                pad(endDate.getUTCSeconds()),
             });
 
             navigation.push('Done');
