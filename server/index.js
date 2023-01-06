@@ -54,6 +54,38 @@ app.get("/todos", async (req, res) => {
 	}
 });
 
+app.get('/equipa/delete/:id/:idEquipa', async (req, res) => {
+	const id = req.params.id
+	console.log("request delete skill")
+	const idEquipa = req.params.idEquipa
+	try {
+		pool.connect();
+		await pool.query("DELETE FROM skill where (id = '" + id + "' AND id_equipa = '" + idEquipa + "');")
+		const skillUpdate = await pool.query("SELECT * FROM skill where (id_equipa = '" + idEquipa + "');")
+		res.json(skillUpdate.rows)
+
+	} catch (err) {
+		console.error(err.message)
+	}
+})
+
+app.get('/equipa/add/:ap/:idEquipa', async (req, res) => {
+	const ap = req.params.ap;
+	console.log("request add skill")
+	const idEquipa = req.params.idEquipa;
+	obj = []
+	try {
+		pool.connect();
+		await pool.query("INSERT INTO skill (id_equipa,ap) VALUES ('" + idEquipa + "', '" + ap + "');")
+		const skillUpdate = await pool.query("SELECT * FROM skill;")
+		//console.log(skillUpdate.rows)
+		//team = idEquipa
+		res.json({ idEquipa })
+	} catch (err) {
+		console.error(err.message)
+	}
+})
+
 app.post("/intervention", async (req, res) => {
 	console.log("request intervention");
 	console.log(req.body);
@@ -70,6 +102,7 @@ app.post("/intervention", async (req, res) => {
 			"'";
 
 		const result = await pool.query(query);
+
 
 		if (result.rows.length === 0) {
 			res.status(401).json({ error: "Intervention Not Found" });
@@ -138,15 +171,11 @@ app.get("/pedidos", async (req, res) => {
 	obj = [];
 	try {
 		pool.connect();
-		const allTodos = await pool.query("SELECT * FROM pedidos");
-		console.log(allTodos.rows);
-		allTodos.rows.forEach((c) => {
-			obj.push({
-				id_intervencao: c.id_intervencao,
-				estado: "Suspenso",
-				descricao: c.descricao,
-			});
-		});
+
+		const allTodos = await pool.query("SELECT * FROM pedidos WHERE estado = 0;");
+		console.log(allTodos.rows)
+		allTodos.rows.forEach(c => { obj.push({ "id_intervencao": c.id_intervencao, "estado": "Suspenso", "descricao": c.descricao, "id": c.id }) })
+
 		res.json(obj);
 	} catch (err) {
 		console.error(err.message);
@@ -291,6 +320,35 @@ app.post("/report", async (req, res) => {
 	}
 });
 
+app.get("/pedidosaceites/:id", async (req, res) => {
+	console.log('request pedidos aceites')
+	const id = req.params.id
+	try {
+		pool.connect();
+		const allTodos = await pool.query("UPDATE pedidos SET estado = 1 WHERE id = " + id + ";");
+		const final = await pool.query("SELECT * FROM pedidos WHERE estado = 0;");
+		res.json(final.rows);
+		console.log(final)
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.get("/pedidosrecusados/:id", async (req, res) => {
+	console.log('request pedidos recusados')
+	const id = req.params.id
+	try {
+		pool.connect();
+		const allTodos = await pool.query("UPDATE pedidos SET estado = 2 WHERE id = " + id + ";");
+		const final = await pool.query("SELECT * FROM pedidos WHERE estado = 0;");
+		res.json(final.rows);
+		console.log(final)
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+
 app.post("/user_experience", async (req, res) => {
 	try {
 		pool.connect();
@@ -305,6 +363,7 @@ app.post("/user_experience", async (req, res) => {
 			global_rate +
 			")";
 		const result = await pool.query(query);
+
 
 		res.json(result.rows);
 	} catch (err) {
