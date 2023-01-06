@@ -1,29 +1,87 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+
+import {AuthContext} from '../components/AuthContext';
+
 import Login from '../pages/Login';
 import AR from '../pages/AR';
 import Home from '../pages/Home';
 import Notes from '../pages/Notes';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import NewReference from '../pages/NewReference';
 import Done from '../pages/Done';
+import UserExperience from '../pages/UserExperience';
+import ResultReference from '../pages/ResultReference';
+import Splash from '../pages/Splash';
 
-const Stack = createNativeStackNavigator();
+const HomeStack = createStackNavigator();
+
+const AuthStack = createStackNavigator();
 
 const MyStack = () => {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [token, setToken] = React.useState(null);
+  const [username, setUsername] = React.useState(null);
+
+  const authContext = React.useMemo(() => {
+    return {
+      login: ({token, username}) => {
+        setIsLoading(false);
+        setUsername(username);
+        setToken(token);
+      },
+      logout: () => {
+        setIsLoading(false);
+        setUsername(null);
+        setToken(null);
+      },
+    };
+  }, []);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
+  if (isLoading) {
+    return <Splash />;
+  }
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Notes"
-        screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="AR" component={AR} />
-        <Stack.Screen name="Notes" component={Notes} />
-        <Stack.Screen name="NewReference" component={NewReference} />
-        <Stack.Screen name="Done" component={Done} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        {token ? (
+          <HomeStack.Navigator
+            initialRouteName="Home"
+            screenOptions={{headerShown: false}}>
+            <HomeStack.Screen
+              name="Home"
+              component={Home}
+              initialParams={{username: username}}
+            />
+            <HomeStack.Screen name="AR" component={AR} />
+            <HomeStack.Screen name="Notes" component={Notes} />
+            <HomeStack.Screen name="NewReference" component={NewReference} />
+            <HomeStack.Screen
+              name="ResultReference"
+              component={ResultReference}
+            />
+            <HomeStack.Screen name="Done" component={Done} />
+            <HomeStack.Screen
+              name="UserExperience"
+              component={UserExperience}
+            />
+          </HomeStack.Navigator>
+        ) : (
+          <AuthStack.Navigator
+            initialRouteName="Login"
+            screenOptions={{headerShown: false}}>
+            <AuthStack.Screen name="Login" component={Login} />
+          </AuthStack.Navigator>
+        )}
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 };
 

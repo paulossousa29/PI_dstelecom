@@ -1,33 +1,121 @@
 import {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import {ViroARSceneNavigator} from '@viro-community/react-viro';
-import {launchCamera} from 'react-native-image-picker'
+import {launchCamera} from 'react-native-image-picker';
+import axios from 'axios';
 
 import SceneAR from '../scenes/SceneAR';
 import colors from '../config/colors';
+import ip from '../config/ip';
 
-const AR = ({navigation}) => {
+const AR = ({route, navigation}) => {
+  const {intervention, username} = route.params;
+  const [startDate, setStartDate] = useState(new Date());
+  const [step1Result, setStep1Result] = useState(null);
+  const [step3Result, setStep3Result] = useState(null);
+  const [step5Result, setStep5Result] = useState(null);
+  const [step7Result, setStep7Result] = useState(null);
+  const [step9Result, setStep9Result] = useState(null);
+  const [step11Result, setStep11Result] = useState(null);
+  const [step13Result, setStep13Result] = useState(null);
   const [step, setStep] = useState(1);
 
+  const fetchAccess = async () => {
+    try {
+      const res = await axios.post(ip.backend_ip + 'access', {
+        intervention: intervention,
+      });
+
+      return res.data.access;
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const fetchAI = async image => {
+    const imageData = new FormData();
+    imageData.append('image', {
+      uri: image.assets[0].uri,
+      type: 'image/jpeg',
+      name: 'image.jpg',
+    });
+
+    try {
+      const res = await axios.post(ip.api_ip + 'detect', imageData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleNextStep = async () => {
-    if(step % 2 == 1) {
-      const result = await launchCamera()
+    if (step % 2 === 1) {
+      const image = await launchCamera();
 
-      if(result.didCancel) 
-        return;
+      if (image.didCancel) return;
 
-      // Envia para o AI e guarda na base de dados
+      res = await fetchAI(image);
+      console.log(res);
+      res = true;
 
-      // Recebe do AI e avisa se não estiver correto
+      if (step === 1) {
+        access = await fetchAccess();
 
-      // Se no step 1 a referencia estiver mal, navigate nova pagina
+        compare = false;
+
+        if (compare) {
+          setStep1Result(true);
+        } else {
+          navigation.push('NewReference', {intervention: intervention});
+        }
+      } else if (step === 3) {
+        setStep3Result(res);
+      } else if (step === 5) {
+        setStep5Result(res);
+      } else if (step === 7) {
+        setStep7Result(res);
+      } else if (step === 9) {
+        setStep9Result(res);
+      } else if (step === 11) {
+        setStep11Result(res);
+      } else if (step === 13) {
+        setStep13Result(res);
+
+        var pad = function (num) {
+          return ('00' + num).slice(-2);
+        };
+
+        navigation.push('Notes', {
+          intervention: intervention,
+          startDate:
+            startDate.getUTCFullYear() +
+            '-' +
+            pad(startDate.getUTCMonth() + 1) +
+            '-' +
+            pad(startDate.getUTCDate()) +
+            ' ' +
+            pad(startDate.getUTCHours()) +
+            ':' +
+            pad(startDate.getUTCMinutes()) +
+            ':' +
+            pad(startDate.getUTCSeconds()),
+          step1: step1Result,
+          step3: step3Result,
+          step5: step5Result,
+          step7: step7Result,
+          step9: step9Result,
+          step11: step11Result,
+          step13: step13Result,
+        });
+      }
     }
 
-    if (step < 13) {
-      setStep(step + 1);
-    } else {
-      navigation.navigate('Notes');
-    }
+    setStep(step + 1);
   };
 
   const handleQuit = () => {
@@ -37,7 +125,7 @@ const AR = ({navigation}) => {
       },
       {
         text: 'Sair',
-        onPress: () => navigation.navigate('Home'),
+        onPress: () => navigation.pop(),
       },
     ]);
   };

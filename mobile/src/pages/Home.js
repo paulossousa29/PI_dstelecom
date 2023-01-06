@@ -1,21 +1,48 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import colors from '../config/colors';
 
-const Home = ({navigation}) => {
-  const [workOrder, setWorkOrder] = useState(null);
-  const [errorMsgWorkOrder, setErrorMsgWorkOrder] = useState(null);
+import {AuthContext} from '../components/AuthContext';
+
+import colors from '../config/colors';
+import ip from '../config/ip';
+import axios from 'axios';
+
+const Home = ({route, navigation}) => {
+  const {username} = route.params;
+  const [intervention, setIntervention] = useState(null);
+  const [errorMsgIntervention, setErrorMsgIntervention] = useState(null);
   const invalid = [null, ''];
 
-  const validationID = () => {
-    if (!invalid.includes(workOrder)) {
-      setWorkOrder(null);
-      setErrorMsgWorkOrder(null);
+  const {logout} = useContext(AuthContext);
 
-      navigation.navigate('AR');
+  const fetchIntervencoes = async () => {
+    try {
+      const res = await axios.post(ip.backend_ip + 'intervention', {
+        intervention: intervention,
+        username: username,
+      });
+
+      return res.status === 200;
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const validationID = async () => {
+    if (!invalid.includes(intervention)) {
+      const status = await fetchIntervencoes();
+
+      if (status) {
+        navigation.push('AR', {
+          intervention: intervention,
+          username: username,
+        });
+      } else {
+        setErrorMsgIntervention('ID da Intervenção inválido!');
+      }
     } else {
-      setErrorMsgWorkOrder('ID de Workorder necessário!');
+      setErrorMsgIntervention('ID da Intervenção necessário!');
     }
   };
 
@@ -25,16 +52,16 @@ const Home = ({navigation}) => {
         style={styles.logo}
         source={require('../assets/logo-black.png')}></Image>
       <View style={styles.container}>
-        <Text style={styles.text}>ID do WorkOrder</Text>
-        {errorMsgWorkOrder && (
-          <Text style={styles.errorMessage}>{errorMsgWorkOrder}</Text>
+        <Text style={styles.text}>ID da Intervenção</Text>
+        {errorMsgIntervention && (
+          <Text style={styles.errorMessage}>{errorMsgIntervention}</Text>
         )}
 
         <TextInput
-          style={styles.workOrderInput}
-          onChangeText={setWorkOrder}
-          value={workOrder}
-          placeholder="FTTH_DST_00263846"
+          style={styles.interventionInput}
+          onChangeText={setIntervention}
+          value={intervention}
+          placeholder="#2021041965000118_2"
           placeholderTextColor={colors.placeholderGrey}></TextInput>
 
         <TouchableOpacity
@@ -43,9 +70,7 @@ const Home = ({navigation}) => {
           <Text style={styles.buttonText}>Começar trabalho</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
           <Text style={styles.buttonText}>Terminar Sessão</Text>
         </TouchableOpacity>
       </View>
@@ -95,7 +120,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     marginHorizontal: 20,
   },
-  workOrderInput: {
+  interventionInput: {
     backgroundColor: colors.white,
     color: colors.logoGreyDark,
     width: '90%',

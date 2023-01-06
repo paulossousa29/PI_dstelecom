@@ -10,15 +10,43 @@ import {StyleSheet} from 'react-native';
 
 import passos from '../assets/passos.json';
 
+import axios from 'axios';
+import ip from '../config/ip';
+
 const SceneAR = props => {
-  const data = props.arSceneNavigator.viroAppProps;
+  const {step, intervention} = props.arSceneNavigator.viroAppProps;
+
+  // const fetchConector = async () => {
+  //   try {
+  //     const res = await axios.post(backend_ip + 'conetor', {
+  //       id_intervention: intervention,
+  //     });
+
+  //     return res.data.connector;
+  //   } catch (err) {
+  //     console.log(err.message);
+  //   }
+  // };
+
+  // const getStep = async () => {
+  //   // stepInt = step.toString();
+  //   // const text = passos[stepInt];
+  //   // if (step === 2 || step === 9) {
+  //   //   connector = await fetchConector();
+
+  //   //   text.concat(connector);
+  //   // }
+
+  //   // return text;
+  //   return 'cona';
+  // };
 
   return (
     <ViroARScene>
       <ViroAmbientLight color="#ffffff" />
-      <ViroARImageMarker target={'skull'}>
+      <ViroARImageMarker target={'marker'}>
         <ViroText
-          text={passos[data.step.toString()]}
+          text={passos[step.toString()]}
           position={[0.25, 0.05, 0]}
           scale={[0.2, 0.2, 0.2]}
           rotation={[-90, 0, 0]}
@@ -32,16 +60,10 @@ const SceneAR = props => {
 export default SceneAR;
 
 ViroARTrackingTargets.createTargets({
-  skull: {
-    source: require('../assets/Skull.jpg'),
+  marker: {
+    source: require('../assets/qrcode.jpg'),
     orientation: 'Up',
     physicalWidth: 0.165,
-    type: 'Image',
-  },
-  danger: {
-    source: require('../assets/Laser-symbol3.png'),
-    orientation: 'Up',
-    physicalWidth: 0.02,
     type: 'Image',
   },
 });

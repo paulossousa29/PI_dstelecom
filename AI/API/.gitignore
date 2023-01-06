@@ -1,0 +1,5 @@
+objDetAPI/
+__pycache__/
+detect.py 
+test_api/ 
+static/images/

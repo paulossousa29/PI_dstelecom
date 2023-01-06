@@ -1,7 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+
+import {AuthContext} from '../components/AuthContext';
+
 import colors from '../config/colors';
+import ip from '../config/ip';
+import axios from 'axios';
 
 const Login = ({navigation}) => {
   const [username, setUsername] = useState(null);
@@ -10,34 +15,41 @@ const Login = ({navigation}) => {
   const [errorMsgPass, setErrorMsgPass] = useState(null);
   const invalid = [null, ''];
 
-  const commitDB = () => {
-    // fazer commit a base de dados
+  const {login} = useContext(AuthContext);
+
+  const fetchLogin = async () => {
+    try {
+      const res = await axios.post(ip.backend_ip + 'login', {
+        username: username,
+        password: pass,
+      });
+
+      return res.data.token;
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
-  const verification = () => {
-    if (invalid.includes(pass) && !invalid.includes(username)) {
+  const validationAccount = async () => {
+    if (!invalid.includes(pass) && !invalid.includes(username)) {
+      const token = await fetchLogin();
+
+      if (token) {
+        login({token: token, username: username});
+      } else {
+        setErrorMsgUsername('Utilizador ou Palavra-pass Inválidos!');
+        setErrorMsgPass(null);
+      }
+    } else if (invalid.includes(pass) && !invalid.includes(username)) {
       setErrorMsgPass('Palavra-passe Obrigatória!');
+      setErrorMsgUsername(null);
     } else if (!invalid.includes(pass) && invalid.includes(username)) {
+      setErrorMsgPass(null);
       setErrorMsgUsername('Utilizador Obrigatório!');
     } else {
       setErrorMsgPass('Palavra-passe Obrigatória!');
       setErrorMsgUsername('Utilizador Obrigatório!');
     }
-  };
-
-  const validationAccount = () => {
-    if (!invalid.includes(pass) && !invalid.includes(username)) {
-      setUsername(null);
-      setPass(null);
-      setErrorMsgPass(null);
-      setErrorMsgUsername(null);
-
-      commitDB();
-
-      navigation.navigate('Home');
-      return;
-    }
-    verification();
   };
 
   return (
