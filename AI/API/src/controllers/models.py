@@ -61,6 +61,27 @@ def getDropId(grid_box, values):
 
   return min_id
 
+def getConectorId(grid_box, values):
+  count = 0
+  min_id = None 
+  min_diff = None
+
+  while count < len(values):
+    real_box = values[count]
+
+    x_grid,y_grid = box_center(grid_box)
+    x_real, y_real = box_center(real_box)
+
+    diff = math.sqrt(((x_grid - x_real) * (x_grid - x_real)) + ((y_grid - y_real) * (y_grid - y_real)))
+
+    if count == 0 or diff < min_diff:
+      min_diff = diff
+      min_id = count
+
+    count += 1
+
+  return min_id
+
 def pil2datauri(img):
     #converts PIL image to datauri
     data = BytesIO()
@@ -80,7 +101,7 @@ class ObjectDetection(Resource):
         uploaded_file = args['image']  # This is FileStorage instance
         #id = int(args['id']) (???)
         id = 1
-        num_insercao = 5
+        num_insercao = 3
 
         if id not in range(len(models)):
             return {'message': 'ID inválido'}, 500
@@ -110,7 +131,7 @@ class ObjectDetection(Resource):
                 print(values[:3])
 
                 #Open grid
-                f = open('static/grids/Drops/grid.json')
+                f = open('static/grids/Conectores/grid_conectores_esquerda_pra_direita.json')
                 grid = json.load(f)
 
                 #Get ref box
@@ -118,8 +139,8 @@ class ObjectDetection(Resource):
                 label = grid_box['label']
                 grid_box = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
 
-                #Get original  id
-                id_drop = getDropId(grid_box,values)
+                #Get id
+                id_escolhido = getConectorId(grid_box,values)
 
                 #Identificar na imagem
                 transform = transforms.Compose([
@@ -130,8 +151,8 @@ class ObjectDetection(Resource):
                 #labels = []
                 colors = []
 
-                if len(values) > id_drop + 1:
-                  row = values[id_drop]
+                if len(values) > 0:
+                  row = values[id_escolhido]
 
                   xmin = row[0]
                   ymin = row[1]
