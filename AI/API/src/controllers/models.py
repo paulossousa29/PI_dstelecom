@@ -131,7 +131,7 @@ class ObjectDetection(Resource):
                 print(values[:3])
 
                 #Open grid
-                f = open('static/grids/Conectores/grid_conectores_esquerda_pra_direita.json')
+                f = open('static/grids/Conectores/grid_conectors_esquerda_pra_direita.json')
                 grid = json.load(f)
 
                 #Get ref box
