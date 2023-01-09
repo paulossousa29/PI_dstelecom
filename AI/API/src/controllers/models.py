@@ -163,7 +163,11 @@ class ObjectDetection(Resource):
                   img_uri = pil2datauri(img)
 
                   print('imagem detetada')
-                  return send_file(img, mimetype='image/jpeg')
+                  outputs_json = {'image': {
+                    'uri': img_uri,
+                    'type': 'image/jpeg',
+                    'name': 'image.jpeg'
+                  }}
 
                 else:
                   outputs_json = {'message' : 'O resultado da deteção não teve sucesso!'}
