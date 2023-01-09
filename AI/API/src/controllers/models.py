@@ -1,10 +1,12 @@
-from flask import Flask
+from flask import Flask, send_file
 from flask_restx import Api, Resource, reqparse
 from werkzeug.datastructures import FileStorage
 from PIL import Image
 import json
 import matplotlib.pyplot as plt
 import math
+import base64
+from io import BytesIO
 
 import torch
 import torchvision
@@ -58,6 +60,13 @@ def getDropId(grid_box, values):
     count += 1
 
   return min_id
+
+def pil2datauri(img):
+    #converts PIL image to datauri
+    data = BytesIO()
+    img.save(data, "JPEG")
+    data64 = base64.b64encode(data.getvalue())
+    return u'data:img/jpeg;base64,'+data64.decode('utf-8')
 
 @api.route('/detect')
 class ObjectDetection(Resource):
@@ -120,38 +129,45 @@ class ObjectDetection(Resource):
                 #labels = []
                 colors = []
 
-                row = values[id_drop]
+                if len(values) > id_drop + 1:
+                  row = values[id_drop]
 
-                xmin = row[0]
-                ymin = row[1]
-                xmax = row[2] 
-                ymax = row[3] 
+                  xmin = row[0]
+                  ymin = row[1]
+                  xmax = row[2] 
+                  ymax = row[3] 
 
-                #labels.append(label)
+                  #labels.append(label)
 
-                box = [xmin, ymin, xmax, ymax]
-                boxes.append(box)
+                  box = [xmin, ymin, xmax, ymax]
+                  boxes.append(box)
 
-                color = 'red' if label == 'ConectorOcupado' else 'green' if 'ConectorLivre' else 'blue'
-                colors.append(color)
-                
-                boxes = torch.tensor(boxes, dtype=torch.float)
+                  color = 'red' if label == 'ConectorOcupado' else 'green' if 'ConectorLivre' else 'blue'
+                  colors.append(color)
+                  
+                  boxes = torch.tensor(boxes, dtype=torch.float)
 
-                '''img = draw_bounding_boxes(img,
-                                        boxes=boxes,
-                                        labels=labels,
-                                        colors=colors,
-                                        width=2)'''
+                  '''img = draw_bounding_boxes(img,
+                                          boxes=boxes,
+                                          labels=labels,
+                                          colors=colors,
+                                          width=2)'''
 
-                img = draw_bounding_boxes(img,
-                                        boxes=boxes,
-                                        colors=colors,
-                                        width=2)
+                  img = draw_bounding_boxes(img,
+                                          boxes=boxes,
+                                          colors=colors,
+                                          width=2)
 
-                img = torchvision.transforms.ToPILImage()(img)
+                  img = torchvision.transforms.ToPILImage()(img)
+
+                  img_uri = pil2datauri(img)
+
+                  print('imagem detetada')
+                  return send_file(img, mimetype='image/jpeg')
+
+                else:
+                  outputs_json = {'message' : 'O resultado da deteção não teve sucesso!'}
                  
                 print('modelo com id == 1')
-                print('imagem detetada')
-                outputs_json = {'message' : 'Imagem detetada com sucesso!'}
 
             return outputs_json, 200
