@@ -110,6 +110,7 @@ class ObjectDetection(Resource):
                 id_drop = getDropId(grid_box,values)
 
                 #Identificar na imagem
+                img = read_path(uploaded_file)
                 boxes = []
                 #labels = []
                 colors = []
