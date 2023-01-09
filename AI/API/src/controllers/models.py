@@ -89,6 +89,7 @@ class ObjectDetection(Resource):
             print(f'Uploaded file: {uploaded_file}')
 
             img = Image.open(uploaded_file)
+            original_size = img.size
             img = img.resize((640,640))
             
             model = models[id]
@@ -159,6 +160,7 @@ class ObjectDetection(Resource):
                                           width=2)
 
                   img = torchvision.transforms.ToPILImage()(img)
+                  img = img.resize(original_size)
 
                   img_uri = pil2datauri(img)
 
