@@ -10,6 +10,7 @@ import torch
 import torchvision
 from torchvision.io import read_image 
 from torchvision.utils import draw_bounding_boxes 
+import torchvision.transforms as transforms
 
 from src.server.instance import server
 from src.database.db import db
@@ -79,6 +80,11 @@ class ObjectDetection(Resource):
             print(f'Uploaded file: {uploaded_file}')
 
             img = Image.open(uploaded_file)
+            img = img.resize((640,640))
+            transform = transforms.Compose([
+              transforms.PILToTensor()
+            ])
+            img = transform(img)
             
             model = models[id]
             results = model(img)
@@ -110,7 +116,7 @@ class ObjectDetection(Resource):
                 id_drop = getDropId(grid_box,values)
 
                 #Identificar na imagem
-                img = read_path(uploaded_file)
+                img = read_image(uploaded_file)
                 boxes = []
                 #labels = []
                 colors = []
