@@ -163,6 +163,7 @@ class ObjectDetection(Resource):
                   img_uri = pil2datauri(img)
 
                   print('imagem detetada')
+                  print('image uri: ', img_uri)
                   outputs_json = {'image': {
                     'uri': img_uri,
                     'type': 'image/jpeg',
