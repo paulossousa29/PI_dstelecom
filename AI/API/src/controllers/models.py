@@ -81,10 +81,6 @@ class ObjectDetection(Resource):
 
             img = Image.open(uploaded_file)
             img = img.resize((640,640))
-            transform = transforms.Compose([
-              transforms.PILToTensor()
-            ])
-            img = transform(img)
             
             model = models[id]
             results = model(img)
@@ -116,7 +112,10 @@ class ObjectDetection(Resource):
                 id_drop = getDropId(grid_box,values)
 
                 #Identificar na imagem
-                img = read_image(uploaded_file)
+                transform = transforms.Compose([
+                  transforms.PILToTensor()
+                ])
+                img = transform(img)
                 boxes = []
                 #labels = []
                 colors = []
