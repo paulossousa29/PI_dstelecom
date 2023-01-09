@@ -83,83 +83,6 @@ class ObjectDetection(Resource):
             model = models[id]
             results = model(img)
             outputs = results.pandas().xyxy[0]
-<<<<<<< Updated upstream
-
-            if id == 0:
-                print('modelo com id == 0')
-                outputs['class'] = outputs.index
-                labels = outputs[['class','name']]
-                outputs_json = labels.to_json(orient='records')
-                print(outputs_json)
-                #output_names_json = label_outputs['name']
-
-            else:
-                outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
-                values = outputs.values
-                print(values[:3])
-
-                #Open grid
-                f = open('static/grids/Drops/grid.json')
-                grid = json.load(f)
-
-                #Get ref box
-                grid_box = grid['grid'][num_insercao-1]
-                label = grid_box['label']
-                grid_box = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
-
-                #Get original  id
-                id_drop = getDropId(grid_box,values)
-
-                #Identificar na imagem
-                boxes = []
-                #labels = []
-                colors = []
-
-                row = values[id_drop]
-
-                xmin = row[0]
-                ymin = row[1]
-                xmax = row[2] 
-                ymax = row[3] 
-
-                #labels.append(label)
-
-                box = [xmin, ymin, xmax, ymax]
-                boxes.append(box)
-
-                color = 'red' if label == 'ConectorOcupado' else 'green' if 'ConectorLivre' else 'blue'
-                colors.append(color)
-                
-                boxes = torch.tensor(boxes, dtype=torch.float)
-
-                '''img = draw_bounding_boxes(img,
-                                        boxes=boxes,
-                                        labels=labels,
-                                        colors=colors,
-                                        width=2)'''
-
-<<<<<<< Updated upstream
-        img = Image.open(uploaded_file)
-        print(img)
-        
-        model = models[0]
-        results = model(img)
-
-        print(results)
-
-        outputs = results.pandas().xyxy[0]
-        outputs['class'] = outputs.index
-        labels = outputs[['class','name']]
-        outputs_json = labels.to_json(orient='records')
-        print(outputs_json)
-        #output_names_json = label_outputs['name']
-=======
-                img = draw_bounding_boxes(img,
-                                        boxes=boxes,
-                                        colors=colors,
-                                        width=2)
-
-=======
 
             if id == 0:
                 print('modelo com id == 0')
@@ -219,14 +142,10 @@ class ObjectDetection(Resource):
                                         colors=colors,
                                         width=2)
 
->>>>>>> Stashed changes
                 img = torchvision.transforms.ToPILImage()(img)
                  
                 print('modelo com id == 1')
                 print('imagem detetada')
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+                outputs_json = {'message' : 'Imagem detetada com sucesso!'}
 
             return outputs_json, 200
