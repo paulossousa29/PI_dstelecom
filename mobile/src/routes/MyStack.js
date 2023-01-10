@@ -12,6 +12,7 @@ import NewReference from '../pages/NewReference';
 import Done from '../pages/Done';
 import UserExperience from '../pages/UserExperience';
 import ResultReference from '../pages/ResultReference';
+import ShowImage from '../pages/ShowImage';
 import Splash from '../pages/Splash';
 
 const HomeStack = createStackNavigator();
@@ -72,6 +73,7 @@ const MyStack = () => {
               name="UserExperience"
               component={UserExperience}
             />
+            <HomeStack.Screen name="ShowImage" component={ShowImage} />
           </HomeStack.Navigator>
         ) : (
           <AuthStack.Navigator

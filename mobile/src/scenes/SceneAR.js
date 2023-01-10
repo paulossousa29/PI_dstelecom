@@ -14,32 +14,7 @@ import axios from 'axios';
 import ip from '../config/ip';
 
 const SceneAR = props => {
-  const {step, intervention} = props.arSceneNavigator.viroAppProps;
-
-  // const fetchConector = async () => {
-  //   try {
-  //     const res = await axios.post(backend_ip + 'conetor', {
-  //       id_intervention: intervention,
-  //     });
-
-  //     return res.data.connector;
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
-
-  // const getStep = async () => {
-  //   // stepInt = step.toString();
-  //   // const text = passos[stepInt];
-  //   // if (step === 2 || step === 9) {
-  //   //   connector = await fetchConector();
-
-  //   //   text.concat(connector);
-  //   // }
-
-  //   // return text;
-  //   return 'cona';
-  // };
+  const {step} = props.arSceneNavigator.viroAppProps;
 
   return (
     <ViroARScene>

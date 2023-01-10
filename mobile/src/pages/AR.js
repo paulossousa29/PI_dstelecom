@@ -32,8 +32,28 @@ const AR = ({route, navigation}) => {
     }
   };
 
+  const fetchConnector = async () => {
+    try {
+      const res = await axios.post(backend_ip + 'conetor', {
+        id_intervention: intervention,
+      });
+
+      return res.data.connector;
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   const fetchAI = async image => {
     const imageData = new FormData();
+
+    if (step == 9) {
+      connector = await fetchConnector();
+      console.log(connector);
+      imageData.append('connector', connector);
+    }
+
+    imageData.append('step', step);
     imageData.append('image', {
       uri: image.assets[0].uri,
       type: 'image/jpeg',
@@ -60,13 +80,17 @@ const AR = ({route, navigation}) => {
       if (image.didCancel) return;
 
       res = await fetchAI(image);
-      console.log(res);
+
+      if (res.image) {
+        navigation.push('ShowImage', {uri: res.image.uri});
+      }
+
       res = true;
 
       if (step === 1) {
         access = await fetchAccess();
 
-        compare = false;
+        compare = true;
 
         if (compare) {
           setStep1Result(true);
