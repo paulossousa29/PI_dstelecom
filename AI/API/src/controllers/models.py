@@ -24,9 +24,8 @@ models_info = db.getModelsInfo()
 
 parser = api.parser()
 parser.add_argument('image', type=FileStorage, location='files', required=True)
-#parser.add_argument('id', type=str, required=True) (???)
-#parser.add_argument('passo', type=str, required=True) (???)
-#parser.add_argument('num_insercao', type=str, required=True) (???)
+parser.add_argument('step', type=int, required=True)
+parser.add_argument('connector', type=int)
 
 def box_center(box):
 
@@ -99,7 +98,12 @@ class ObjectDetection(Resource):
         args = parser.parse_args()
         print(f'Args: {args}')
         uploaded_file = args['image']  # This is FileStorage instance
-        #id = int(args['id']) (???)
+        step = args['step']
+        connector = args['connector']
+        print('Step: ',step)
+        print('Connector: ',connector) 
+
+        #step = int(args['step']) (???)
         id = 1
         num_insercao = 3
 
