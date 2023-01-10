@@ -13,6 +13,7 @@ import {
     MDBPaginationItem,
     MDBPaginationLink,
 } from "mdb-react-ui-kit";
+import ip from "../config/ip";
 
 
 
@@ -76,7 +77,7 @@ function RelTable() {
                     .catch((err) => console.log(err));
             default:
                 return await axios
-                    .get(`http://localhost:3001/relatorios`)
+                    .get(ip.backend_ip + 'relatorios')
                     .then((response) => {
                         setData(response.data);
                         setCurrentPage(currentPage + increase);

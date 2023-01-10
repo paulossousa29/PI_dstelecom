@@ -13,6 +13,7 @@ import {
   MDBPaginationItem,
   MDBPaginationLink,
 } from "mdb-react-ui-kit";
+import ip from "../config/ip";
 
 
 import { useNavigate } from "react-router-dom";
@@ -83,7 +84,7 @@ function StatsTable() {
           .catch((err) => console.log(err));
       default:
         return await axios
-          .get(`http://localhost:3001/stats`)
+          .get(ip.backend_ip + 'stats')
           .then((response) => {
             setData(response.data);
             setCurrentPage(currentPage + increase);

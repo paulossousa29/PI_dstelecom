@@ -14,6 +14,8 @@ import {
 	MDBPaginationLink,
 } from "mdb-react-ui-kit";
 
+import ip from "../config/ip";
+
 
 function RelTable() {
 	const [data, setData] = useState([]);
@@ -77,7 +79,7 @@ function RelTable() {
 					.catch((err) => console.log(err));
 			default:
 				return await axios
-					.get(`http://localhost:3001/pedidos`)
+					.get(ip.backend_ip + 'pedidos')
 					.then((response) => {
 						setData(response.data);
 						setCurrentPage(currentPage + increase);
@@ -90,7 +92,7 @@ function RelTable() {
 
 	const handleAceitar = (p) => {
 		return axios
-			.get(`http://localhost:3001/pedidosaceites/` + p)
+			.get(ip.backend_ip + 'pedidosaceites/' + p)
 			.then((response) => {
 				setData(response.data);
 				//setCurrentPage(currentPage + increase);
@@ -100,7 +102,7 @@ function RelTable() {
 
 	const handleRecusar = (p) => {
 		return axios
-			.get(`http://localhost:3001/pedidosrecusados/` + p)
+			.get(ip.backend_ip + 'pedidosrecusados/' + p)
 			.then((response) => {
 				setData(response.data);
 				//setCurrentPage(currentPage + increase);
