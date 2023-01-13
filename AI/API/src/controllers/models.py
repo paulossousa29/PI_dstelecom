@@ -125,13 +125,19 @@ class ObjectDetection(Resource):
               outputs = results.pandas().xyxy[0]
               outputs['class'] = outputs.index
               labels = outputs[['class','name']]
-              outputs_json = labels.to_json(orient='records')
-              print('Outputs do passo 1 (verificar se o estado do PDO):', outputs_json)
+              if 'PDOAberto' in labels['name'].unique():
+                print('PDO Aberto detetado')
+                return {'message': 'PDO aberto detetado'}, 200
+              else:
+                #Apontar falha no relatório final
+                outputs_json = labels.to_json(orient='records')
+                print('Outputs do passo 1 (verificar o estado do PDO):', outputs_json)
+                return {'message': 'Não foi detetado um PDO aberto'}, 200
 
               # 2. Tentamos verificar a referência do PDO
               # Se falhar também incluimos a falha no relatório final
 
-              return outputs_json, 200
+              
 
             elif step == 9:
                 model = models[1]
