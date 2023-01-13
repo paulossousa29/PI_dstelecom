@@ -116,11 +116,11 @@ class ObjectDetection(Resource):
             img = img.resize((640,640))
 
             if step == 1:
-              models = [0, 3]
+              model_ids = [0, 3]
               # 1. Verificar se o PDO está aberto com o modelo de Object Detection 
               # Se não reconhecer um PDO aberto apontamos essa falha no relatório final
               print('Modelo com id == 0')
-              model = models[models[0]]
+              model = models[model_ids[0]]
               results = model(img)
               outputs = results.pandas().xyxy[0]
               outputs['class'] = outputs.index
