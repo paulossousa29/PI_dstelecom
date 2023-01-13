@@ -103,12 +103,10 @@ class ObjectDetection(Resource):
         print('Step: ',step)
         print('Connector: ',connector) 
 
-        #step = int(args['step']) (???)
-        id = 1
-        num_insercao = 3
+        connector = 3
 
-        if id not in range(len(models)):
-            return {'message': 'ID inválido'}, 500
+        if step == None:
+          return {'message': 'Erro ao reconhecer o passo do trabalho.'}, 500
 
         else:
             print(f'Uploaded file: {uploaded_file}')
@@ -116,20 +114,30 @@ class ObjectDetection(Resource):
             img = Image.open(uploaded_file)
             original_size = img.size
             img = img.resize((640,640))
-            
-            model = models[id]
-            results = model(img)
-            outputs = results.pandas().xyxy[0]
 
-            if id == 0:
-                print('modelo com id == 0')
-                outputs['class'] = outputs.index
-                labels = outputs[['class','name']]
-                outputs_json = labels.to_json(orient='records')
-                print(outputs_json)
-                #output_names_json = label_outputs['name']
+            if step == 1:
+              models = [0, 3]
+              # 1. Verificar se o PDO está aberto com o modelo de Object Detection 
+              # Se não reconhecer um PDO aberto apontamos essa falha no relatório final
+              print('Modelo com id == 0')
+              model = models[models[0]]
+              results = model(img)
+              outputs = results.pandas().xyxy[0]
+              outputs['class'] = outputs.index
+              labels = outputs[['class','name']]
+              outputs_json = labels.to_json(orient='records')
+              print('Outputs do passo 1 (verificar se o estado do PDO):', outputs_json)
 
-            else:
+              # 2. Tentamos verificar a referência do PDO
+              # Se falhar também incluimos a falha no relatório final
+
+              return outputs_json, 200
+
+            elif step == 9:
+                model = models[1]
+                results = model(img)
+                outputs = results.pandas().xyxy[0]
+
                 outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
                 values = outputs.values
                 print(values[:3])
@@ -139,7 +147,7 @@ class ObjectDetection(Resource):
                 grid = json.load(f)
 
                 #Get ref box
-                grid_box = grid['grid'][num_insercao-1]
+                grid_box = grid['grid'][connector-1]
                 label = grid_box['label']
                 grid_box = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
 
@@ -190,7 +198,7 @@ class ObjectDetection(Resource):
                   img_uri = pil2datauri(img)
 
                   print('imagem detetada')
-                  print('image uri: ', img_uri)
+                  #print('image uri: ', img_uri)
                   outputs_json = {'image': {
                     'uri': img_uri,
                     'type': 'image/jpeg',
