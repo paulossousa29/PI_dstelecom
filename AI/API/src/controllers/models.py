@@ -116,8 +116,6 @@ class ObjectDetection(Resource):
         print('Step: ',step)
         print('Connector: ',connector) 
 
-        connector = 3
-
         if step == None:
           return {'message': 'Erro ao reconhecer o passo do trabalho.'}, 500
 
@@ -218,7 +216,11 @@ class ObjectDetection(Resource):
               else:
                 outputs_json = {'message' : 'O resultado da deteção não teve sucesso!'}
 
+            # PASSO 9 (Selecionar conector)
             elif step == 9:
+              if connector == None:
+                return {'message' : 'Não foi recebido o número do conector!'}, 501
+              
               model = models[1]
               results = model(img)
               outputs = results.pandas().xyxy[0]
