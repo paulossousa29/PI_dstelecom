@@ -259,7 +259,7 @@ class ObjectDetection(Resource):
                 xmax = row[2] 
                 ymax = row[3] 
 
-                labels.append(str(connector))
+                labels = [str(connector)]
 
                 box = [xmin, ymin, xmax, ymax]
                 boxes.append(box)
