@@ -13,6 +13,7 @@ import torchvision
 from torchvision.io import read_image 
 from torchvision.utils import draw_bounding_boxes 
 import torchvision.transforms as transforms
+import numpy as np
 
 from src.server.instance import server
 from src.database.db import db
@@ -88,6 +89,18 @@ def pil2datauri(img):
     data64 = base64.b64encode(data.getvalue())
     return u'data:img/jpeg;base64,'+data64.decode('utf-8')
 
+def getFirstAvailableDrop(grid, values):
+
+ for grid_box in grid:
+  box_list = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
+  id = getDropId(box_list, values)
+  row = values[id]
+  label = row[6]
+  num_drop = grid_box['label']
+
+  if label == 'DropNaoUsado':
+    return np.append(row, [num_drop], axis=0)
+
 @api.route('/detect')
 class ObjectDetection(Resource):
     def get(self,):
@@ -138,82 +151,149 @@ class ObjectDetection(Resource):
               # Se falhar também incluimos a falha no relatório final
 
               
+            elif step == 4:
+              model = models[1]
+              results = model(img)
+              outputs = results.pandas().xyxy[0]
 
-            elif step == 9:
-                model = models[1]
-                results = model(img)
-                outputs = results.pandas().xyxy[0]
+              outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+              values = outputs.values
+              print(values[:3])
 
-                outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
-                values = outputs.values
-                print(values[:3])
+              #Open grid
+              f = open('static/grids/Drops/grid.json','r')
+              grid = json.load(f)
+              f.close()
 
-                #Open grid
-                f = open('static/grids/Conectores/grid_conectors_esquerda_pra_direita.json')
-                grid = json.load(f)
-
-                #Get ref box
-                grid_box = grid['grid'][connector-1]
-                label = grid_box['label']
-                grid_box = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
-
-                #Get id
-                id_escolhido = getConectorId(grid_box,values)
+              if len(values) > 0:
+                #Get available drop
+                d = getFirstAvailableDrop(grid['grid'], values)
 
                 #Identificar na imagem
                 transform = transforms.Compose([
                   transforms.PILToTensor()
                 ])
                 img = transform(img)
+
                 boxes = []
-                #labels = []
+                labels = []
                 colors = []
 
-                if len(values) > 0:
-                  row = values[id_escolhido]
+                label = d[6]
+                xmin = d[0]
+                ymin = d[1]
+                xmax = d[2] 
+                ymax = d[3] 
+                num_drop = d[7]
 
-                  xmin = row[0]
-                  ymin = row[1]
-                  xmax = row[2] 
-                  ymax = row[3] 
+                labels.append(num_drop)
 
-                  #labels.append(label)
+                box = [xmin, ymin, xmax, ymax]
+                boxes.append(box)
 
-                  box = [xmin, ymin, xmax, ymax]
-                  boxes.append(box)
+                color = 'red' if label == 'DropUsado' else 'green' if 'DropNaoUsado' else 'blue'
+                colors.append(color)
 
-                  color = 'red' if label == 'ConectorOcupado' else 'green' if 'ConectorLivre' else 'blue'
-                  colors.append(color)
-                  
-                  boxes = torch.tensor(boxes, dtype=torch.float)
+                boxes = torch.tensor(boxes, dtype=torch.float)
 
-                  '''img = draw_bounding_boxes(img,
-                                          boxes=boxes,
-                                          labels=labels,
-                                          colors=colors,
-                                          width=2)'''
+                img = draw_bounding_boxes(img,
+                                        boxes=boxes,
+                                        labels=labels,
+                                        colors=colors,
+                                        width=3)
 
-                  img = draw_bounding_boxes(img,
-                                          boxes=boxes,
-                                          colors=colors,
-                                          width=2)
+                img = torchvision.transforms.ToPILImage()(img)
+                img = img.resize(original_size)
 
-                  img = torchvision.transforms.ToPILImage()(img)
-                  img = img.resize(original_size)
+                img_uri = pil2datauri(img)
 
-                  img_uri = pil2datauri(img)
+                print('imagem detetada no passo 4')
+                #print('image uri: ', img_uri)
+                outputs_json = {'image': {
+                  'uri': img_uri,
+                  'type': 'image/jpeg',
+                  'name': 'image.jpeg'
+                }}
+                
+              else:
+                outputs_json = {'message' : 'O resultado da deteção não teve sucesso!'}
 
-                  print('imagem detetada')
-                  #print('image uri: ', img_uri)
-                  outputs_json = {'image': {
-                    'uri': img_uri,
-                    'type': 'image/jpeg',
-                    'name': 'image.jpeg'
-                  }}
+            elif step == 9:
+              model = models[1]
+              results = model(img)
+              outputs = results.pandas().xyxy[0]
 
-                else:
-                  outputs_json = {'message' : 'O resultado da deteção não teve sucesso!'}
-                 
-                print('modelo com id == 1')
+              outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+              values = outputs.values
+              print(values[:3])
+
+              #Open grid
+              f = open('static/grids/Conectores/grid_conectors_esquerda_pra_direita.json', 'r')
+              grid = json.load(f)
+              f.close()
+
+              #Get ref box
+              grid_box = grid['grid'][connector-1]
+              label = grid_box['label']
+              grid_box = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
+
+              #Get id
+              id_escolhido = getConectorId(grid_box,values)
+
+              #Identificar na imagem
+              transform = transforms.Compose([
+                transforms.PILToTensor()
+              ])
+              img = transform(img)
+              boxes = []
+              #labels = []
+              colors = []
+
+              if len(values) > 0:
+                row = values[id_escolhido]
+
+                xmin = row[0]
+                ymin = row[1]
+                xmax = row[2] 
+                ymax = row[3] 
+
+                #labels.append(label)
+
+                box = [xmin, ymin, xmax, ymax]
+                boxes.append(box)
+
+                color = 'red' if label == 'ConectorOcupado' else 'green' if 'ConectorLivre' else 'blue'
+                colors.append(color)
+                
+                boxes = torch.tensor(boxes, dtype=torch.float)
+
+                '''img = draw_bounding_boxes(img,
+                                        boxes=boxes,
+                                        labels=labels,
+                                        colors=colors,
+                                        width=2)'''
+
+                img = draw_bounding_boxes(img,
+                                        boxes=boxes,
+                                        colors=colors,
+                                        width=2)
+
+                img = torchvision.transforms.ToPILImage()(img)
+                img = img.resize(original_size)
+
+                img_uri = pil2datauri(img)
+
+                print('imagem detetada')
+                #print('image uri: ', img_uri)
+                outputs_json = {'image': {
+                  'uri': img_uri,
+                  'type': 'image/jpeg',
+                  'name': 'image.jpeg'
+                }}
+
+              else:
+                outputs_json = {'message' : 'O resultado da deteção não teve sucesso!'}
+                
+              print('modelo com id == 1')
 
             return outputs_json, 200
