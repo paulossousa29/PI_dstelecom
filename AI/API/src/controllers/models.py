@@ -259,26 +259,26 @@ class ObjectDetection(Resource):
                 xmax = row[2] 
                 ymax = row[3] 
 
-                #labels.append(label)
+                labels.append(str(connector))
 
                 box = [xmin, ymin, xmax, ymax]
                 boxes.append(box)
 
-                color = 'red' if label == 'ConectorOcupado' else 'green' if 'ConectorLivre' else 'blue'
+                color = 'red' if label == 'ConectorOcupado' else 'yellow' if 'ConectorLivre' else 'blue'
                 colors.append(color)
                 
                 boxes = torch.tensor(boxes, dtype=torch.float)
 
-                '''img = draw_bounding_boxes(img,
+                img = draw_bounding_boxes(img,
                                         boxes=boxes,
                                         labels=labels,
                                         colors=colors,
-                                        width=2)'''
+                                        width=3)
 
-                img = draw_bounding_boxes(img,
+                '''img = draw_bounding_boxes(img,
                                         boxes=boxes,
                                         colors=colors,
-                                        width=2)
+                                        width=3)'''
 
                 img = torchvision.transforms.ToPILImage()(img)
                 img = img.resize(original_size)
