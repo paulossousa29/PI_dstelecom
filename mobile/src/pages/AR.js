@@ -81,10 +81,6 @@ const AR = ({route, navigation}) => {
 
       res = await fetchAI(image);
 
-      if (res.image) {
-        navigation.push('ShowImage', {uri: res.image.uri});
-      }
-
       res = true;
 
       if (step === 1) {
@@ -104,6 +100,9 @@ const AR = ({route, navigation}) => {
       } else if (step === 7) {
         setStep7Result(res);
       } else if (step === 9) {
+        if (res.image) {
+          navigation.push('ShowImage', {uri: res.image.uri});
+        }
         setStep9Result(res);
       } else if (step === 11) {
         setStep11Result(res);
