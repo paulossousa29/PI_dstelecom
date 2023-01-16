@@ -101,6 +101,191 @@ def getFirstAvailableDrop(grid, values):
   if label == 'DropNaoUsado':
     return np.append(row, [num_drop], axis=0)
 
+def step1(img):
+  output = {}
+  model_ids = [0, 3]
+  # 1. Verificar se o PDO está aberto com o modelo de Object Detection 
+  # Se não reconhecer um PDO aberto apontamos essa falha no relatório final
+
+  print('Modelo de deteção do estado do PDO!')
+  model = models[model_ids[0]]
+  results = model(img)
+  outputs = results.pandas().xyxy[0]
+  outputs['class'] = outputs.index
+  labels = outputs[['class','name']]
+
+  if 'PDOAberto' in labels['name'].unique():
+    print('PDO foi aberto')
+    output =  {'message': 'PDO encontra-se aberto'}
+  else:
+    #Apontar falha no relatório final
+    outputs_json = labels.to_json(orient='records')
+    print('Outputs do passo 1 (verificar o estado do PDO):', outputs_json)
+    output = {'message': 'Não foi detetado um PDO aberto'}
+
+  # 2. Tentamos verificar a referência do PDO
+  # Se falhar também incluimos a falha no relatório final
+  #model = models[model_ids[1]]
+
+  return output, 200
+
+def step4(img, original_size):
+  output = {}
+
+  model = models[1]
+  results = model(img)
+  outputs = results.pandas().xyxy[0]
+
+  outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+  values = outputs.values
+  print(values[:3])
+
+  #Open grid
+  f = open('static/grids/Drops/grid.json','r')
+  grid = json.load(f)
+  f.close()
+
+  if len(values) > 0:
+    #Get available drop
+    d = getFirstAvailableDrop(grid['grid'], values)
+
+    #Identificar na imagem
+    transform = transforms.Compose([
+      transforms.PILToTensor()
+    ])
+    img = transform(img)
+
+    boxes = []
+    labels = []
+    colors = []
+
+    label = d[6]
+    xmin = d[0]
+    ymin = d[1]
+    xmax = d[2] 
+    ymax = d[3] 
+    num_drop = d[7]
+
+    labels.append(num_drop)
+
+    box = [xmin, ymin, xmax, ymax]
+    boxes.append(box)
+
+    color = 'red' if label == 'DropUsado' else 'yellow'
+    colors.append(color)
+
+    boxes = torch.tensor(boxes, dtype=torch.float)
+
+    img = draw_bounding_boxes(img,
+                            boxes=boxes,
+                            labels=labels,
+                            colors=colors,
+                            width=3)
+
+    img = torchvision.transforms.ToPILImage()(img)
+    img = img.resize(original_size)
+
+    img_uri = pil2datauri(img)
+
+    print('imagem detetada no passo 4')
+    #print('image uri: ', img_uri)
+    output = {'image': {
+      'uri': img_uri,
+      'type': 'image/jpeg',
+      'name': 'image.jpeg'
+    }}
+    
+  else:
+    output = {'message' : 'O resultado da deteção não teve sucesso!'}
+
+  return output, 200
+
+def step9(img, original_size, connector):
+  output = {}
+  status = 200
+
+  if connector == None:
+    output = {'message' : 'Não foi recebido o número do conector!'}
+    status = 501
+  else:
+    model = models[1]
+    results = model(img)
+    outputs = results.pandas().xyxy[0]
+
+    outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+    values = outputs.values
+    print(values[:3])
+
+    #Open grid
+    f = open('static/grids/Conectores/grid_conectors_esquerda_pra_direita.json', 'r')
+    grid = json.load(f)
+    f.close()
+
+    #Get ref box
+    grid_box = grid['grid'][connector-1]
+    label = grid_box['label']
+    grid_box = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
+
+    #Get id
+    id_escolhido = getConectorId(grid_box,values)
+
+    #Identificar na imagem
+    transform = transforms.Compose([
+      transforms.PILToTensor()
+    ])
+    img = transform(img)
+
+    boxes = []
+    #labels = []
+    colors = []
+
+    if len(values) > 0:
+      row = values[id_escolhido]
+
+      xmin = row[0]
+      ymin = row[1]
+      xmax = row[2] 
+      ymax = row[3] 
+
+      labels = [str(connector)]
+
+      box = [xmin, ymin, xmax, ymax]
+      boxes.append(box)
+
+      color = 'red' if label == 'ConectorOcupado' else 'yellow'
+      colors.append(color)
+      
+      boxes = torch.tensor(boxes, dtype=torch.float)
+
+      img = draw_bounding_boxes(img,
+                              boxes=boxes,
+                              labels=labels,
+                              colors=colors,
+                              width=3)
+
+      '''img = draw_bounding_boxes(img,
+                              boxes=boxes,
+                              colors=colors,
+                              width=3)'''
+
+      img = torchvision.transforms.ToPILImage()(img)
+      img = img.resize(original_size)
+
+      img_uri = pil2datauri(img)
+
+      print('imagem detetada')
+      #print('image uri: ', img_uri)
+      output = {'image': {
+        'uri': img_uri,
+        'type': 'image/jpeg',
+        'name': 'image.jpeg'
+      }}
+    else:
+      output = {'message' : 'O resultado da deteção não teve sucesso!'}          
+  print('modelo com id == 1')
+
+  return output, status
+
 @api.route('/detect')
 class ObjectDetection(Resource):
     def get(self,):
@@ -127,175 +312,10 @@ class ObjectDetection(Resource):
             img = img.resize((640,640))
 
             if step == 1:
-              model_ids = [0, 3]
-              # 1. Verificar se o PDO está aberto com o modelo de Object Detection 
-              # Se não reconhecer um PDO aberto apontamos essa falha no relatório final
-              print('Modelo com id == 0')
-              model = models[model_ids[0]]
-              results = model(img)
-              outputs = results.pandas().xyxy[0]
-              outputs['class'] = outputs.index
-              labels = outputs[['class','name']]
-              if 'PDOAberto' in labels['name'].unique():
-                print('PDO Aberto detetado')
-                return {'message': 'PDO aberto detetado'}, 200
-              else:
-                #Apontar falha no relatório final
-                outputs_json = labels.to_json(orient='records')
-                print('Outputs do passo 1 (verificar o estado do PDO):', outputs_json)
-                return {'message': 'Não foi detetado um PDO aberto'}, 200
-
-              # 2. Tentamos verificar a referência do PDO
-              # Se falhar também incluimos a falha no relatório final
-
-              
+              return step1(img)
             elif step == 4:
-              model = models[1]
-              results = model(img)
-              outputs = results.pandas().xyxy[0]
-
-              outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
-              values = outputs.values
-              print(values[:3])
-
-              #Open grid
-              f = open('static/grids/Drops/grid.json','r')
-              grid = json.load(f)
-              f.close()
-
-              if len(values) > 0:
-                #Get available drop
-                d = getFirstAvailableDrop(grid['grid'], values)
-
-                #Identificar na imagem
-                transform = transforms.Compose([
-                  transforms.PILToTensor()
-                ])
-                img = transform(img)
-
-                boxes = []
-                labels = []
-                colors = []
-
-                label = d[6]
-                xmin = d[0]
-                ymin = d[1]
-                xmax = d[2] 
-                ymax = d[3] 
-                num_drop = d[7]
-
-                labels.append(num_drop)
-
-                box = [xmin, ymin, xmax, ymax]
-                boxes.append(box)
-
-                color = 'red' if label == 'DropUsado' else 'green' if 'DropNaoUsado' else 'blue'
-                colors.append(color)
-
-                boxes = torch.tensor(boxes, dtype=torch.float)
-
-                img = draw_bounding_boxes(img,
-                                        boxes=boxes,
-                                        labels=labels,
-                                        colors=colors,
-                                        width=3)
-
-                img = torchvision.transforms.ToPILImage()(img)
-                img = img.resize(original_size)
-
-                img_uri = pil2datauri(img)
-
-                print('imagem detetada no passo 4')
-                #print('image uri: ', img_uri)
-                outputs_json = {'image': {
-                  'uri': img_uri,
-                  'type': 'image/jpeg',
-                  'name': 'image.jpeg'
-                }}
-                
-              else:
-                outputs_json = {'message' : 'O resultado da deteção não teve sucesso!'}
-
-            # PASSO 9 (Selecionar conector)
+              return step4(img, original_size)
             elif step == 9:
-              if connector == None:
-                return {'message' : 'Não foi recebido o número do conector!'}, 501
-              
-              model = models[1]
-              results = model(img)
-              outputs = results.pandas().xyxy[0]
-
-              outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
-              values = outputs.values
-              print(values[:3])
-
-              #Open grid
-              f = open('static/grids/Conectores/grid_conectors_esquerda_pra_direita.json', 'r')
-              grid = json.load(f)
-              f.close()
-
-              #Get ref box
-              grid_box = grid['grid'][connector-1]
-              label = grid_box['label']
-              grid_box = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
-
-              #Get id
-              id_escolhido = getConectorId(grid_box,values)
-
-              #Identificar na imagem
-              transform = transforms.Compose([
-                transforms.PILToTensor()
-              ])
-              img = transform(img)
-              boxes = []
-              #labels = []
-              colors = []
-
-              if len(values) > 0:
-                row = values[id_escolhido]
-
-                xmin = row[0]
-                ymin = row[1]
-                xmax = row[2] 
-                ymax = row[3] 
-
-                labels = [str(connector)]
-
-                box = [xmin, ymin, xmax, ymax]
-                boxes.append(box)
-
-                color = 'red' if label == 'ConectorOcupado' else 'yellow' if 'ConectorLivre' else 'blue'
-                colors.append(color)
-                
-                boxes = torch.tensor(boxes, dtype=torch.float)
-
-                img = draw_bounding_boxes(img,
-                                        boxes=boxes,
-                                        labels=labels,
-                                        colors=colors,
-                                        width=3)
-
-                '''img = draw_bounding_boxes(img,
-                                        boxes=boxes,
-                                        colors=colors,
-                                        width=3)'''
-
-                img = torchvision.transforms.ToPILImage()(img)
-                img = img.resize(original_size)
-
-                img_uri = pil2datauri(img)
-
-                print('imagem detetada')
-                #print('image uri: ', img_uri)
-                outputs_json = {'image': {
-                  'uri': img_uri,
-                  'type': 'image/jpeg',
-                  'name': 'image.jpeg'
-                }}
-
-              else:
-                outputs_json = {'message' : 'O resultado da deteção não teve sucesso!'}
-                
-              print('modelo com id == 1')
-
-            return outputs_json, 200
+              return step9(img, original_size, connector)
+            else:
+              return {'message': 'Passo errado'}, 502
