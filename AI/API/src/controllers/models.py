@@ -114,14 +114,13 @@ def step1(img):
   outputs['class'] = outputs.index
   labels = outputs[['class','name']]
 
-  if 'PDOAberto' in labels['name'].unique():
-    print('PDO foi aberto')
-    output =  {'message': 'PDO encontra-se aberto'}
+  if 'PDOFechado' in labels['name'].unique():
+    print('PDO está fechado')
   else:
     #Apontar falha no relatório final
     outputs_json = labels.to_json(orient='records')
     print('Outputs do passo 1 (verificar o estado do PDO):', outputs_json)
-    output = {'message': 'Não foi detetado um PDO aberto'}
+    output = {'error': 'Não foi detetado um PDO aberto'}
 
   # 2. Tentamos verificar a referência do PDO
   # Se falhar também incluimos a falha no relatório final
@@ -196,7 +195,7 @@ def step4(img, original_size):
     }}
     
   else:
-    output = {'message' : 'O resultado da deteção não teve sucesso!'}
+    output = {'error' : 'O resultado da deteção não teve sucesso!'}
 
   return output, 200
 
@@ -205,7 +204,7 @@ def step9(img, original_size, connector):
   status = 200
 
   if connector == None:
-    output = {'message' : 'Não foi recebido o número do conector!'}
+    output = {'error' : 'Não foi recebido o número do conector!'}
     status = 501
   else:
     model = models[1]
@@ -281,7 +280,7 @@ def step9(img, original_size, connector):
         'name': 'image.jpeg'
       }}
     else:
-      output = {'message' : 'O resultado da deteção não teve sucesso!'}          
+      output = {'error' : 'O resultado da deteção não teve sucesso!'}          
   print('modelo com id == 1')
 
   return output, status
@@ -289,33 +288,33 @@ def step9(img, original_size, connector):
 @api.route('/detect')
 class ObjectDetection(Resource):
     def get(self,):
-        return models_info
+      return models_info
 
     @api.expect(parser)
     def post(self,): 
-        args = parser.parse_args()
-        print(f'Args: {args}')
-        uploaded_file = args['image']  # This is FileStorage instance
-        step = args['step']
-        connector = args['connector']
-        print('Step: ',step)
-        print('Connector: ',connector) 
+      args = parser.parse_args()
+      print(f'Args: {args}')
+      uploaded_file = args['image']  # This is FileStorage instance
+      step = args['step']
+      connector = args['connector']
+      print('Step: ',step)
+      print('Connector: ',connector) 
 
-        if step == None:
-          return {'message': 'Erro ao reconhecer o passo do trabalho.'}, 500
+      if step == None:
+        return {'error': 'Erro ao reconhecer o passo do trabalho.'}, 500
 
+      else:
+        print(f'Uploaded file: {uploaded_file}')
+
+        img = Image.open(uploaded_file)
+        original_size = img.size
+        img = img.resize((640,640))
+
+        if step == 1:
+          return step1(img)
+        elif step == 4:
+          return step4(img, original_size)
+        elif step == 9:
+          return step9(img, original_size, connector)
         else:
-            print(f'Uploaded file: {uploaded_file}')
-
-            img = Image.open(uploaded_file)
-            original_size = img.size
-            img = img.resize((640,640))
-
-            if step == 1:
-              return step1(img)
-            elif step == 4:
-              return step4(img, original_size)
-            elif step == 9:
-              return step9(img, original_size, connector)
-            else:
-              return {'message': 'Passo errado'}, 502
+          return {'error': 'Passo errado'}, 502
