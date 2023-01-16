@@ -17,8 +17,12 @@ const AR = ({route, navigation}) => {
   const [step7Result, setStep7Result] = useState(null);
   const [step9Result, setStep9Result] = useState(null);
   const [step11Result, setStep11Result] = useState(null);
+  const [step12Result, setStep12Result] = useState(null);
   const [step13Result, setStep13Result] = useState(null);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(9);
+  const [uriConnector, setUriConnector] = useState(null);
+  const [uriDrop, setUriDrop] = useState(null);
+  const steps = [1, 2, 3, 4, 5, 7, 9, 11, 12, 13];
 
   const fetchAccess = async () => {
     try {
@@ -32,9 +36,21 @@ const AR = ({route, navigation}) => {
     }
   };
 
+  const fetchElement = async () => {
+    try {
+      const res = await axios.post(ip.backend_ip + 'element', {
+        intervention: intervention,
+      });
+
+      return res.data.element;
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const fetchConnector = async () => {
     try {
-      const res = await axios.post(backend_ip + 'conetor', {
+      const res = await axios.post(ip.backend_ip + 'conetor', {
         id_intervention: intervention,
       });
 
@@ -47,9 +63,8 @@ const AR = ({route, navigation}) => {
   const fetchAI = async image => {
     const imageData = new FormData();
 
-    if (step == 9) {
+    if (step == 2 || step == 9) {
       connector = await fetchConnector();
-      console.log(connector);
       imageData.append('connector', connector);
     }
 
@@ -67,75 +82,130 @@ const AR = ({route, navigation}) => {
         },
       });
 
-      return res.data;
+      return res;
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleNextStep = async () => {
-    if (step % 2 === 1) {
-      const image = await launchCamera();
+    if (step === 5) {
+      navigation.push('ShowImage', {
+        uri: uriDrop,
+        message: 'Passagem drop a utilizar',
+      });
+    } else if (step === 9) {
+      navigation.push('ShowImage', {
+        uri: uriConnector,
+        message: 'Conetor a utilizar',
+      });
+    }
 
-      if (image.didCancel) return;
+    if (steps.includes(step)) {
+      const image = await launchCamera();
+      if (!image.didCancel) return;
 
       res = await fetchAI(image);
-
-      res = true;
+      if (res.status !== 200) {
+        Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
+        return;
+      }
+      if (res.data.error) {
+        Alert.alert('Erro', res.data.error, [{text: 'Cancel'}]);
+        return;
+      }
 
       if (step === 1) {
-        access = await fetchAccess();
+        element = await fetchElement();
 
-        compare = true;
-
-        if (compare) {
-          setStep1Result(true);
-        } else {
+        if (!element === res.data.element) {
           navigation.push('NewReference', {intervention: intervention});
         }
+        setStep1Result(element === res.data.element);
+      } else if (step === 2) {
+        setUriConnector(res.data.image.uri);
       } else if (step === 3) {
-        setStep3Result(res);
-      } else if (step === 5) {
-        setStep5Result(res);
-      } else if (step === 7) {
-        setStep7Result(res);
-      } else if (step === 9) {
-        if (res.image) {
-          navigation.push('ShowImage', {uri: res.image.uri});
+        if (res.data.power1490 > -26 && res.data.power1550 > -15)
+          setStep3Result(true);
+        else {
+          Alert.alert('Erro técnico', 'Potência Inválida', [
+            {text: 'Cancelar'},
+          ]);
+          setStep3Result(false);
         }
-        setStep9Result(res);
+      } else if (step === 4) {
+        setUriDrop(res.data.image.uri);
+      } else if (step === 5) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Slot de Drop Inválido', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep5Result(res.data.result);
+      } else if (step === 7) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Tabuleiro Inválido', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep7Result(res.data.result);
+      } else if (step === 9) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Conetor Inválido', [{text: 'Cancelar'}]);
+        }
+        setStep9Result(res.data.result);
       } else if (step === 11) {
-        setStep11Result(res);
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Revestimento dos Cabos Incorreto', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep11Result(res.data.result);
+      } else if (step === 12) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Tabuleiro Aberto', [{text: 'Cancelar'}]);
+        }
+        setStep12Result(res.data.result);
       } else if (step === 13) {
-        setStep13Result(res);
+        access = await fetchAccess();
 
-        var pad = function (num) {
-          return ('00' + num).slice(-2);
-        };
-
-        navigation.push('Notes', {
-          intervention: intervention,
-          startDate:
-            startDate.getUTCFullYear() +
-            '-' +
-            pad(startDate.getUTCMonth() + 1) +
-            '-' +
-            pad(startDate.getUTCDate()) +
-            ' ' +
-            pad(startDate.getUTCHours()) +
-            ':' +
-            pad(startDate.getUTCMinutes()) +
-            ':' +
-            pad(startDate.getUTCSeconds()),
-          step1: step1Result,
-          step3: step3Result,
-          step5: step5Result,
-          step7: step7Result,
-          step9: step9Result,
-          step11: step11Result,
-          step13: step13Result,
-        });
+        if (access !== res.data.access) {
+          Alert.alert('Erro técnico', 'Nome do Acesso Errado', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep13Result(access === res.data.access);
       }
+    }
+
+    if (step === 14) {
+      var pad = function (num) {
+        return ('00' + num).slice(-2);
+      };
+
+      navigation.push('Notes', {
+        intervention: intervention,
+        startDate:
+          startDate.getUTCFullYear() +
+          '-' +
+          pad(startDate.getUTCMonth() + 1) +
+          '-' +
+          pad(startDate.getUTCDate()) +
+          ' ' +
+          pad(startDate.getUTCHours()) +
+          ':' +
+          pad(startDate.getUTCMinutes()) +
+          ':' +
+          pad(startDate.getUTCSeconds()),
+        step1: step1Result,
+        step3: step3Result,
+        step5: step5Result,
+        step7: step7Result,
+        step9: step9Result,
+        step11: step11Result,
+        step12: step12Result,
+        step13: step13Result,
+      });
     }
 
     setStep(step + 1);

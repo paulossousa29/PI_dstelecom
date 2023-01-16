@@ -24,7 +24,7 @@ const Login = ({navigation}) => {
         password: pass,
       });
 
-      return res.data.token;
+      return res;
     } catch (error) {
       console.log(error.message);
     }
@@ -32,12 +32,15 @@ const Login = ({navigation}) => {
 
   const validationAccount = async () => {
     if (!invalid.includes(pass) && !invalid.includes(username)) {
-      const token = await fetchLogin();
+      const res = await fetchLogin();
 
-      if (token) {
+      if (res.status === 200) {
         login({token: token, username: username});
-      } else {
+      } else if (res.status === 401) {
         setErrorMsgUsername('Utilizador ou Palavra-pass Inválidos!');
+        setErrorMsgPass(null);
+      } else {
+        setErrorMsgUsername('Erro de Rede. Tente outra vez!');
         setErrorMsgPass(null);
       }
     } else if (invalid.includes(pass) && !invalid.includes(username)) {

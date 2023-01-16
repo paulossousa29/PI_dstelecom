@@ -9,6 +9,10 @@ const Splash = () => {
         source={require('../assets/logo-black.png')}></Image>
       <View style={styles.container}>
         <View style={styles.resultReference}>
+          <Image
+            source={require('../assets/loading.png')}
+            style={{width: 40, height: 40}}
+          />
           <Text style={styles.text}>A carregar</Text>
         </View>
       </View>
@@ -65,6 +69,14 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     color: colors.logoGreyDark,
     fontWeight: 'bold',
+  },
+  result: {
+    flex: 1,
+    marginTop: 15,
+    paddingTop: 60,
+    borderRadius: 50,
+    width: '100%',
+    alignItems: 'center',
   },
 });
 

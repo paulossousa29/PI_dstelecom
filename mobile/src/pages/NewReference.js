@@ -25,7 +25,7 @@ const NewReference = ({route, navigation}) => {
         description: reference,
       });
 
-      return res.status === 200;
+      return res;
     } catch (err) {
       console.log(err.message);
     }
@@ -34,10 +34,12 @@ const NewReference = ({route, navigation}) => {
   const validationRef = async () => {
     if (!invalid.includes(reference)) {
       setReference(null);
-      const status = await fetchNewReference();
+      const res = await fetchNewReference();
 
-      if (status) {
+      if (res.status === 200) {
         navigation.push('ResultReference', {intervention: intervention});
+      } else {
+        setErrorMsgRef('Erro de Rede. Tente outra vez!');
       }
     } else {
       setErrorMsgRef('Necessário o nº da referência');
