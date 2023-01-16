@@ -98,14 +98,14 @@ def getFirstAvailableDrop(grid, values):
   label = row[6]
   num_drop = grid_box['label']
 
-  if label == 'DropNaoUsado':
+  if label == 'DropLivre':
     return np.append(row, [num_drop], axis=0)
 
 def step1(img):
   output = {}
-  model_ids = [0, 3]
-  # 1. Verificar se o PDO está aberto com o modelo de Object Detection 
-  # Se não reconhecer um PDO aberto apontamos essa falha no relatório final
+  model_ids = [0, 4]
+  # 1. Verificar se o PDO está fechado com o modelo de Object Detection 
+  # Se não reconhecer um PDO fechado apontamos essa falha no relatório final
 
   print('Modelo de deteção do estado do PDO!')
   model = models[model_ids[0]]
@@ -114,92 +114,22 @@ def step1(img):
   outputs['class'] = outputs.index
   labels = outputs[['class','name']]
 
-  if 'PDOFechado' in labels['name'].unique():
+  '''if 'PDOFechado' in labels['name'].unique():
     print('PDO está fechado')
   else:
     #Apontar falha no relatório final
     outputs_json = labels.to_json(orient='records')
     print('Outputs do passo 1 (verificar o estado do PDO):', outputs_json)
-    output = {'error': 'Não foi detetado um PDO aberto'}
+    output = {'error': 'Não foi detetado um PDO fechado'}'''
 
   # 2. Tentamos verificar a referência do PDO
   # Se falhar também incluimos a falha no relatório final
   #model = models[model_ids[1]]
+  output = {'element': 'teste'}
 
   return output, 200
 
-def step4(img, original_size):
-  output = {}
-
-  model = models[1]
-  results = model(img)
-  outputs = results.pandas().xyxy[0]
-
-  outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
-  values = outputs.values
-  print(values[:3])
-
-  #Open grid
-  f = open('static/grids/Drops/grid.json','r')
-  grid = json.load(f)
-  f.close()
-
-  if len(values) > 0:
-    #Get available drop
-    d = getFirstAvailableDrop(grid['grid'], values)
-
-    #Identificar na imagem
-    transform = transforms.Compose([
-      transforms.PILToTensor()
-    ])
-    img = transform(img)
-
-    boxes = []
-    labels = []
-    colors = []
-
-    label = d[6]
-    xmin = d[0]
-    ymin = d[1]
-    xmax = d[2] 
-    ymax = d[3] 
-    num_drop = d[7]
-
-    labels.append(num_drop)
-
-    box = [xmin, ymin, xmax, ymax]
-    boxes.append(box)
-
-    color = 'red' if label == 'DropUsado' else 'yellow'
-    colors.append(color)
-
-    boxes = torch.tensor(boxes, dtype=torch.float)
-
-    img = draw_bounding_boxes(img,
-                            boxes=boxes,
-                            labels=labels,
-                            colors=colors,
-                            width=3)
-
-    img = torchvision.transforms.ToPILImage()(img)
-    img = img.resize(original_size)
-
-    img_uri = pil2datauri(img)
-
-    print('imagem detetada no passo 4')
-    #print('image uri: ', img_uri)
-    output = {'image': {
-      'uri': img_uri,
-      'type': 'image/jpeg',
-      'name': 'image.jpeg'
-    }}
-    
-  else:
-    output = {'error' : 'O resultado da deteção não teve sucesso!'}
-
-  return output, 200
-
-def step9(img, original_size, connector):
+def step2(img, original_size, connector):
   output = {}
   status = 200
 
@@ -285,6 +215,98 @@ def step9(img, original_size, connector):
 
   return output, status
 
+def step3():
+  return {'power1490': -20, 'power1550': -10}
+
+def step4(img, original_size):
+  output = {}
+
+  model = models[2]
+  results = model(img)
+  outputs = results.pandas().xyxy[0]
+
+  outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+  values = outputs.values
+  print(values[:3])
+
+  #Open grid
+  f = open('static/grids/Drops/grid.json','r')
+  grid = json.load(f)
+  f.close()
+
+  if len(values) > 0:
+    #Get available drop
+    d = getFirstAvailableDrop(grid['grid'], values)
+
+    #Identificar na imagem
+    transform = transforms.Compose([
+      transforms.PILToTensor()
+    ])
+    img = transform(img)
+
+    boxes = []
+    labels = []
+    colors = []
+
+    label = d[6]
+    xmin = d[0]
+    ymin = d[1]
+    xmax = d[2] 
+    ymax = d[3] 
+    num_drop = d[7]
+
+    labels.append(num_drop)
+
+    box = [xmin, ymin, xmax, ymax]
+    boxes.append(box)
+
+    color = 'red' if label == 'DropOcupado' else 'yellow'
+    colors.append(color)
+
+    boxes = torch.tensor(boxes, dtype=torch.float)
+
+    img = draw_bounding_boxes(img,
+                            boxes=boxes,
+                            labels=labels,
+                            colors=colors,
+                            width=3)
+
+    img = torchvision.transforms.ToPILImage()(img)
+    img = img.resize(original_size)
+
+    img_uri = pil2datauri(img)
+
+    print('imagem detetada no passo 4')
+    #print('image uri: ', img_uri)
+    output = {'image': {
+      'uri': img_uri,
+      'type': 'image/jpeg',
+      'name': 'image.jpeg'
+    }}
+    
+  else:
+    output = {'error' : 'O resultado da deteção não teve sucesso!'}
+
+  return output, 200
+
+def step5():
+  return {'result': 'true'}
+
+def step7():
+  return {'result': 'true'}
+
+def step9():
+  return {'result': 'true'}
+
+def step11():
+  return {'result': 'true'}
+
+def step12():
+  return {'result': 'true'}
+
+def step13():
+  return {'access': 'teste'}
+
 @api.route('/detect')
 class ObjectDetection(Resource):
     def get(self,):
@@ -312,9 +334,23 @@ class ObjectDetection(Resource):
 
         if step == 1:
           return step1(img)
+        elif step == 2:
+          return step2(img, original_size, connector)
+        elif step == 3:
+          return step3()
         elif step == 4:
           return step4(img, original_size)
+        elif step == 5:
+          return step5()
+        elif step == 7:
+          return step7()
         elif step == 9:
-          return step9(img, original_size, connector)
+          return step9()
+        elif step == 11:
+          return step11()
+        elif step == 12:
+          return step12()
+        elif step == 13:
+          return step13()
         else:
           return {'error': 'Passo errado'}, 502

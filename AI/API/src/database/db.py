@@ -3,8 +3,9 @@ import torch
 class Database():
     def __init__(self,):
         self.models = [
-            torch.hub.load('ultralytics/yolov5', 'custom', path='static/weights/model0/best.pt', device='cpu', force_reload=True),
-            torch.hub.load('ultralytics/yolov5', 'custom', path='static/weights/model1/best.pt', device='cpu', force_reload=True)
+            torch.hub.load('ultralytics/yolov5', 'custom', path='static/weights/estadoPDO/best.pt', device='cpu', force_reload=True),
+            torch.hub.load('ultralytics/yolov5', 'custom', path='static/weights/conectores/best.pt', device='cpu', force_reload=True),
+            torch.hub.load('ultralytics/yolov5', 'custom', path='static/weights/drops/best.pt', device='cpu', force_reload=True)
         ]
         self.models_info = [
             {
@@ -13,7 +14,11 @@ class Database():
             },
             {
                 "id": 1,
-                "description": "Deteção de conectores ocupados e livres, bem como drops ocupados e livres"
+                "description": "Deteção de conectores ocupados e livres"
+            },
+            {
+                "id": 2,
+                "description": "Deteção de drops ocupados e livres"
             }
         ]
     
