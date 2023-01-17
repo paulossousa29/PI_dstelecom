@@ -115,8 +115,6 @@ def getFirstAvailableDrop(grid, values):
             return np.append(row, [num_drop], axis=0)
 
 # PASSO 1: Identificar a referencia do PDO e verificar se coincide com a ordem de trabalho
-
-
 def step1(img):
     output = {}
     model_ids = [0, 4]
@@ -207,6 +205,8 @@ def step1(img):
         elif c == '$':
             c = 'S'
             final_string += c
+
+    print('Element: ',final_string)
 
     output = {'element': final_string}
 
@@ -302,14 +302,10 @@ def step2(img, original_size, connector):
     return output, status
 
 # PASSO 3: Medir a potencia ótica no conetor
-
-
 def step3():
     return {'power1490': -20, 'power1550': -10}, 200
 
 # PASSO 4: Verificar o slot para a saída do cabo de drop
-
-
 def step4(img, original_size):
     output = {}
 
@@ -382,8 +378,6 @@ def step4(img, original_size):
     return output, 200
 
 # PASSO 5: Passar o cabo de drop pelo slot
-
-
 def step5():
     # Preciso de saber qual é o drop que já deve ter sido ligado
     # Vou fazer uma nova deteção à imagem
@@ -393,14 +387,10 @@ def step5():
     return {'result': 'true'}, 200
 
 # PASSO 7: Identificar o tabuleiro verde para fusão
-
-
 def step7():
     return {'result': 'true'}, 200
 
 # PASSO 9: Ligar no conetor
-
-
 def step9():
     # Preciso de saber qual é o conector que já deve ter sido ligado
     # Vou fazer uma nova deteção à imagem
@@ -410,14 +400,10 @@ def step9():
     return {'result': 'true'}, 200
 
 # PASSO 11: Verificar revestimento dos cabos
-
-
 def step11():
     return {'result': 'true'}, 200
 
 # PASSO 12: Fechar o Tabuleiro
-
-
 def step12(img):
     output = {}
 
@@ -443,8 +429,6 @@ def step12(img):
     return output, 200
 
 # PASSO 13: Colocar a tag no cabo de drop
-
-
 def step13():
     return {'access': 'FTTH_DST_00362667'}, 200
 
