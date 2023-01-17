@@ -475,7 +475,7 @@ class ObjectDetection(Resource):
             img = img.resize((640, 640))
 
             if step == 1:
-                return step1(img, uploaded_file)
+                return step1(img)
             elif step == 2:
                 return step2(img, original_size, connector)
             elif step == 3:
