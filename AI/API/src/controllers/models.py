@@ -142,7 +142,7 @@ def step1(img):
     # 2. Tentamos verificar a referência do PDO
     # Se falhar também incluimos a falha no relatório final
     #model = models[model_ids[1]]
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     ret, thresh = cv2.threshold(gray, 150, 255, 0)
