@@ -8,6 +8,8 @@ import math
 import base64
 from io import BytesIO
 import pytesseract
+import cv2 
+import imutils
 
 import torch
 import torchvision
