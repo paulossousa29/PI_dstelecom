@@ -117,7 +117,7 @@ def getFirstAvailableDrop(grid, values):
 # PASSO 1: Identificar a referencia do PDO e verificar se coincide com a ordem de trabalho
 
 
-def step1(img, img_path):
+def step1(img):
     output = {}
     model_ids = [0, 4]
     # 1. Verificar se o PDO está fechado com o modelo de Object Detection
@@ -141,7 +141,11 @@ def step1(img, img_path):
     # 2. Tentamos verificar a referência do PDO
     # Se falhar também incluimos a falha no relatório final
     #model = models[model_ids[1]]
-    image = cv2.imread(img_path)
+    image = img.convert('RGB')
+    image = np.array(image) 
+    #Convert to BGR
+    image = image[:, :, ::-1].copy() 
+    #image = cv2.imread(img_path)
     #image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
