@@ -4,6 +4,8 @@ import {TextInput} from 'react-native-gesture-handler';
 
 import {AuthContext} from '../components/AuthContext';
 
+import SceneAR from '../scenes/SceneAR';
+
 import colors from '../config/colors';
 import ip from '../config/ip';
 import axios from 'axios';
@@ -29,19 +31,41 @@ const Home = ({route, navigation}) => {
     }
   };
 
+  const newDate = () => {
+    var pad = function (num) {
+      return ('00' + num).slice(-2);
+    };
+
+    date = new Date();
+
+    return (
+      date.getUTCFullYear() +
+      '-' +
+      pad(date.getUTCMonth() + 1) +
+      '-' +
+      pad(date.getUTCDate()) +
+      ' ' +
+      pad(date.getUTCHours()) +
+      ':' +
+      pad(date.getUTCMinutes()) +
+      ':' +
+      pad(date.getUTCSeconds())
+    );
+  };
+
   const validationID = async () => {
     if (!invalid.includes(intervention)) {
       const res = await fetchIntervencoes();
 
-      if (res.status === 200) {
-        navigation.push('AR', {
+      if (res === undefined) {
+        setErrorMsgIntervention('Erro de Rede. Tente outra vez!');
+      } else if (res.status === 200) {
+        navigation.push('AR1', {
           intervention: intervention,
-          username: username,
+          date: newDate(),
         });
       } else if (res.status === 401) {
         setErrorMsgIntervention('ID da Intervenção inválido!');
-      } else {
-        setErrorMsgIntervention('Erro de Rede. Tente outra vez!');
       }
     } else {
       setErrorMsgIntervention('ID da Intervenção necessário!');

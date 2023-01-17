@@ -4,7 +4,7 @@ import ip from '../config/ip';
 import axios from 'axios';
 
 const ResultReference = ({route, navigation}) => {
-  const {intervention} = route.params;
+  const {intervention, startDate} = route.params;
 
   const fetchNewReferenceStatus = async () => {
     try {
@@ -21,8 +21,15 @@ const ResultReference = ({route, navigation}) => {
   const handleVerify = async () => {
     const status = await fetchNewReferenceStatus();
 
-    if (status === 1 || status === 2) {
-      navigation.pop(); // Tem que voltar dois pops mas estoura
+    if (status === 1) {
+      navigation.push('AR2', {
+        intervention: intervention,
+        startDate: startDate,
+        step1: false,
+      });
+    } else if (status === 2) {
+      // Alert avisar que foi recusado
+      navigation.popToTop();
     }
   };
 

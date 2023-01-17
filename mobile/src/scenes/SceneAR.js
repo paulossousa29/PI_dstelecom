@@ -10,9 +10,6 @@ import {StyleSheet} from 'react-native';
 
 import passos from '../assets/passos.json';
 
-import axios from 'axios';
-import ip from '../config/ip';
-
 const SceneAR = props => {
   const {step} = props.arSceneNavigator.viroAppProps;
 

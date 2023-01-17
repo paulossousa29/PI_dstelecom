@@ -34,13 +34,13 @@ const Login = ({navigation}) => {
     if (!invalid.includes(pass) && !invalid.includes(username)) {
       const res = await fetchLogin();
 
-      if (res.status === 200) {
-        login({token: token, username: username});
+      if (res === undefined) {
+        setErrorMsgUsername('Erro de Rede. Tente outra vez!');
+        setErrorMsgPass(null);
+      } else if (res.status === 200) {
+        login({token: res.data.token, username: username});
       } else if (res.status === 401) {
         setErrorMsgUsername('Utilizador ou Palavra-pass Inválidos!');
-        setErrorMsgPass(null);
-      } else {
-        setErrorMsgUsername('Erro de Rede. Tente outra vez!');
         setErrorMsgPass(null);
       }
     } else if (invalid.includes(pass) && !invalid.includes(username)) {

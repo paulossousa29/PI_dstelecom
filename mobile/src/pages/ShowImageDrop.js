@@ -2,9 +2,21 @@ import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 
 import colors from '../config/colors';
 
-const ShowImage = ({route, navigation}) => {
-  const {uri, message} = route.params;
+const ShowImageDrop = ({route, navigation}) => {
+  const {intervention, startDate, step1, step3, uriDrop, uriConnector} =
+    route.params;
 
+  const handleNext = async () => {
+    navigation.push('AR3', {
+      intervention: intervention,
+      startDate: startDate,
+      step1: step1,
+      step3: step3,
+      uriConnector: uriConnector,
+    });
+  };
+
+  // mudar cor do botão para andar
   return (
     <View style={styles.background}>
       <Image
@@ -12,24 +24,22 @@ const ShowImage = ({route, navigation}) => {
         source={require('../assets/logo-black.png')}></Image>
 
       <View style={styles.container}>
-        <Text style={styles.text}>{message}</Text>
+        <Text style={styles.text}>Passagem drop a utilizar</Text>
         <View style={styles.image}>
           <Image
-            source={{uri: uri}}
+            source={{uri: uriDrop}}
             style={{width: 280, height: 350, borderRadius: 15}}
           />
         </View>
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={() => {
-            navigation.pop();
-          }}>
-          <Text style={styles.buttonText}>Sair</Text>
+        <TouchableOpacity style={styles.startButton} onPress={handleNext}>
+          <Text style={styles.buttonText}>Continuar</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
+export default ShowImageDrop;
 
 const styles = StyleSheet.create({
   text: {
@@ -67,14 +77,12 @@ const styles = StyleSheet.create({
     height: '30%',
     resizeMode: 'contain',
   },
-  logoutButton: {
-    position: 'absolute',
-    bottom: 0,
+  startButton: {
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
-    backgroundColor: colors.logoGreyDark,
+    backgroundColor: colors.red,
     paddingTop: 14,
     paddingBottom: 14,
     marginVertical: 30,
@@ -88,5 +96,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default ShowImage;

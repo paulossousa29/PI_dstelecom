@@ -13,7 +13,7 @@ import ip from '../config/ip';
 import axios from 'axios';
 
 const NewReference = ({route, navigation}) => {
-  const {intervention} = route.params;
+  const {intervention, startDate} = route.params;
   const [reference, setReference] = useState('mudar depois');
   const [errorMsgRef, setErrorMsgRef] = useState(null);
   const invalid = [null, ''];
@@ -36,10 +36,13 @@ const NewReference = ({route, navigation}) => {
       setReference(null);
       const res = await fetchNewReference();
 
-      if (res.status === 200) {
-        navigation.push('ResultReference', {intervention: intervention});
-      } else {
+      if (res === undefined) {
         setErrorMsgRef('Erro de Rede. Tente outra vez!');
+      } else if (res.status === 200) {
+        navigation.push('ResultReference', {
+          intervention: intervention,
+          startDate: startDate,
+        });
       }
     } else {
       setErrorMsgRef('Necessário o nº da referência');
@@ -72,9 +75,7 @@ const NewReference = ({route, navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.logoutButton}
-          onPress={() => {
-            navigation.pop();
-          }}>
+          onPress={() => navigation.popToTop()}>
           <Text style={styles.buttonText}>Cancelar</Text>
         </TouchableOpacity>
       </View>
