@@ -138,7 +138,7 @@ def step1(img):
 
     # 2. Tentamos verificar a referência do PDO
     # Se falhar também incluimos a falha no relatório final
-    #model = models[model_ids[1]]
+    print('Modelo para detetar referência')
     image = img.convert('RGB')
     image = np.array(image) 
     #Convert to BGR
