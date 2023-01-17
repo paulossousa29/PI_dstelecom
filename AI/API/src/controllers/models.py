@@ -36,7 +36,6 @@ drop_identificado = None
 
 
 def box_center(box):
-
     xmin = box[0]
     ymin = box[1]
     xmax = box[2]
@@ -118,7 +117,7 @@ def getFirstAvailableDrop(grid, values):
 # PASSO 1: Identificar a referencia do PDO e verificar se coincide com a ordem de trabalho
 
 
-def step1(img):
+def step1(img, img_path):
     output = {}
     model_ids = [0, 4]
     # 1. Verificar se o PDO está fechado com o modelo de Object Detection
@@ -142,8 +141,9 @@ def step1(img):
     # 2. Tentamos verificar a referência do PDO
     # Se falhar também incluimos a falha no relatório final
     #model = models[model_ids[1]]
-    image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    gray = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+    #image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     ret, thresh = cv2.threshold(gray, 150, 255, 0)
 
@@ -209,8 +209,6 @@ def step1(img):
     return output, 200
 
 # PASSO 2: Verificar a disponibilidade do conetor
-
-
 def step2(img, original_size, connector):
     output = {}
     status = 200
@@ -473,7 +471,7 @@ class ObjectDetection(Resource):
             img = img.resize((640, 640))
 
             if step == 1:
-                return step1(img)
+                return step1(img, uploaded_file)
             elif step == 2:
                 return step2(img, original_size, connector)
             elif step == 3:
