@@ -14,6 +14,7 @@ import {
   MDBPaginationLink,
 } from "mdb-react-ui-kit";
 import ip from "../config/ip";
+import Relatorio from "../pages/Relatorio"
 
 
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,7 @@ function StatsTable() {
   const [pageLimit] = useState(4);
   const [sortFilterValue, setSortFilterValue] = useState("");
   const [operation, setOperation] = useState("");
+  const [id, setId]=useState("");
 
 
   const navigate = useNavigate();
@@ -83,7 +85,7 @@ function StatsTable() {
   console.log("data", data);
 
   const handleConsulta = (p) => {
-    navigate('/equipa', { state: { id: p } })
+    <Relatorio parentToChild={id}/>
   }
 
   const handleReset = () => {
@@ -117,6 +119,11 @@ function StatsTable() {
     //   })
     //   .catch((err) => console.log(err));
   };
+
+  const parentToChild = (id)  => {
+    setId(id);
+    <Relatorio parentToChild={id}/>
+  }
 
   const handleFilter = async (value) => {
     loadUsersData(0, 4, 0, "filter", value);
@@ -291,7 +298,7 @@ function StatsTable() {
                       <td>{item.total_mistakes}</td>
                       <td>{item.media_erro}</td>
                       <td>{item.media_tempo.days} </td>
-                      <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar Equipa </button>
+                      <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => parentToChild(item.id)}> Consultar Equipa </button>
                     </tr>
                   </MDBTableBody>
                 ))
