@@ -10,7 +10,7 @@ const Avaliacao = () => {
     const [avaliacao, setAvaliacao] = React.useState([]);
 
     async function getAvaliacao() {
-        const res = await fetch(ip.backend_ip + "avaliacao");
+        const res = await fetch(ip.backend_ip + "ava");
         const avaliacaoAux = await res.json();
         setAvaliacao(avaliacaoAux);
     }
@@ -42,7 +42,7 @@ const Avaliacao = () => {
         <React.Fragment>
             <div className="row">
                 <NavBar />
-                <div className='row'>
+                {/* <div className='row'>
                     <ul className='list-group'>
                         {medias(avaliacao)}
                         <li className="list-group-item">
@@ -55,7 +55,7 @@ const Avaliacao = () => {
                             <b>Avaliação global da aplicação:</b> {global}
                         </li>
                     </ul>
-                </div>
+                </div> */}
             </div>
         </React.Fragment>
     );

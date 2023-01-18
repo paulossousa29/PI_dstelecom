@@ -55,7 +55,7 @@ app.get("/todos", async (req, res) => {
 });
 
 
-app.get("/avaliacao", async (req, res) => {
+app.get("/ava", async (req, res) => {
 	console.log("request avaliacao");
 	try {
 		pool.connect();
