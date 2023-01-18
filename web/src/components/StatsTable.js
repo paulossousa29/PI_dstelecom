@@ -276,7 +276,7 @@ function StatsTable() {
                 <MDBTableBody className="align-center mb-0">
                   <tr>
                     <td colSpan={8} className="text-center mb-0">
-                      No Data Found
+                      Sem dados encontrados
                     </td>
                   </tr>
                 </MDBTableBody>
@@ -289,7 +289,7 @@ function StatsTable() {
                       <td>{item.total_jobs}</td>
                       <td>{item.total_mistakes}</td>
                       <td>{item.media_erro}</td>
-                      <td>{item.media_tempo.hours}:{item.media_tempo.minutes}:{item.media_tempo.seconds} </td>
+                      <td>{item.media_tempo} </td>
                       <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar Equipa </button>
                     </tr>
                   </MDBTableBody>
