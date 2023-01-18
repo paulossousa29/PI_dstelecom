@@ -9,7 +9,7 @@ import ip from '../config/ip';
 const Relatorio = ({route}) => {
   const location = useLocation();
 
-  const id = location.state.id
+  const id = 0
   console.log(id);
   
   const [relatorio,setRelatorio] = React.useState([]);
@@ -55,6 +55,16 @@ const Relatorio = ({route}) => {
                           </div>
                           <div className='col-8'>
                             {e.data_fim}
+                          </div>
+                        </div>
+                      </li>
+                      <li className="list-group-item">
+                        <div className='row'>
+                          <div className='col-4'>
+                            <b>Equipa:</b>
+                          </div>
+                          <div className='col-8'>
+                            {e.id_equipa}
                           </div>
                         </div>
                       </li>
