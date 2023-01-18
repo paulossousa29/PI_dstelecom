@@ -27,7 +27,6 @@ function StatsTable() {
   const [pageLimit] = useState(4);
   const [sortFilterValue, setSortFilterValue] = useState("");
   const [operation, setOperation] = useState("");
-  const [id, setId] = useState("");
 
 
   const navigate = useNavigate();
@@ -51,6 +50,7 @@ function StatsTable() {
         setOperation(optType);
         setSortValue("");
         return await axios
+          /* + '/' + start + '/' + end */
           .get(ip.backend_ip + 'searchstat/' + value + '/' + start + '/' + end)
           .then((response) => {
             setData(response.data);
@@ -117,7 +117,6 @@ function StatsTable() {
     //   })
     //   .catch((err) => console.log(err));
   };
-
   const handleFilter = async (value) => {
     loadUsersData(0, 4, 0, "filter", value);
     // return await axios
