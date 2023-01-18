@@ -56,7 +56,7 @@ const Avaliacao = () => {
                                             <div className='col-4'>
                                                 Aspeto
                                             </div>
-                                            <div className='col-4'>
+                                            <div className='col-8'>
                                                 {aspeto}
                                                 <FontAwesomeIcon icon="fa-solid fa-star" />
                                                 <FontAwesomeIcon icon="fa-solid fa-star" />
@@ -71,7 +71,7 @@ const Avaliacao = () => {
                                             <div className='col-4'>
                                                 Usabilidade
                                             </div>
-                                            <div className='col-4'>
+                                            <div className='col-8'>
                                                 {usabilidade}
                                                 <i class="fa-solid fa-star "></i>
                                                 <i class="fa-solid fa-star "></i>
@@ -86,7 +86,7 @@ const Avaliacao = () => {
                                             <div className='col-4'>
                                                 Global
                                             </div>
-                                            <div className='col-4'>
+                                            <div className='col-8'>
                                                 {global}
                                                 <i class="fa-solid fa-star"></i>
                                                 <i class="fa-solid fa-star"></i>
