@@ -60,7 +60,7 @@ app.get("/ava", async (req, res) => {
 	try {
 		pool.connect();
 		const allAva = await pool.query("SELECT * FROM avaliacoes;");
-		console.log(allAva.rows)
+		console.log(allAva)
 		res.json(allAva.rows);
 
 	} catch (err) {

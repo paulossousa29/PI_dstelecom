@@ -41,13 +41,17 @@ const Avaliacao = () => {
 
     console.log(avaliacao)
     function preenchido(avali){
+        let a = 0;
         let tmp = avali;
         let str = ""
         while (tmp >= 1){
+            tmp -= 1;
+            a += 1;
             str += "<span class='fa fa-star checked'></span>"
         }
-        if (tmp > 0 && tmp < 1){
+        while (a !== 5){
             str += " <span class='fa fa-star'></span>"
+            a += 1;
         }
         return str;
     }
@@ -62,7 +66,7 @@ const Avaliacao = () => {
                         <div className='card'>
                             <div className="card-body">
                                 <h5 className="card-title">Avaliações</h5>
-                                {medias(avaliacao)}
+                                {/* {medias(avaliacao)} */}
                                 <ul className="list-group">
                                     <li className="list-group-item">
                                         <div className='row'>
