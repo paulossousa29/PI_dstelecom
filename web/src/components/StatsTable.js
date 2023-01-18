@@ -120,8 +120,7 @@ function StatsTable() {
   };
 
   const parentToChild = (id)  => {
-    setId(id);
-    <Relatorio parentToChild={id}/>
+    <Relatorio id={id}/>
   }
 
   const handleFilter = async (value) => {

@@ -6,11 +6,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./Painel.css"
 import ip from '../config/ip';
 
-const Relatorio = (id) => {
+const Relatorio = ({id}) => {
   /* const location = useLocation();
   const id = location.state.id */
-
-  console.log(id);
+  const idRel = {id}
+  console.log(idRel)
   
   const [relatorio,setRelatorio] = React.useState([]);
 
@@ -22,7 +22,7 @@ const Relatorio = (id) => {
   }
 
   React.useEffect(() => {
-    getRelatorio(id);
+    getRelatorio(idRel);
   }, []);
 
   console.log(relatorio)
@@ -44,7 +44,7 @@ const Relatorio = (id) => {
         <NavBar />
         <div className='row'>
           <div className="right-panel" style={{ paddingTop: 10, paddingRight: 30 }}>
-            <h1 style={{ textAlign: "center" }}>Relatório <b>{id}</b> </h1>
+            <h1 style={{ textAlign: "center" }}>Relatório <b>{idRel}</b> </h1>
             <div className='card w-75' >
               <div className="card-body">
                 <ul className="list-group">
