@@ -43,18 +43,46 @@ const Avaliacao = () => {
             <div className="row">
                 <NavBar />
                 <div className='row'>
-                    <ul className='list-group'>
-                        {medias(avaliacao)}
-                        <li className="list-group-item">
-                            <b>Avaliação do aspeto:</b> {aspeto}
-                        </li>
-                        <li className="list-group-item">
-                            <b>Avaliação da usabilidade:</b> {usabilidade}
-                        </li>
-                        <li className="list-group-item">
-                            <b>Avaliação global da aplicação:</b> {global}
-                        </li>
-                    </ul>
+                    <div className="right-panel" style={{ paddingTop: 10, paddingRight: 30 }}>
+                        <div className='card'>
+                            <div className="card-body">
+                                <h5 className="card-title">Avaliações</h5>
+                                {medias(avaliacao)}
+                                <ul className="list-group">
+                                    <li className="list-group-item">
+                                        <div className='row'>
+                                            <div className='col-4'>
+                                                Aspeto
+                                            </div>
+                                            <div className='col-4'>
+                                                
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="list-group-item">
+                                        <div className='row'>
+                                            <div className='col-4'>
+                                                Usabilidade
+                                            </div>
+                                            <div className='col-4'>
+                                                
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="list-group-item">
+                                        <div className='row'>
+                                            <div className='col-4'>
+                                                Global
+                                            </div>
+                                            <div className='col-4'>
+                                                    
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </React.Fragment>
