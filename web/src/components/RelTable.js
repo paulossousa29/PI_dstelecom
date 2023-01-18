@@ -304,6 +304,7 @@ function RelTable() {
                                 data.map((item, index) => (
                                     <MDBTableBody key={index}>
                                         <tr>
+                                            {console.log("o id é:" + item.id.toString())}
                                             <td>{item.id_intervencao}</td>
                                             <td>{item.id_equipa}</td>
                                             <td>{item.total_erros}</td>
@@ -311,7 +312,6 @@ function RelTable() {
                                             <td>{item.data_inicio}</td>
                                             <td>{item.data_fim}</td>
                                             <td>{item.duracao.seconds} segundos</td>
-                                            {console.log(item.id)}
                                             <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
 
                                         </tr>
