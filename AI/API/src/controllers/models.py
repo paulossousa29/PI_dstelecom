@@ -398,7 +398,7 @@ def step4(img, original_size):
     else:
         output = {'error': 'O resultado da deteção não teve sucesso!'}
 
-    return output, num_drop
+    return output, int(num_drop)
 
 # PASSO 5: Passar o cabo de drop pelo slot
 def step5(img, drop):
