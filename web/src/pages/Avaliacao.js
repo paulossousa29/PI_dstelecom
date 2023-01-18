@@ -3,6 +3,7 @@ import "./Painel.css"
 import NavBar from '../components/Navbar';
 import "./Avaliacao.css"
 import ip from '../config/ip';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 const Avaliacao = () => {
@@ -40,7 +41,7 @@ const Avaliacao = () => {
     return (
 
         <React.Fragment>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
             <div className="row">
                 <NavBar />
                 <div className='row'>
@@ -57,11 +58,11 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-4'>
                                                 {aspeto}
-                                                <i class="fa-solid fa-star "></i>
-                                                <i class="fa-solid fa-star "></i>
-                                                <i class="fa-solid fa-star "></i>
-                                                <i class="fa-solid fa-star "></i>
-                                                <i class="fa-solid fa-star"></i>
+                                                <FontAwesomeIcon icon="fa-solid fa-star" />
+                                                <FontAwesomeIcon icon="fa-solid fa-star" />
+                                                <FontAwesomeIcon icon="fa-solid fa-star" />
+                                                <FontAwesomeIcon icon="fa-light fa-star" />
+                                                <FontAwesomeIcon icon="fa-light fa-star" />
                                             </div>
                                         </div>
                                     </li>
