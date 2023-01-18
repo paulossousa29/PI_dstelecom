@@ -41,30 +41,6 @@ function RelTable() {
 		filterOrSortValue
 	) => {
 		switch (optType) {
-			case "search":
-				setOperation(optType);
-				setSortValue("");
-				return await axios
-					.get(
-						`http://localhost:3001/users?q=${value}&_start=${start}&_end=${end}`
-					)
-					.then((response) => {
-						setData(response.data);
-						setCurrentPage(currentPage + increase);
-					})
-					.catch((err) => console.log(err));
-			case "sort":
-				setOperation(optType);
-				setSortFilterValue(filterOrSortValue);
-				return await axios
-					.get(
-						`http://localhost:5000/users?_sort=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
-					)
-					.then((response) => {
-						setData(response.data);
-						setCurrentPage(currentPage + increase);
-					})
-					.catch((err) => console.log(err));
 			case "filter":
 				setOperation(optType);
 				setSortFilterValue(filterOrSortValue);
@@ -79,7 +55,7 @@ function RelTable() {
 					.catch((err) => console.log(err));
 			default:
 				return await axios
-					.get(ip.backend_ip + 'pedidos')
+					.get(ip.backend_ip + 'pedidos/' + start + '/' + end)
 					.then((response) => {
 						setData(response.data);
 						setCurrentPage(currentPage + increase);
@@ -237,25 +213,6 @@ function RelTable() {
 				marginTop: "50px",
 				padding: "20px"
 			}}>
-				{data.length > 0 && (
-					<MDBRow>
-						<MDBCol size="4">
-							<h5>Filter By Status:</h5>
-							<MDBBtnGroup>
-								<MDBBtn color="success" onClick={() => handleFilter("Active")}>
-									Ativos
-								</MDBBtn>
-								<MDBBtn
-									color="danger"
-									style={{ marginLeft: "2px" }}
-									onClick={() => handleFilter("Inactive")}
-								>
-									Encerrados
-								</MDBBtn>
-							</MDBBtnGroup>
-						</MDBCol>
-					</MDBRow>
-				)}
 				<MDBRow>
 					<MDBCol size="12">
 						<MDBTable>
