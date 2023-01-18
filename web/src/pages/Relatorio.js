@@ -8,8 +8,7 @@ import ip from '../config/ip';
 
 const Relatorio = ({route}) => {
   const location = useLocation();
-  console.log(location.state)
-  const id = 1
+  const id = location.state.id
 
   console.log(id);
   
