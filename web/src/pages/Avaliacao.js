@@ -40,25 +40,20 @@ const Avaliacao = () => {
     }
 
     console.log(avaliacao)
+    const a = [0,0,0,0,0];
     function preenchido(avali){
-        let a = 0;
-        let tmp = avali;
-        let str = ""
-        while (tmp >= 1){
-            tmp -= 1;
-            a += 1;
-            str +=  <React.Fragment>
-                        <span class='fa fa-star checked'></span>
-                    </React.Fragment>
+        let i;
+        for(i = 0; i < 5; i++){
+            if(avali >= 1){
+                a[i] = 1 
+            }
+            else {
+                a[i] = 0
+            }
         }
-        while (a !== 5){
-            str += <React.Fragment>
-                        <span class='fa fa-star '></span>
-                    </React.Fragment>
-            a += 1;
-        }
-        return str;
+        return a;
     }
+
     return (
 
         <React.Fragment>
@@ -94,7 +89,15 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-8'>
                                                 {usabilidade}
-                                                {preenchido(usabilidade)}
+                                                a = {preenchido(usabilidade)}
+                                                {a.map((e) => {
+                                                    if(e === 1){
+                                                        <span class="fa fa-star checked"></span>
+                                                    }
+                                                    else {
+                                                        <span class="fa fa-star"></span>
+                                                    }
+                                                })}
                                             </div>
                                         </div>
                                     </li>
