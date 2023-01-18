@@ -7,8 +7,7 @@ import {
   MDBRow,
   MDBCol,
   MDBContainer,
-  MDBBtn,
-  MDBBtnGroup,
+  buttonGroup,
   MDBPagination,
   MDBPaginationItem,
   MDBPaginationLink,
@@ -136,9 +135,9 @@ function StatsTable() {
             <MDBPaginationLink>1</MDBPaginationLink>
           </MDBPaginationItem>
           <MDBPaginationItem>
-            <MDBBtn onClick={() => loadUsersData(4, 8, 1, operation)}>
+            <button onClick={() => loadUsersData(4, 8, 1, operation)}>
               Next
-            </MDBBtn>
+            </button>
           </MDBPaginationItem>
         </MDBPagination>
       );
@@ -146,7 +145,7 @@ function StatsTable() {
       return (
         <MDBPagination className="mb-0">
           <MDBPaginationItem>
-            <MDBBtn
+            <button
               onClick={() =>
                 loadUsersData(
                   (currentPage - 1) * 4,
@@ -158,14 +157,14 @@ function StatsTable() {
               }
             >
               Prev
-            </MDBBtn>
+            </button>
           </MDBPaginationItem>
           <MDBPaginationItem>
             <MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
           </MDBPaginationItem>
 
           <MDBPaginationItem>
-            <MDBBtn
+            <button
               onClick={() =>
                 loadUsersData(
                   (currentPage + 1) * 4,
@@ -177,7 +176,7 @@ function StatsTable() {
               }
             >
               Next
-            </MDBBtn>
+            </button>
           </MDBPaginationItem>
         </MDBPagination>
       );
@@ -185,7 +184,7 @@ function StatsTable() {
       return (
         <MDBPagination className="mb-0">
           <MDBPaginationItem>
-            <MDBBtn
+            <button
               onClick={() =>
                 loadUsersData(
                   (currentPage - 1) * 4,
@@ -196,7 +195,7 @@ function StatsTable() {
               }
             >
               Prev
-            </MDBBtn>
+            </button>
           </MDBPaginationItem>
           <MDBPaginationItem>
             <MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
