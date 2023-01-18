@@ -40,6 +40,7 @@ const Avaliacao = () => {
     return (
 
         <React.Fragment>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
             <div className="row">
                 <NavBar />
                 <div className='row'>
@@ -55,7 +56,12 @@ const Avaliacao = () => {
                                                 Aspeto
                                             </div>
                                             <div className='col-4'>
-                                                
+                                                {aspeto}
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
                                             </div>
                                         </div>
                                     </li>
@@ -65,7 +71,7 @@ const Avaliacao = () => {
                                                 Usabilidade
                                             </div>
                                             <div className='col-4'>
-                                                
+                                                {usabilidade}
                                             </div>
                                         </div>
                                     </li>
@@ -75,7 +81,7 @@ const Avaliacao = () => {
                                                 Global
                                             </div>
                                             <div className='col-4'>
-                                                    
+                                                {global}
                                             </div>
                                         </div>
                                     </li>
