@@ -15,6 +15,7 @@ import {
 } from "mdb-react-ui-kit";
 import ip from "../config/ip";
 
+import Relatorio from "../pages/Relatorio"
 import { useNavigate } from "react-router-dom";
 
 
@@ -96,6 +97,10 @@ function RelTable() {
 
     console.log("data", data);
 
+
+    const parentToChild = (id)  => {
+        <Relatorio id={id}/>
+      }
 
     const handleReset = () => {
         setOperation("");
@@ -306,7 +311,7 @@ function RelTable() {
                                             <td>{item.data_inicio}</td>
                                             <td>{item.data_fim}</td>
                                             <td>{item.duracao.seconds} segundos</td>
-                                            <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() =>handleConsulta(item.id)}> Consultar </button>
+                                            <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() =>parentToChild(item.id)}> Consultar </button>
 
                                         </tr>
                                     </MDBTableBody>
