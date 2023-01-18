@@ -1,45 +1,210 @@
-import React from "react";
+import React, { useState } from "react";
 import SlideShow from "../components/SlideShow";
 import NavBar from "../components/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import "./Painel.css"
-
+import ip from '../config/ip';
 
 const Relatorio = () => {
   const location = useLocation();
 
   const id = location.state.id
   console.log(id);
+  
+  const [relatorio,setRelatorio] = React.useState([]);
+
+
+  async function getRelatorio(id) {
+    const res = await fetch(ip.backend_ip + "relatorio/" + id);
+    const relatorio = await res.json();
+    setRelatorio(relatorio);
+  }
+
+  React.useEffect(() => {
+    getRelatorio(id);
+  }, []);
+
 
   return (
-    
     <React.Fragment>
       <div className="row">
-        <NavBar/>
-        <div className="right-panel">
-          <center>
-            <h1 style={{paddingTop: 30}}>Relatório R1</h1>
-          </center>
-          <SlideShow  />
-        </div>
-        <div style={{fontFamily: "Verdana" , paddingLeft: 40}}>
-          <div>
-            <p style={{borderRadius: 10,width: 500, textAlign: "center"}}>
-              Info
-            </p>
-            <ul>
-              <li>Data: 1/1/2000</li>
-              <li>Local: Barcelos</li>
-              <li>Equipa: equipa1</li>
-            </ul>
-            <div style={{backgroundColor: "#FF91A4", borderRadius: 10, width: 500, textAlign: "center"}}>        
-              Alertas  
+        <NavBar />
+        <div className='row'>
+          <div className="right-panel" style={{ paddingTop: 10, paddingRight: 30 }}>
+            <h1 style={{ textAlign: "center" }}>Relatório <b>{id}</b> </h1>
+            <div className='card'>
+              <div className="card-body">
+                <ul className="list-group">
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Data de inicio:</b>
+                      </div>
+                      <div className='col-8'>
+                        {relatorio[0].data_inicio}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Data de fim:</b>
+                      </div>
+                      <div className='col-8'>
+                        {relatorio[0].data_fim}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Id da intervenção:</b>
+                      </div>
+                      <div className='col-8'>
+                        {relatorio[0].id_intervenção}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Passo 1:</b>
+                      </div>
+                      <div className='col-8'>
+                        {(() => {
+                          if(relatorio[0].passo_1 === 0){
+                            return "Passo incorreto"
+                          }
+                          else{
+                            return "Passo correto"
+                          }
+                        })}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Passo 3:</b>
+                      </div>
+                      <div className='col-8'>
+                        {(() => {
+                          if(relatorio[0].passo_3 === 0){
+                            return "Passo incorreto"
+                          }
+                          else{
+                            return "Passo correto"
+                          }
+                        })}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Passo 5:</b>
+                      </div>
+                      <div className='col-8'>
+                        {(() => {
+                          if(relatorio[0].passo_5 === 0){
+                            return "Passo incorreto"
+                          }
+                          else{
+                            return "Passo correto"
+                          }
+                        })}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Passo 7:</b>
+                      </div>
+                      <div className='col-8'>
+                        {(() => {
+                          if(relatorio[0].passo_7 === 0){
+                            return "Passo incorreto"
+                          }
+                          else{
+                            return "Passo correto"
+                          }
+                        })}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Passo 9:</b>
+                      </div>
+                      <div className='col-8'>
+                        {(() => {
+                          if(relatorio[0].passo_9 === 0){
+                            return "Passo incorreto"
+                          }
+                          else{
+                            return "Passo correto"
+                          }
+                        })}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Passo 11:</b>
+                      </div>
+                      <div className='col-8'>
+                        {(() => {
+                          if(relatorio[0].passo_11 === 0){
+                            return "Passo incorreto"
+                          }
+                          else{
+                            return "Passo correto"
+                          }
+                        })}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Passo 12:</b>
+                      </div>
+                      <div className='col-8'>
+                        {(() => {
+                          if(relatorio[0].passo_12 === 0){
+                            return "Passo incorreto"
+                          }
+                          else{
+                            return "Passo correto"
+                          }
+                        })}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className='row'>
+                      <div className='col-4'>
+                        <b>Passo 13:</b>
+                      </div>
+                      <div className='col-8'>
+                        {(() => {
+                          if(relatorio[0].passo_13 === 0){
+                            return "Passo incorreto"
+                          }
+                          else{
+                            return "Passo correto"
+                          }
+                        })}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <ul style={{backgroundColor: "#FF91A4", borderRadius: 10,width: 500}}>
-              <li>Passo 3: Conetor Incorreto</li>
-              <li>Alteração de PDO necessária</li>  
-            </ul>
           </div>
         </div>
       </div>
