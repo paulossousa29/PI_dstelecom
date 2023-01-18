@@ -54,6 +54,19 @@ app.get("/todos", async (req, res) => {
 	}
 });
 
+app.get("/ava", async (req, res) => {
+	console.log("request avaliacao");
+	try {
+		pool.connect();
+		const allAva = await pool.query("SELECT * FROM avaliacoes;");
+		console.log(allAva)
+		res.json(allAva.rows);
+
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
 app.get("/equipa/delete/:id/:idEquipa", async (req, res) => {
 	const id = req.params.id;
 	console.log("request delete skill");
