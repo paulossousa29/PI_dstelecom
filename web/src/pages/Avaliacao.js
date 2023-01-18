@@ -1,7 +1,7 @@
 import * as React from 'react';
 import "./Painel.css"
 import NavBar from '../components/Navbar';
-
+import "./Avaliacao.css"
 import ip from '../config/ip';
 
 
@@ -57,11 +57,11 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-4'>
                                                 {aspeto}
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
+                                                <span class="w3-large fa-solid fa-star checked"></span>
+                                                <span class="w3-large fa-solid fa-star checked"></span>
+                                                <span class="w3-large fa-solid fa-star checked"></span>
+                                                <span class="w3-large fa-solid fa-star checked"></span>
+                                                <span class="w3-large fa-solid fa-star"></span>
                                             </div>
                                         </div>
                                     </li>
