@@ -29,7 +29,8 @@ const Relatorio = ({route}) => {
   console.log(relatorio)
 
   function passos(passo){
-    if (passo === 0){
+    console.log(passo)
+    if (passo.toString() === "0"){
       return "Passo correto"
     }
     else{
