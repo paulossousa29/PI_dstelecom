@@ -458,7 +458,7 @@ def step9(img, connector):
         output = {'result': 'true'}
     else:
         output = {'result': 'false'}
-        
+
     # Caso seja retornar true
     return output, 200
 
@@ -530,11 +530,11 @@ class ObjectDetection(Resource):
             elif step == 4:
                 return step4(img, original_size)
             elif step == 5:
-                return step5()
+                return step5(img)
             elif step == 7:
                 return step7()
             elif step == 9:
-                return step9()
+                return step9(img, connector)
             elif step == 11:
                 return step11()
             elif step == 12:
