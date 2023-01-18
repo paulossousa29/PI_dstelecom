@@ -72,9 +72,6 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-4'>
                                                 {usabilidade}
-                                                {while (tmp >= 1){
-
-                                                }}
                                                 <i class="fa-solid fa-star "></i>
                                                 <i class="fa-solid fa-star "></i>
                                                 <i class="fa-solid fa-star "></i>
