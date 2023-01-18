@@ -68,20 +68,20 @@ function RelTable() {
 
 	const handleAceitar = (p) => {
 		return axios
-			.get(ip.backend_ip + 'pedidosaceites/' + p)
+			.get(ip.backend_ip + 'pedidosaceites/' + p + '/' + start + '/' + end)
 			.then((response) => {
 				setData(response.data);
-				//setCurrentPage(currentPage + increase);
+				setCurrentPage(currentPage + increase);
 			})
 			.catch((err) => console.log(err));
 	}
 
 	const handleRecusar = (p) => {
 		return axios
-			.get(ip.backend_ip + 'pedidosrecusados/' + p)
+			.get(ip.backend_ip + 'pedidosrecusados/' + p + '/' + start + '/' + end)
 			.then((response) => {
 				setData(response.data);
-				//setCurrentPage(currentPage + increase);
+				setCurrentPage(currentPage + increase);
 			})
 			.catch((err) => console.log(err));
 	}
