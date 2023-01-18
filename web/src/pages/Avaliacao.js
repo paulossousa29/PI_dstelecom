@@ -22,8 +22,8 @@ const Avaliacao = () => {
     let aspeto = 0
     let global = 0
     let usabilidade = 0
-    //let total = avaliacao.length;
-/* 
+    let total = avaliacao.length;
+
     function medias(avaliacao){
         let i;
         for (i  = 0; i < total; i++){
@@ -36,13 +36,13 @@ const Avaliacao = () => {
             global = global/total
             usabilidade = usabilidade/total
         }
-    } */
+    }
     return (
 
         <React.Fragment>
             <div className="row">
                 <NavBar />
-                {/* <div className='row'>
+                <div className='row'>
                     <ul className='list-group'>
                         {medias(avaliacao)}
                         <li className="list-group-item">
@@ -55,7 +55,7 @@ const Avaliacao = () => {
                             <b>Avaliação global da aplicação:</b> {global}
                         </li>
                     </ul>
-                </div> */}
+                </div>
             </div>
         </React.Fragment>
     );
