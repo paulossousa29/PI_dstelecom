@@ -50,9 +50,7 @@ function StatsTable() {
         setOperation(optType);
         setSortValue("");
         return await axios
-          .get(
-            `http://localhost:3001/users?q=${value}&_start=${start}&_end=${end}`
-          )
+          .get(ip.backend_ip + 'stat/' + value + '/' + start + '/' + end)
           .then((response) => {
             setData(response.data);
             setCurrentPage(currentPage + increase);
@@ -63,19 +61,7 @@ function StatsTable() {
         setSortFilterValue(filterOrSortValue);
         return await axios
           .get(
-            `http://localhost:5000/users?_sort=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
-          )
-          .then((response) => {
-            setData(response.data);
-            setCurrentPage(currentPage + increase);
-          })
-          .catch((err) => console.log(err));
-      case "filter":
-        setOperation(optType);
-        setSortFilterValue(filterOrSortValue);
-        return await axios
-          .get(
-            `http://localhost:5000/users?status=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
+            ip.backend_ip + 'stat/' + filterOrSortValue + '/' + start + '/' + end
           )
           .then((response) => {
             setData(response.data);
