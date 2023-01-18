@@ -6,10 +6,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./Painel.css"
 import ip from '../config/ip';
 
-const Relatorio = ({id}) => {
-  /* const location = useLocation();
-  const id = location.state.id */
-  const idRel = {id}
+const Relatorio = () => {
+  const location = useLocation();
+  const idRel = location.state.id
   console.log(idRel)
   
   const [relatorio,setRelatorio] = React.useState([]);
