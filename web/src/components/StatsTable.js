@@ -28,7 +28,7 @@ function StatsTable() {
   const [pageLimit] = useState(4);
   const [sortFilterValue, setSortFilterValue] = useState("");
   const [operation, setOperation] = useState("");
-  const [id, setId]=useState("");
+  const [id, setId] = useState("");
 
 
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ function StatsTable() {
         setSortValue("");
         return await axios
           /* + '/' + start + '/' + end */
-          .get(ip.backend_ip + 'searchstat/' + value)
+          .get(ip.backend_ip + 'searchstat/' + value + '/' + start + '/' + end)
           .then((response) => {
             setData(response.data);
             setCurrentPage(currentPage + increase);
@@ -64,7 +64,7 @@ function StatsTable() {
         setSortFilterValue(filterOrSortValue);
         return await axios
           .get(
-            ip.backend_ip + 'sortstat/' + filterOrSortValue
+            ip.backend_ip + 'sortstat/' + filterOrSortValue + '/' + start + '/' + end
           )
           .then((response) => {
             setData(response.data);
@@ -85,7 +85,7 @@ function StatsTable() {
   console.log("data", data);
 
   const handleConsulta = (p) => {
-    <Relatorio parentToChild={id}/>
+    <Relatorio parentToChild={id} />
   }
 
   const handleReset = () => {
@@ -120,8 +120,8 @@ function StatsTable() {
     //   .catch((err) => console.log(err));
   };
 
-  const parentToChild = (id)  => {
-    <Relatorio id={id}/>
+  const parentToChild = (id) => {
+    <Relatorio id={id} />
   }
 
   const handleFilter = async (value) => {
