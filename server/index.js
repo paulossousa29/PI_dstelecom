@@ -47,7 +47,7 @@ app.get("/todos", async (req, res) => {
 	console.log("request todos");
 	try {
 		pool.connect();
-		const allTodos = await pool.query("SELECT * FROM equipas");
+		const allTodos = await pool.query("SELECT * FROM equipas;");
 		res.json(allTodos.rows);
 	} catch (err) {
 		console.error(err.message);
@@ -59,8 +59,10 @@ app.get("/ava", async (req, res) => {
 	console.log("request avaliacao");
 	try {
 		pool.connect();
-		const allAva = await pool.query("SELECT * FROM avaliacoes");
+		const allAva = await pool.query("SELECT * FROM avaliacoes;");
+		console.log(allAva.rows)
 		res.json(allAva.rows);
+		
 	} catch (err) {
 		console.error(err.message);
 	}
