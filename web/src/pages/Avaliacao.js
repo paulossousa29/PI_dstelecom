@@ -39,14 +39,15 @@ const Avaliacao = () => {
         }
     }
 
+    console.log(avaliacao)
     function preenchido(avali){
         let tmp = avali;
         let str = ""
         while (tmp >= 1){
-            str += "<FontAwesomeIcon icon='fa-solid fa-star' />"
+            str += "<span class='fa fa-star checked'></span>"
         }
         if (tmp > 0 && tmp < 1){
-            str += "<FontAwesomeIcon icon='fa-light fa-star' />"
+            str += " <span class='fa fa-star'></span>"
         }
         return str;
     }
@@ -70,11 +71,11 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-8'>
                                                 {aspeto}
-                                                <FontAwesomeIcon icon="fa-solid fa-star" />
-                                                <FontAwesomeIcon icon="fa-solid fa-star" />
-                                                <FontAwesomeIcon icon="fa-solid fa-star" />
-                                                <FontAwesomeIcon icon="fa-light fa-star" />
-                                                <FontAwesomeIcon icon="fa-light fa-star" />
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star"></span>
+                                                <span class="fa fa-star"></span>
                                             </div>
                                         </div>
                                     </li>
@@ -96,11 +97,11 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-8'>
                                                 {global}
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-light fa-star"></i>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star"></span>
+                                                <span class="fa fa-star"></span>
                                             </div>
                                         </div>
                                     </li>
