@@ -138,7 +138,7 @@ app.get("/equipa/delete/:id", async (req, res) => {
 });
 
 
-app.get("/stat/:search/:start/:end", async (req, res) => {
+app.get("/statSearch/:search/:start/:end", async (req, res) => {
 	const search = req.params.search;
 	const start = req.params.start;
 	const end = req.params.end;
