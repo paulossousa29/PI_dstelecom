@@ -38,6 +38,18 @@ const Avaliacao = () => {
             usabilidade = usabilidade/total
         }
     }
+
+    function preenchido(avali){
+        let tmp = avali;
+        let str = ""
+        while (tmp >= 1){
+            str += "<FontAwesomeIcon icon='fa-solid fa-star' />"
+        }
+        if (tmp > 0 && tmp < 1){
+            str += "<FontAwesomeIcon icon='fa-light fa-star' />"
+        }
+        return str;
+    }
     return (
 
         <React.Fragment>
@@ -73,11 +85,7 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-8'>
                                                 {usabilidade}
-                                                <i class="fa-solid fa-star "></i>
-                                                <i class="fa-solid fa-star "></i>
-                                                <i class="fa-solid fa-star "></i>
-                                                <i class="fa-solid fa-star "></i>
-                                                <i class="fa-light fa-star"></i>
+                                                {preenchido(usabilidade)}
                                             </div>
                                         </div>
                                     </li>
