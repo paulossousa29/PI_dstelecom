@@ -28,6 +28,7 @@ const NavBar = () => {
             <a className="nav-link" href="/relatorios">Relatórios</a>
             <a className="nav-link" href="/pendentes">Pedidos</a>
             <a className="nav-link" href="/stats">Estatisticas</a>
+            <a className='nav-link' href="/avaliacao">Avaliacao</a>
           </div>
         </div>
         <a style={{ paddingRight: 30 }} className="nav-link" href="#">

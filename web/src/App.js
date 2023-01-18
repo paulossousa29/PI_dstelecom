@@ -9,6 +9,7 @@ import Estatistica from "./pages/Estatistica";
 import Pendentes from "./pages/Pendentes";
 import Equipa from "./pages/Equipa";
 import Login from "./components/Login";
+import Avaliacao from "./pages/Avaliacao"
 import Protected from "./components/Protected";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
 				<Route exact path="/relatorio" element={<Protected>  <Relatorio /> </Protected>} />
 				<Route exact path="/pendentes" element={<Protected> <Pendentes /> </Protected>} />
 				<Route exact path="/equipa" element={<Protected> <Equipa /></Protected>} />
+				<Route exact path="/avaliacao" element={<Protected> <Avaliacao /></Protected>} />
 			</Routes>
 		</BrowserRouter>
 	);
