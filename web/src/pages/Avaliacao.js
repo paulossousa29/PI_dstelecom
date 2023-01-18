@@ -55,6 +55,7 @@ const Avaliacao = () => {
         return a;
     }
 
+
     return (
 
         <React.Fragment>
@@ -90,13 +91,12 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-8'>
                                                 {usabilidade}
-                                                a = {preenchido(usabilidade)}
-                                                {a.map((e) => {
+                                                {preenchido(usabilidade).map((e) => {
                                                     if(e === 1){
-                                                        <span class="fa fa-star checked"></span>
+                                                        return <span class="fa fa-star checked"></span>
                                                     }
                                                     else {
-                                                        <span class="fa fa-star"></span>
+                                                        return <span class="fa fa-star"></span>
                                                     }
                                                 })}
                                             </div>
