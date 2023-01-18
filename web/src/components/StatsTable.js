@@ -50,7 +50,8 @@ function StatsTable() {
         setOperation(optType);
         setSortValue("");
         return await axios
-          .get(ip.backend_ip + 'searchstat/' + value + '/' + start + '/' + end)
+          /* + '/' + start + '/' + end */
+          .get(ip.backend_ip + 'searchstat/' + value)
           .then((response) => {
             setData(response.data);
             setCurrentPage(currentPage + increase);
@@ -61,7 +62,7 @@ function StatsTable() {
         setSortFilterValue(filterOrSortValue);
         return await axios
           .get(
-            ip.backend_ip + 'sortstat/' + filterOrSortValue + '/' + start + '/' + end
+            ip.backend_ip + 'sortstat/' + filterOrSortValue
           )
           .then((response) => {
             setData(response.data);
