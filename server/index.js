@@ -269,7 +269,7 @@ app.post("/element", async (req, res) => {
 		const result = await pool.query(query);
 
 		if (result.rows.length > 0) {
-			res.json({ access: result.rows[0].elemento });
+			res.json({ element: result.rows[0].elemento });
 			console.log("Status: 200 Element: " + result.rows[0].elemento);
 		} else {
 			res.status(404).json({ error: "Not Found" });
