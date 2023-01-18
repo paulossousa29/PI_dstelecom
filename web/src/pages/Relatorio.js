@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./Painel.css"
 import ip from '../config/ip';
 
-const Relatorio = () => {
+const Relatorio = ({route}) => {
   const location = useLocation();
 
   const id = location.state.id
@@ -76,10 +76,10 @@ const Relatorio = () => {
                           <div className='col-8'>
                             {(() => {
                               if(e.passo_1 === 0){
-                                return "Passo incorreto"
+                                return "Passo correto"
                               }
                               else{
-                                return "Passo correto"
+                                return "Passo incorreto"
                               }
                             })}
                           </div>
@@ -93,10 +93,10 @@ const Relatorio = () => {
                           <div className='col-8'>
                             {(() => {
                               if(e.passo_3 === 0){
-                                return "Passo incorreto"
+                                return "Passo correto"
                               }
                               else{
-                                return "Passo correto"
+                                return "Passo incorreto"
                               }
                             })}
                           </div>
@@ -110,10 +110,10 @@ const Relatorio = () => {
                           <div className='col-8'>
                             {(() => {
                               if(e.passo_5 === 0){
-                                return "Passo incorreto"
+                                return "Passo correto"
                               }
                               else{
-                                return "Passo correto"
+                                return "Passo incorreto"
                               }
                             })}
                           </div>
@@ -127,10 +127,10 @@ const Relatorio = () => {
                           <div className='col-8'>
                             {(() => {
                               if(e.passo_7 === 0){
-                                return "Passo incorreto"
+                                return "Passo correto"
                               }
                               else{
-                                return "Passo correto"
+                                return "Passo incorreto"
                               }
                             })}
                           </div>
@@ -144,10 +144,10 @@ const Relatorio = () => {
                           <div className='col-8'>
                             {(() => {
                               if(e.passo_9 === 0){
-                                return "Passo incorreto"
+                                return "Passo correto"
                               }
                               else{
-                                return "Passo correto"
+                                return "Passo incorreto"
                               }
                             })}
                           </div>
@@ -161,10 +161,10 @@ const Relatorio = () => {
                           <div className='col-8'>
                             {(() => {
                               if(e.passo_11 === 0){
-                                return "Passo incorreto"
+                                return "Passo correto"
                               }
                               else{
-                                return "Passo correto"
+                                return "Passo incorreto"
                               }
                             })}
                           </div>
@@ -178,10 +178,10 @@ const Relatorio = () => {
                           <div className='col-8'>
                             {(() => {
                               if(e.passo_12 === 0){
-                                return "Passo incorreto"
+                                return "Passo correto"
                               }
                               else{
-                                return "Passo correto"
+                                return "Passo incorreto"
                               }
                             })}
                           </div>
@@ -195,10 +195,10 @@ const Relatorio = () => {
                           <div className='col-8'>
                             {(() => {
                               if(e.passo_13 === 0){
-                                return "Passo incorreto"
+                                return "Passo correto"
                               }
                               else{
-                                return "Passo correto"
+                                return "Passo incorreto"
                               }
                             })}
                           </div>
