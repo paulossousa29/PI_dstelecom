@@ -5,7 +5,7 @@ import NavBar from '../components/Navbar';
 import ip from '../config/ip';
 
 
-const Avaliacao = ({ route }) => {
+const Avaliacao = () => {
 
     const [avaliacao, setAvaliacao] = React.useState([]);
 
@@ -31,9 +31,11 @@ const Avaliacao = ({ route }) => {
             global = global +  avaliacao[i].avaliacao_global
             usabilidade = usabilidade  + avaliacao[i].avaliacao_usabilidade
         }
-        aspeto = aspeto/total
-        global = global/total
-        usabilidade = usabilidade/total
+        if(total !== 0){
+            aspeto = aspeto/total
+            global = global/total
+            usabilidade = usabilidade/total
+        }
     }
     return (
 
