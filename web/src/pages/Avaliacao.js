@@ -57,11 +57,11 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-4'>
                                                 {aspeto}
-                                                <span class="w3-large fa-solid fa-star checked"></span>
-                                                <span class="w3-large fa-solid fa-star checked"></span>
-                                                <span class="w3-large fa-solid fa-star checked"></span>
-                                                <span class="w3-large fa-solid fa-star checked"></span>
-                                                <span class="w3-large fa-solid fa-star"></span>
+                                                <i class="fa-solid fa-star "></i>
+                                                <i class="fa-solid fa-star "></i>
+                                                <i class="fa-solid fa-star "></i>
+                                                <i class="fa-solid fa-star "></i>
+                                                <i class="fa-solid fa-star"></i>
                                             </div>
                                         </div>
                                     </li>
@@ -72,6 +72,14 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-4'>
                                                 {usabilidade}
+                                                {while (tmp >= 1){
+
+                                                }}
+                                                <i class="fa-solid fa-star "></i>
+                                                <i class="fa-solid fa-star "></i>
+                                                <i class="fa-solid fa-star "></i>
+                                                <i class="fa-solid fa-star "></i>
+                                                <i class="fa-light fa-star"></i>
                                             </div>
                                         </div>
                                     </li>
@@ -82,6 +90,11 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-4'>
                                                 {global}
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-light fa-star"></i>
                                             </div>
                                         </div>
                                     </li>
