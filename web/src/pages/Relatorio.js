@@ -28,6 +28,15 @@ const Relatorio = ({route}) => {
 
   console.log(relatorio)
 
+  function passos(passo){
+    if (passo === 0){
+      return "Passo correto"
+    }
+    else{
+      return "Passo correto"
+    }
+  }
+
 
   return (
     <React.Fragment>
@@ -36,183 +45,127 @@ const Relatorio = ({route}) => {
         <div className='row'>
           <div className="right-panel" style={{ paddingTop: 10, paddingRight: 30 }}>
             <h1 style={{ textAlign: "center" }}>Relatório <b>{id}</b> </h1>
-            <div className='card mw-100' >
+            <div className='card mw-75' >
               <div className="card-body">
                 <ul className="list-group">
                   {relatorio.map((e) => (
                     <React.Fragment>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Data de inicio:</b>
                           </div>
-                          <div className='col-8'>
+                          <div className='col'>
                             {e.data_inicio}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Data de fim:</b>
                           </div>
-                          <div className='col-8'>
+                          <div className='col'>
                             {e.data_fim}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Id da intervenção:</b>
                           </div>
-                          <div className='col-8'>
+                          <div className='col'>
                             {e.id_intervencao}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Passo 1 - Identificar a referencia do PDO e verificar se coincide com a ordem de trabalho:</b>
                           </div>
-                          <div className='col-8'>
-                            {((e) => {
-                              if(e.passo_1 === 0){
-                                return "Passo correto"
-                              }
-                              else{
-                                return "Passo incorreto"
-                              }
-                            })}
+                          <div className='col'>
+                            {passos(e.passo_1)}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Passo 3 - Medir a potencia ótica no conetor:</b>
                           </div>
-                          <div className='col-8'>
-                            {((e) => {
-                              if(e.passo_3 === 0){
-                                return "Passo correto"
-                              }
-                              else{
-                                return "Passo incorreto"
-                              }
-                            })}
+                          <div className='col'>
+                            {passos(e.passo_3)}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Passo 5 - Passar o cabo de drop pelo slot:</b>
                           </div>
-                          <div className='col-8'>
-                            {((e) => {
-                              if(e.passo_5 === 0){
-                                return "Passo correto"
-                              }
-                              else{
-                                return "Passo incorreto"
-                              }
-                            })}
+                          <div className='col'>
+                            {passos(e.passo_5)}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Passo 7 - Identificar o tabuleiro verde para fusão:</b>
                           </div>
-                          <div className='col-8'>
-                            {((e) => {
-                              if(e.passo_7 === 0){
-                                return "Passo correto"
-                              }
-                              else{
-                                return "Passo incorreto"
-                              }
-                            })}
+                          <div className='col'>
+                            {passos(e.passo_7)}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Passo 9 - Ligar no conetor:</b>
                           </div>
-                          <div className='col-8'>
-                            {((e) => {
-                              if(e.passo_9 === 0){
-                                return "Passo correto"
-                              }
-                              else{
-                                return "Passo incorreto"
-                              }
-                            })}
+                          <div className='col'>
+                            {passos(e.passo_9)}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Passo 11 - Verficar revestimento dos cabos:</b>
                           </div>
-                          <div className='col-8'>
-                            {((e) => {
-                              if(e.passo_11 === 0){
-                                return "Passo correto"
-                              }
-                              else{
-                                return "Passo incorreto"
-                              }
-                            })}
+                          <div className='col'>
+                            {passos(e.passo_11)}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Passo 12 - Fechar o Tabuleiro:</b>
                           </div>
-                          <div className='col-8'>
-                            {((e) => {
-                              if(e.passo_12 === 0){
-                                return "Passo correto"
-                              }
-                              else{
-                                return "Passo incorreto"
-                              }
-                            })}
+                          <div className='col'>
+                            {passos(e.passo_12)}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Passo 13 - Colocar a tag no cabo de drop:</b>
                           </div>
-                          <div className='col-8'>
-                            {((e) => {
-                              if(e.passo_13 === 0){
-                                return "Passo correto"
-                              }
-                              else{
-                                return "Passo incorreto"
-                              }
-                            })}
+                          <div className='col'>
+                            {passos(e.passo_13)}
                           </div>
                         </div>
                       </li>
                       <li className="list-group-item">
                         <div className='row'>
-                          <div className='col-4'>
+                          <div className='col'>
                             <b>Observações:</b>
                           </div>
-                          <div className='col-8'>
+                          <div className='col'>
                             {e.observacoes}
                           </div>
                         </div>
