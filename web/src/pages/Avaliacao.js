@@ -23,7 +23,7 @@ const Avaliacao = () => {
     let global = 0
     let usabilidade = 0
     //let total = avaliacao.length;
-
+/* 
     function medias(avaliacao){
         let i;
         for (i  = 0; i < total; i++){
@@ -36,7 +36,7 @@ const Avaliacao = () => {
             global = global/total
             usabilidade = usabilidade/total
         }
-    }
+    } */
     return (
 
         <React.Fragment>
