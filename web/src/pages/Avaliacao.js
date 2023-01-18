@@ -47,10 +47,14 @@ const Avaliacao = () => {
         while (tmp >= 1){
             tmp -= 1;
             a += 1;
-            str += "<span class='fa fa-star checked'></span>"
+            str +=  <React.Fragment>
+                        <span class='fa fa-star checked'></span>
+                    </React.Fragment>
         }
         while (a !== 5){
-            str += " <span class='fa fa-star'></span>"
+            str += <React.Fragment>
+                        <span class='fa fa-star '></span>
+                    </React.Fragment>
             a += 1;
         }
         return str;
@@ -66,7 +70,7 @@ const Avaliacao = () => {
                         <div className='card'>
                             <div className="card-body">
                                 <h5 className="card-title">Avaliações</h5>
-                                {/* {medias(avaliacao)} */}
+                                {medias(avaliacao)}
                                 <ul className="list-group">
                                     <li className="list-group-item">
                                         <div className='row'>
