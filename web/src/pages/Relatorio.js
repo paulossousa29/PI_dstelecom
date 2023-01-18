@@ -34,7 +34,7 @@ const Relatorio = ({route}) => {
       return "Passo correto"
     }
     else{
-      return "Passo correto"
+      return "Passo incorreto"
     }
   }
 
@@ -46,7 +46,7 @@ const Relatorio = ({route}) => {
         <div className='row'>
           <div className="right-panel" style={{ paddingTop: 10, paddingRight: 30 }}>
             <h1 style={{ textAlign: "center" }}>Relatório <b>{id}</b> </h1>
-            <div className='card mw-75' >
+            <div className='card w-75' >
               <div className="card-body">
                 <ul className="list-group">
                   {relatorio.map((e) => (
