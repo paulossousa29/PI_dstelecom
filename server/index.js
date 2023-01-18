@@ -382,7 +382,7 @@ app.get("/stats", async (req, res) => {
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
-			"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.pass_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.pass_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id"
+			"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.pass_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id"
 		);
 		console.log(allTodos.rows);
 		res.json(allTodos.rows);
