@@ -235,14 +235,16 @@ app.post("/element", async (req, res) => {
 	}
 });
 
-app.get("/pedidos", async (req, res) => {
+app.get("/pedidos/:start/:end", async (req, res) => {
 	console.log("request pedidos");
+	const start = req.params.start;
+	const end = req.params.end;
 	obj = [];
 	try {
 		pool.connect();
 
 		const allTodos = await pool.query(
-			"SELECT * FROM pedidos WHERE estado = 0;"
+			"SELECT * FROM pedidos WHERE estado = 0 LIMIT " + end + "OFFSET " + start + ";"
 		);
 		console.log(allTodos.rows);
 		allTodos.rows.forEach((c) => {
