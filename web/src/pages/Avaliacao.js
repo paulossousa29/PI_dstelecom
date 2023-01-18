@@ -22,7 +22,7 @@ const Avaliacao = () => {
     let aspeto = 0
     let global = 0
     let usabilidade = 0
-    let total = avaliacao.length()
+    let total = avaliacao.length;
 
     function medias(avaliacao){
         let i;
