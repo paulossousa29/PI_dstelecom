@@ -396,15 +396,13 @@ def step4(img, original_size):
             'name': 'image.jpeg'
         }}
 
-        drop_identificado = num_drop
-
     else:
         output = {'error': 'O resultado da deteção não teve sucesso!'}
 
-    return output, 200
+    return output, num_drop
 
 # PASSO 5: Passar o cabo de drop pelo slot
-def step5(img):
+def step5(img, drop):
     # Fazer uma nova deteção à imagem
     output = {}
 
@@ -422,12 +420,10 @@ def step5(img):
     f.close()
     
     # Verifico se a deteção indica que é um drop ocupado
-    if verifyOcupationDrop(drop_identificado, grid['grid'], values):
+    if verifyOcupationDrop(drop, grid['grid'], values):
         output = {'result': 'true'}
     else:
         output = {'result': 'false'}
-
-    drop_identificado = None
 
     return output, 200
 
@@ -528,9 +524,13 @@ class ObjectDetection(Resource):
             elif step == 3:
                 return step3()
             elif step == 4:
-                return step4(img, original_size)
+                output, drop = step4(img, original_size)
+                drop_identificado = drop 
+                return output, 200
             elif step == 5:
-                return step5(img)
+                output = step5(img, drop_identificado)
+                drop_identificado = None 
+                return output
             elif step == 7:
                 return step7()
             elif step == 9:
