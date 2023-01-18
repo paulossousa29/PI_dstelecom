@@ -72,7 +72,7 @@ const Avaliacao = () => {
                                     <li className="list-group-item">
                                         <div className='row'>
                                             <div className='col-4'>
-                                                Aspeto
+                                                <b>Aspeto</b>
                                             </div>
                                             <div className='col-8'>
                                                 
@@ -91,7 +91,7 @@ const Avaliacao = () => {
                                     <li className="list-group-item">
                                         <div className='row'>
                                             <div className='col-4'>
-                                                Usabilidade
+                                                <b>Usabilidade</b>
                                             </div>
                                             <div className='col-8'>
                                                 
@@ -110,10 +110,9 @@ const Avaliacao = () => {
                                     <li className="list-group-item">
                                         <div className='row'>
                                             <div className='col-4'>
-                                                Global
+                                                <b>Global</b>
                                             </div>
                                             <div className='col-8'>
-                                                {global}
                                                 {preenchido(global).map((e) => {
                                                     if(e === 1){
                                                         return <span class="fa fa-star checked"></span>

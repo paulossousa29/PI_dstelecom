@@ -1,12 +1,16 @@
 import React from "react";
 import SlideShow from "../components/SlideShow";
 import NavBar from "../components/Navbar";
-
+import { useLocation, useNavigate } from "react-router-dom";
 
 import "./Painel.css"
 
 
 const Relatorio = () => {
+  const location = useLocation();
+
+  const id = location.state.id
+  console.log(id);
 
   return (
     

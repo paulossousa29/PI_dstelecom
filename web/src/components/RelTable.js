@@ -15,6 +15,9 @@ import {
 } from "mdb-react-ui-kit";
 import ip from "../config/ip";
 
+import { useNavigate } from "react-router-dom";
+
+
 
 
 function RelTable() {
@@ -27,9 +30,14 @@ function RelTable() {
     const [operation, setOperation] = useState("");
     const sortOptions = ["Data de Início", "Data Fim", "Total de Erros"];
 
+    const navigate = useNavigate();
     useEffect(() => {
         loadUsersData(0, 4, 0);
     }, []);
+
+    const handleConsulta = (p) => {
+        navigate('/relatorio', {state: {id:p}})
+    }
 
     const loadUsersData = async (
         start,
@@ -298,7 +306,7 @@ function RelTable() {
                                             <td>{item.data_inicio}</td>
                                             <td>{item.data_fim}</td>
                                             <td>{item.duracao.seconds} segundos</td>
-                                            <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Consultar </button>
+                                            <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() =>handleConsulta(item.id)}> Consultar </button>
 
                                         </tr>
                                     </MDBTableBody>
