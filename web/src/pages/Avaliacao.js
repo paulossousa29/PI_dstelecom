@@ -1,9 +1,7 @@
 import * as React from 'react';
 import "./Painel.css"
 import NavBar from '../components/Navbar';
-import axios from "axios";
 
-import { useLocation, useNavigate } from "react-router-dom";
 import ip from '../config/ip';
 
 
