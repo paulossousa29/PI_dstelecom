@@ -138,7 +138,7 @@ app.get("/equipa/delete/:id", async (req, res) => {
 });
 
 
-app.get("/statSearch/:search/:start/:end", async (req, res) => {
+app.get("/searchstat/:search/:start/:end", async (req, res) => {
 	const search = req.params.search;
 	const start = req.params.start;
 	const end = req.params.end;
@@ -154,7 +154,7 @@ app.get("/statSearch/:search/:start/:end", async (req, res) => {
 	}
 });
 
-app.get("/statSort/:sort/:start/:end", async (req, res) => {
+app.get("/sortstat/:sort/:start/:end", async (req, res) => {
 	const sort = req.params.sort;
 	const start = req.params.start;
 	const end = req.params.end;
