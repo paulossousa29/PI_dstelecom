@@ -46,6 +46,7 @@ const Avaliacao = () => {
         for(i = 0; i < 5; i++){
             if(avali >= 1){
                 a[i] = 1 
+                avali -= 1
             }
             else {
                 a[i] = 0
