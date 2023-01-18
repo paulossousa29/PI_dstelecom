@@ -70,7 +70,7 @@ const Avaliacao = () => {
                         <div className='card'>
                             <div className="card-body">
                                 <h5 className="card-title">Avaliações</h5>
-                                {/* {medias(avaliacao)} */}
+                                {medias(avaliacao)}
                                 <ul className="list-group">
                                     <li className="list-group-item">
                                         <div className='row'>
