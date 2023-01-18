@@ -35,7 +35,7 @@ const Login = ({navigation}) => {
       const res = await fetchLogin();
 
       if (res.status === 200) {
-        login({token: token, username: username});
+        login({token: res.data.token, username: username});
       } else if (res.status === 401) {
         setErrorMsgUsername('Utilizador ou Palavra-pass Inválidos!');
         setErrorMsgPass(null);

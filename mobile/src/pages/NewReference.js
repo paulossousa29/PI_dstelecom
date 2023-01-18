@@ -36,10 +36,10 @@ const NewReference = ({route, navigation}) => {
       setReference(null);
       const res = await fetchNewReference();
 
-      if (res.status === 200) {
-        navigation.push('ResultReference', {intervention: intervention});
-      } else {
+      if (res === undefined) {
         setErrorMsgRef('Erro de Rede. Tente outra vez!');
+      } else if (res.status === 200) {
+        navigation.push('ResultReference', {intervention: intervention});
       }
     } else {
       setErrorMsgRef('Necessário o nº da referência');

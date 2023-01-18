@@ -33,15 +33,15 @@ const Home = ({route, navigation}) => {
     if (!invalid.includes(intervention)) {
       const res = await fetchIntervencoes();
 
-      if (res.status === 200) {
+      if (res === undefined) {
+        setErrorMsgIntervention('Erro de Rede. Tente outra vez!');
+      } else if (res.status === 200) {
         navigation.push('AR', {
           intervention: intervention,
           username: username,
         });
       } else if (res.status === 401) {
         setErrorMsgIntervention('ID da Intervenção inválido!');
-      } else {
-        setErrorMsgIntervention('Erro de Rede. Tente outra vez!');
       }
     } else {
       setErrorMsgIntervention('ID da Intervenção necessário!');
