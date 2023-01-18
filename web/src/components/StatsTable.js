@@ -70,7 +70,7 @@ function StatsTable() {
           .catch((err) => console.log(err));
       default:
         return await axios
-          .get(ip.backend_ip + 'stats')
+          .get(ip.backend_ip + 'stats/' + start + '/' + end)
           .then((response) => {
             setData(response.data);
             setCurrentPage(currentPage + increase);
