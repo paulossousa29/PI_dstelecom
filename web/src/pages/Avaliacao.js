@@ -3,7 +3,7 @@ import "./Painel.css"
 import NavBar from '../components/Navbar';
 import "./Avaliacao.css"
 import ip from '../config/ip';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 
 const Avaliacao = () => {

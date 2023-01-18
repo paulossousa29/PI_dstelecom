@@ -8,8 +8,8 @@ import ip from '../config/ip';
 
 const Relatorio = ({route}) => {
   const location = useLocation();
+  const id = 1
 
-  const id = 0
   console.log(id);
   
   const [relatorio,setRelatorio] = React.useState([]);
@@ -17,13 +17,15 @@ const Relatorio = ({route}) => {
 
   async function getRelatorio(id) {
     const res = await fetch(ip.backend_ip + "relatorio/" + id);
-    const relatorio = await res.json();
-    setRelatorio(relatorio);
+    const relatorioAux = await res.json();
+    setRelatorio(relatorioAux);
   }
 
   React.useEffect(() => {
     getRelatorio(id);
   }, []);
+
+  console.log(relatorio)
 
 
   return (

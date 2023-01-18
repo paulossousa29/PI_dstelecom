@@ -36,7 +36,7 @@ function RelTable() {
     }, []);
 
     const handleConsulta = (p) => {
-        navigate('/relatorio', {state: {id:p}})
+        navigate('/relatorio', { state: { id: p}})
     }
 
     const loadUsersData = async (
