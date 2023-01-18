@@ -8,6 +8,7 @@ import ip from '../config/ip';
 
 const Relatorio = ({route}) => {
   const location = useLocation();
+  console.log(location.state)
   const id = 1
 
   console.log(id);
@@ -35,7 +36,7 @@ const Relatorio = ({route}) => {
         <div className='row'>
           <div className="right-panel" style={{ paddingTop: 10, paddingRight: 30 }}>
             <h1 style={{ textAlign: "center" }}>Relatório <b>{id}</b> </h1>
-            <div className='card' style={{width:100, height:100}}>
+            <div className='card mw-100' >
               <div className="card-body">
                 <ul className="list-group">
                   {relatorio.map((e) => (
