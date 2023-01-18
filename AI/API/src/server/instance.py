@@ -10,6 +10,7 @@ class Server():
             description='API with Machine Learning models deployed',
             doc='/docs'
         )
+        self.drop_identificado = None
 
     '''def run(self,):
         self.app.run(

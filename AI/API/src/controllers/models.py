@@ -32,7 +32,6 @@ parser.add_argument('image', type=FileStorage, location='files', required=True)
 parser.add_argument('step', type=int, required=True)
 parser.add_argument('connector', type=int)
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
-drop_identificado = None
 
 
 def box_center(box):
@@ -525,11 +524,10 @@ class ObjectDetection(Resource):
                 return step3()
             elif step == 4:
                 output, drop = step4(img, original_size)
-                drop_identificado = drop 
+                server.drop_identificado = drop 
                 return output, 200
             elif step == 5:
-                output = step5(img, drop_identificado)
-                drop_identificado = None 
+                output = step5(img, server.drop_identificado)
                 return output
             elif step == 7:
                 return step7()
