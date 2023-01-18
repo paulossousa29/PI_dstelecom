@@ -47,10 +47,14 @@ const Avaliacao = () => {
         while (tmp >= 1){
             tmp -= 1;
             a += 1;
-            str += "<span class='fa fa-star checked'></span>"
+            str +=  <React.Fragment>
+                        <span class='fa fa-star checked'></span>
+                    </React.Fragment>
         }
         while (a !== 5){
-            str += " <span class='fa fa-star'></span>"
+            str += <React.Fragment>
+                        <span class='fa fa-star '></span>
+                    </React.Fragment>
             a += 1;
         }
         return str;
