@@ -114,6 +114,30 @@ def getFirstAvailableDrop(grid, values):
         if label == 'DropLivre':
             return np.append(row, [num_drop], axis=0)
 
+def verifyOcupationDrop(num_drop, grid, values):
+  grid_box = grid[num_drop-1]
+  box_list = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
+  id = getDropId(box_list, values)
+  row = values[id]
+  label = row[6]
+
+  if str(num_drop) != grid_box['label']:
+    print('Erro: drop diferente do suposto')
+  
+  return label == 'DropOcupado'
+
+def verifyOcupationConnector(num_connector, grid, values):
+  grid_box = grid[num_connector-1]
+  box_list = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
+  id = getConectorId(box_list, values)
+  row = values[id]
+  label = row[6]
+
+  if str(num_connector) != grid_box['label']:
+    print('Erro: conetor diferente do suposto')
+  
+  return label == 'ConectorOcupado'
+
 # PASSO 1: Identificar a referencia do PDO e verificar se coincide com a ordem de trabalho
 def step1(img):
     output = {}
@@ -372,32 +396,71 @@ def step4(img, original_size):
             'name': 'image.jpeg'
         }}
 
+        drop_identificado = num_drop
+
     else:
         output = {'error': 'O resultado da deteção não teve sucesso!'}
 
     return output, 200
 
 # PASSO 5: Passar o cabo de drop pelo slot
-def step5():
-    # Preciso de saber qual é o drop que já deve ter sido ligado
-    # Vou fazer uma nova deteção à imagem
-    # Para cada deteção vou ver qual é a mais próxima da posição de referência desse drop
+def step5(img):
+    # Fazer uma nova deteção à imagem
+    output = {}
+
+    model = models[2]
+    results = model(img)
+    outputs = results.pandas().xyxy[0]
+
+    outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+    values = outputs.values
+    print(values[:3])
+
+    # Open grid
+    f = open('static/grids/Drops/grid.json', 'r')
+    grid = json.load(f)
+    f.close()
+    
     # Verifico se a deteção indica que é um drop ocupado
-    # Caso seja retornar true
-    return {'result': 'true'}, 200
+    if verifyOcupationDrop(drop_identificado, grid['grid'], values):
+        output = {'result': 'true'}
+    else:
+        output = {'result': 'false'}
+
+    drop_identificado = None
+
+    return output, 200
 
 # PASSO 7: Identificar o tabuleiro verde para fusão
 def step7():
     return {'result': 'true'}, 200
 
 # PASSO 9: Ligar no conetor
-def step9():
-    # Preciso de saber qual é o conector que já deve ter sido ligado
-    # Vou fazer uma nova deteção à imagem
-    # Para cada deteção vou ver qual é a mais próxima da posição de referência desse conector
+def step9(img, connector):
+    output = {}
+
+    # Fazer uma nova deteção à imagem
+    model = models[1]
+    results = model(img)
+    outputs = results.pandas().xyxy[0]
+
+    outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+    values = outputs.values
+    print(values[:3])
+
+    # Open grid
+    f = open('static/grids/Conectores/grid_conectors_esquerda_pra_direita.json', 'r')
+    grid = json.load(f)
+    f.close()
+    
     # Verifico se a deteção indica que é um conector ocupado
+    if verifyOcupationConnector(connector, grid['grid'], values):
+        output = {'result': 'true'}
+    else:
+        output = {'result': 'false'}
+        
     # Caso seja retornar true
-    return {'result': 'true'}, 200
+    return output, 200
 
 # PASSO 11: Verificar revestimento dos cabos
 def step11():
