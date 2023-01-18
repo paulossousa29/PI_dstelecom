@@ -5,7 +5,7 @@ const cors = require("cors");
 const pool = require("./db");
 
 //middleware
-//app.use(cors());
+app.use(cors());
 app.use(cors({ withCredentials: true }));
 app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
@@ -62,7 +62,7 @@ app.get("/ava", async (req, res) => {
 		const allAva = await pool.query("SELECT * FROM avaliacoes;");
 		console.log(allAva.rows)
 		res.json(allAva.rows);
-		
+
 	} catch (err) {
 		console.error(err.message);
 	}
