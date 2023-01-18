@@ -19,7 +19,7 @@ const AR = ({route, navigation}) => {
   const [step11Result, setStep11Result] = useState(null);
   const [step12Result, setStep12Result] = useState(null);
   const [step13Result, setStep13Result] = useState(null);
-  const [step, setStep] = useState(9);
+  const [step, setStep] = useState(1);
   const [uriConnector, setUriConnector] = useState(null);
   const [uriDrop, setUriDrop] = useState(null);
   const steps = [1, 2, 3, 4, 5, 7, 9, 11, 12, 13];
