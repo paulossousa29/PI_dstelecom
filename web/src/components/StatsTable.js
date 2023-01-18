@@ -61,7 +61,7 @@ function StatsTable() {
         setSortFilterValue(filterOrSortValue);
         return await axios
           .get(
-            ip.backend_ip + 'stat/' + filterOrSortValue + '/' + start + '/' + end
+            ip.backend_ip + 'statSort/' + filterOrSortValue + '/' + start + '/' + end
           )
           .then((response) => {
             setData(response.data);
