@@ -75,12 +75,16 @@ const Avaliacao = () => {
                                                 Aspeto
                                             </div>
                                             <div className='col-8'>
+                                                
+                                                {preenchido(aspeto).map((e) => {
+                                                    if(e === 1){
+                                                        return <span class="fa fa-star checked"></span>
+                                                    }
+                                                    else {
+                                                        return <span class="fa fa-star"></span>
+                                                    }
+                                                })}
                                                 {aspeto}
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star"></span>
-                                                <span class="fa fa-star"></span>
                                             </div>
                                         </div>
                                     </li>
@@ -90,7 +94,7 @@ const Avaliacao = () => {
                                                 Usabilidade
                                             </div>
                                             <div className='col-8'>
-                                                {usabilidade}
+                                                
                                                 {preenchido(usabilidade).map((e) => {
                                                     if(e === 1){
                                                         return <span class="fa fa-star checked"></span>
@@ -99,6 +103,7 @@ const Avaliacao = () => {
                                                         return <span class="fa fa-star"></span>
                                                     }
                                                 })}
+                                                {usabilidade}
                                             </div>
                                         </div>
                                     </li>
@@ -109,11 +114,15 @@ const Avaliacao = () => {
                                             </div>
                                             <div className='col-8'>
                                                 {global}
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star"></span>
-                                                <span class="fa fa-star"></span>
+                                                {preenchido(global).map((e) => {
+                                                    if(e === 1){
+                                                        return <span class="fa fa-star checked"></span>
+                                                    }
+                                                    else {
+                                                        return <span class="fa fa-star"></span>
+                                                    }
+                                                })}
+                                                {global}
                                             </div>
                                         </div>
                                     </li>
