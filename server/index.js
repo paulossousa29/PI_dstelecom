@@ -54,6 +54,19 @@ app.get("/todos", async (req, res) => {
 	}
 });
 
+app.get("/relatorio/:id", async (req, res) => {
+	const id = req.params.id;
+	try {
+		pool.connect();
+		const relatorio = await pool.query(
+			"SELECT * FROM relatorios where id=" + id + ";"
+		);
+		res.json(relatorio.rows);
+	} catch (err) {
+		console.log(err.message);
+	}
+});
+
 app.get("/ava", async (req, res) => {
 	console.log("request avaliacao");
 	try {
