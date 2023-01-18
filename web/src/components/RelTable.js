@@ -311,7 +311,7 @@ function RelTable() {
                                             <td>{item.data_inicio}</td>
                                             <td>{item.data_fim}</td>
                                             <td>{item.duracao.seconds} segundos</td>
-                                            <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() =>parentToChild(item.id)}> Consultar </button>
+                                            <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => <Relatorio id={item.id}/>}> Consultar </button>
 
                                         </tr>
                                     </MDBTableBody>
