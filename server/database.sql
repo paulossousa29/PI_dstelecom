@@ -27,7 +27,13 @@ INSERT INTO relatorios (id_intervencao,passo_1 ,passo_3 ,passo_5 ,passo_7 ,passo
 
 INSERT INTO intervencoes(id, acesso, elemento, conector, id_equipa) VALUES ('TESTE', 'FTTH_DST_00231064', 'S25/R03/PLDP/2024', 3,'CGO0046')
 INSERT INTO intervencoes(id, acesso, elemento, conector, id_equipa) VALUES ('TESTE2', 'FTTH_DST_00231064', 'S25/R03/PLDP/2024', 3,'CGO0046')
+INSERT INTO intervencoes(id, acesso, elemento, conector, id_equipa) VALUES ('TESTE3', 'FTTH_DST_00231064', 'S25/R03/PLDP/2024', 3,'CGO0050')
+INSERT INTO intervencoes(id, acesso, elemento, conector, id_equipa) VALUES ('TESTE4', 'FTTH_DST_00231064', 'S25/R03/PLDP/2024', 3,'CGO0057')
 
+
+
+INSERT INTO relatorios (id_intervencao,passo_1 ,passo_3 ,passo_5 ,passo_7 ,passo_9 ,passo_11 ,passo_12,passo_13 ,observacoes ,data_inicio,data_fim) VALUES ('TESTE3',0,1,0,0,0,1,0,0,'tem dois erro','2022-01-17','2022-01-28');
+INSERT INTO relatorios (id_intervencao,passo_1 ,passo_3 ,passo_5 ,passo_7 ,passo_9 ,passo_11 ,passo_12,passo_13 ,observacoes ,data_inicio,data_fim) VALUES ('TESTE4',0,1,1,1,0,0,0,0,'tem três erro','2022-01-17','2022-01-27');
 
 
 INSERT INTO pedidos (id_intervencao,estado,descricao) VALUES ('ULO18Y',0,'Mudar PDO de localização');
