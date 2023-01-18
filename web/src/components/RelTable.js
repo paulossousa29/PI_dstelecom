@@ -304,7 +304,8 @@ function RelTable() {
                                 data.map((item, index) => (
                                     <MDBTableBody key={index}>
                                         <tr>
-                                            {console.log("o id é:" + item.id.toString())}
+                                            {console.log("o id é:")}
+                                            {console.log(item.id)}
                                             <td>{item.id_intervencao}</td>
                                             <td>{item.id_equipa}</td>
                                             <td>{item.total_erros}</td>
