@@ -26,7 +26,7 @@ const AR1 = ({route, navigation}) => {
   const fetchAI = async image => {
     const imageData = new FormData();
 
-    imageData.append('step', step);
+    imageData.append('step', 1);
     imageData.append('image', {
       uri: image.assets[0].uri,
       type: 'image/jpeg',
@@ -47,39 +47,38 @@ const AR1 = ({route, navigation}) => {
   };
 
   const handleNextStep = async () => {
-    navigation.push('AR2', {
-      intervention: intervention,
-      startDate: startDate,
-      step1: true,
-    });
+    const image = await launchCamera();
+    if (image.didCancel) return;
 
-    // const image = await launchCamera();
-    // if (image.didCancel) return;
+    res = await fetchAI(image);
+    if (res === undefined) {
+      Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
+      return;
+    }
+    if (res.status !== 200) {
+      Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
+      return;
+    }
+    if (res.data.error) {
+      Alert.alert('Erro', res.data.error, [{text: 'Cancel'}]);
+      return;
+    }
 
-    // res = await fetchAI(image);
-    // if (res.status !== 200) {
-    //   Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
-    //   return;
-    // }
-    // if (res.data.error) {
-    //   Alert.alert('Erro', res.data.error, [{text: 'Cancel'}]);
-    //   return;
-    // }
+    const element = await fetchElement();
 
-    // const element = await fetchElement();
-
-    // if (!element === res.data.element) {
-    //   navigation.push('NewReference', {
-    //     intervention: intervention,
-    //     startDate: startDate,
-    //   });
-    // } else {
-    //   navigation.push('AR2', {
-    //     intervention: intervention,
-    //     startDate: startDate,
-    //     step1: true,
-    //   });
-    // }
+    if (!(element === res.data.element)) {
+      navigation.push('NewReference', {
+        intervention: intervention,
+        startDate: startDate,
+        element: res.data.element,
+      });
+    } else {
+      navigation.push('AR2', {
+        intervention: intervention,
+        startDate: startDate,
+        step1: true,
+      });
+    }
   };
 
   const handleQuit = () => {
@@ -99,7 +98,7 @@ const AR1 = ({route, navigation}) => {
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{scene: SceneAR}}
-        viroAppProps={{step: 1}}
+        viroAppProps={{step: 1, uriDrop: 'empty', uriConnector: 'empty'}}
         style={styles.ar}
       />
       <View style={styles.controls}>

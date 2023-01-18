@@ -13,8 +13,8 @@ import ip from '../config/ip';
 import axios from 'axios';
 
 const NewReference = ({route, navigation}) => {
-  const {intervention, startDate} = route.params;
-  const [reference, setReference] = useState('mudar depois');
+  const {intervention, startDate, element} = route.params;
+  const [reference, setReference] = useState(element);
   const [errorMsgRef, setErrorMsgRef] = useState(null);
   const invalid = [null, ''];
 

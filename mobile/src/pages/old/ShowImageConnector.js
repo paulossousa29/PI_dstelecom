@@ -2,21 +2,21 @@ import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 
 import colors from '../config/colors';
 
-const ShowImageDrop = ({route, navigation}) => {
-  const {intervention, startDate, step1, step3, uriDrop, uriConnector} =
+const ShowImageConnector = ({route, navigation}) => {
+  const {intervention, startDate, step1, step3, step5, step7, uriConnector} =
     route.params;
 
   const handleNext = async () => {
-    navigation.push('AR3', {
+    navigation.push('AR4', {
       intervention: intervention,
       startDate: startDate,
       step1: step1,
       step3: step3,
-      uriConnector: uriConnector,
+      step5: step5,
+      step7: step7,
     });
   };
 
-  // mudar cor do botão para andar
   return (
     <View style={styles.background}>
       <Image
@@ -24,10 +24,10 @@ const ShowImageDrop = ({route, navigation}) => {
         source={require('../assets/logo-black.png')}></Image>
 
       <View style={styles.container}>
-        <Text style={styles.text}>Passagem drop a utilizar</Text>
+        <Text style={styles.text}>Conetor a utilizar</Text>
         <View style={styles.image}>
           <Image
-            source={{uri: uriDrop}}
+            source={{uri: uriConnector}}
             style={{width: 280, height: 350, borderRadius: 15}}
           />
         </View>
@@ -39,7 +39,7 @@ const ShowImageDrop = ({route, navigation}) => {
   );
 };
 
-export default ShowImageDrop;
+export default ShowImageConnector;
 
 const styles = StyleSheet.create({
   text: {

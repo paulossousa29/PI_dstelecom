@@ -10,11 +10,31 @@ import ip from '../config/ip';
 
 const AR2 = ({route, navigation}) => {
   const {intervention, startDate, step1} = route.params;
+  const steps = [2, 3, 4, 5, 7, 9, 11, 12, 13];
+
+  const [step, setStep] = useState(2);
+  const [uriConnector, setUriConnector] = useState('https://picsum.photos/200');
+  const [uriDrop, setUriDrop] = useState('https://picsum.photos/200');
 
   const [step3, setStep3] = useState(null);
-  const [step, setStep] = useState(2);
-  const [uriConnector, setUriConnector] = useState(null);
-  const [uriDrop, setUriDrop] = useState(null);
+  const [step5, setStep5] = useState(null);
+  const [step7, setStep7] = useState(null);
+  const [step9, setStep9] = useState(step9);
+  const [step11, setStep11] = useState(step11);
+  const [step12, setStep12] = useState(step12);
+  const [step13, setStep13] = useState(step13);
+
+  const fetchAccess = async () => {
+    try {
+      const res = await axios.post(ip.backend_ip + 'access', {
+        intervention: intervention,
+      });
+
+      return res.data.access;
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const fetchConnector = async () => {
     try {
@@ -57,49 +77,92 @@ const AR2 = ({route, navigation}) => {
   };
 
   const handleNextStep = async () => {
-    navigation.push('ShowImageDrop', {
-      intervention: intervention,
-      startDate: startDate,
-      step1: step1,
-      step3: step3,
-      uriDrop: 'https://picsum.photos/200',
-      uriConnector: uriConnector,
-    });
-    // const image = await launchCamera();
-    // if (image.didCancel) return;
+    if (steps.includes(step)) {
+      const image = await launchCamera();
+      if (image.didCancel) return;
 
-    // res = await fetchAI(image);
-    // if (res === undefined) {
-    //   Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
-    //   return;
-    // }
-    // if (res.data.error) {
-    //   Alert.alert('Erro', res.data.error, [{text: 'Cancel'}]);
-    //   return;
-    // }
+      res = await fetchAI(image);
+      if (res === undefined) {
+        Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
+        return;
+      }
+      if (res.data.error) {
+        Alert.alert('Erro', res.data.error, [{text: 'Cancel'}]);
+        return;
+      }
 
-    // if (step === 2) {
-    //   setUriConnector(res.data.image.uri);
-    // } else if (step === 3) {
-    //   if (res.data.power1490 > -26 && res.data.power1550 > -15) setStep3(true);
-    //   else {
-    //     Alert.alert('Erro técnico', 'Potência Inválida', [{text: 'Cancelar'}]);
-    //     setStep3(false);
-    //   }
-    // } else if (step === 4) {
-    //   setUriDrop(res.data.image.uri);
-    // } else if (step === 5) {
-    //   navigation.push('ShowImageDrop', {
-    //     intervention: intervention,
-    //     startDate: startDate,
-    //     step1: step1,
-    //     step3: step3,
-    //     uriDrop: uriDrop,
-    //     uriConnector: uriConnector,
-    //   });
-    // }
+      if (step === 2) {
+        setUriConnector(res.data.image.uri);
+      } else if (step === 3) {
+        if (res.data.power1490 > -26 && res.data.power1550 > -15)
+          setStep3(true);
+        else {
+          Alert.alert('Erro técnico', 'Potência Inválida', [
+            {text: 'Cancelar'},
+          ]);
+          setStep3(false);
+        }
+      } else if (step === 4) {
+        setUriDrop(res.data.image.uri);
+      } else if (step === 5) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Slot de Drop Inválido', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep5(res.data.result);
+      } else if (step === 7) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Tabuleiro Inválido', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep7(res.data.result);
+      } else if (step === 9) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Conetor Inválido', [{text: 'Cancelar'}]);
+        }
+        setStep9(res.data.result);
+      } else if (step === 11) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Revestimento dos Cabos Incorreto', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep11(res.data.result);
+      } else if (step === 12) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Tabuleiro Aberto', [{text: 'Cancelar'}]);
+        }
+        setStep12(res.data.result);
+      } else if (step === 13) {
+        access = await fetchAccess();
 
-    // setStep(step + 1);
+        if (access !== res.data.access) {
+          Alert.alert('Erro técnico', 'Nome do Acesso Errado', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep13(access === res.data.access);
+      }
+    }
+
+    if (step === 14) {
+      navigation.push('Notes', {
+        intervention: intervention,
+        startDate: startDate,
+        step1: step1,
+        step3: step3,
+        step5: step5,
+        step7: step7,
+        step9: step9,
+        step11: step11,
+        step12: step12,
+        step13: step13,
+      });
+    }
+
+    setStep(step + 1);
   };
 
   const handleQuit = () => {
@@ -119,7 +182,11 @@ const AR2 = ({route, navigation}) => {
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{scene: SceneAR}}
-        viroAppProps={{step: step}}
+        viroAppProps={{
+          step: step,
+          uriConnector: uriConnector,
+          uriDrop: uriDrop,
+        }}
         style={styles.ar}
       />
       <View style={styles.controls}>

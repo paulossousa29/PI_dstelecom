@@ -7,16 +7,12 @@ import {AuthContext} from '../components/AuthContext';
 import Login from '../pages/Login';
 import AR1 from '../pages/AR1';
 import AR2 from '../pages/AR2';
-import AR3 from '../pages/AR3';
-import AR4 from '../pages/AR4';
 import Home from '../pages/Home';
 import Notes from '../pages/Notes';
 import NewReference from '../pages/NewReference';
 import Done from '../pages/Done';
 import UserExperience from '../pages/UserExperience';
 import ResultReference from '../pages/ResultReference';
-import ShowImageDrop from '../pages/ShowImageDrop';
-import ShowImageConnector from '../pages/ShowImageConnector';
 import Splash from '../pages/Splash';
 
 const HomeStack = createStackNavigator();
@@ -67,8 +63,6 @@ const MyStack = () => {
             />
             <HomeStack.Screen name="AR1" component={AR1} />
             <HomeStack.Screen name="AR2" component={AR2} />
-            <HomeStack.Screen name="AR3" component={AR3} />
-            <HomeStack.Screen name="AR4" component={AR4} />
             <HomeStack.Screen name="Notes" component={Notes} />
             <HomeStack.Screen name="NewReference" component={NewReference} />
             <HomeStack.Screen
@@ -79,11 +73,6 @@ const MyStack = () => {
             <HomeStack.Screen
               name="UserExperience"
               component={UserExperience}
-            />
-            <HomeStack.Screen name="ShowImageDrop" component={ShowImageDrop} />
-            <HomeStack.Screen
-              name="ShowImageConnector"
-              component={ShowImageConnector}
             />
           </HomeStack.Navigator>
         ) : (
