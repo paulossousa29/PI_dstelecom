@@ -27,6 +27,7 @@ function StatsTable() {
   const [pageLimit] = useState(4);
   const [sortFilterValue, setSortFilterValue] = useState("");
   const [operation, setOperation] = useState("");
+  const [id, setId] = useState("");
 
 
   const navigate = useNavigate();
