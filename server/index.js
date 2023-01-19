@@ -468,15 +468,15 @@ app.get("/pedidos/:start/:end", async (req, res) => {
 app.get("/pedidosaceites/:id/:start/:end", async (req, res) => {
 	console.log("request pedidos aceites");
 	const id = req.params.id;
-	const start = req.params.start;
-	const end = req.params.end;
+	/* const start = req.params.start;
+	const end = req.params.end; */
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
 			"UPDATE pedidos SET estado = 1 WHERE id = " + id + ";"
 		);
 		const final = await pool.query(
-			"SELECT * FROM pedidos WHERE estado = 0 LIMIT " + end + "OFFSET " + start + ";"
+			"SELECT * FROM pedidos WHERE estado = 0 ;"
 		);
 		res.json(final.rows);
 		console.log(final);
@@ -485,18 +485,18 @@ app.get("/pedidosaceites/:id/:start/:end", async (req, res) => {
 	}
 });
 
-app.get("/pedidosrecusados/:id/:start/:end", async (req, res) => {
+app.get("/pedidosrecusados/:id", async (req, res) => {
 	console.log("request pedidos recusados");
 	const id = req.params.id;
-	const start = req.params.start;
-	const end = req.params.end;
+	/* const start = req.params.start;
+	const end = req.params.end; */
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
 			"UPDATE pedidos SET estado = 2 WHERE id = " + id + ";"
 		);
 		const final = await pool.query(
-			"SELECT * FROM pedidos WHERE estado = 0 LIMIT " + end + "OFFSET " + start + ";"
+			"SELECT * FROM pedidos WHERE estado = 0;"
 		);
 		res.json(final.rows);
 		console.log(final);
