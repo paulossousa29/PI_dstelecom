@@ -84,47 +84,6 @@ function RelTable() {
 			.catch((err) => console.log(err));
 	}
 
-	const handleReset = () => {
-		setOperation("");
-		setValue("");
-		setSortFilterValue("");
-		setSortValue("");
-		loadUsersData(0, 4, 0);
-	};
-	const handleSearch = async (e) => {
-		e.preventDefault();
-		loadUsersData(0, 4, 0, "search");
-		// return await axios
-		//   .get(`http://localhost:5000/users?q=${value}`)
-		//   .then((response) => {
-		//     setData(response.data);
-		//     setValue("");
-		//   })
-		//   .catch((err) => console.log(err));
-	};
-
-	const handleSort = async (e) => {
-		let value = e.target.value;
-		loadUsersData(0, 4, 0, "sort", value);
-		setSortValue(value);
-
-		// return await axios
-		//   .get(`http://localhost:5000/users?_sort=${value}&_order=asc`)
-		//   .then((response) => {
-		//     setData(response.data);
-		//   })
-		//   .catch((err) => console.log(err));
-	};
-
-	const handleFilter = async (value) => {
-		loadUsersData(0, 4, 0, "filter", value);
-		// return await axios
-		//   .get(`http://localhost:5000/users?status=${value}`)
-		//   .then((response) => {
-		//     setData(response.data);
-		//   })
-		//   .catch((err) => console.log(err));
-	};
 
 	const renderPagination = () => {
 		if (data.length < 4 && currentPage === 0) return null;
