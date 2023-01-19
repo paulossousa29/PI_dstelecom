@@ -37,7 +37,7 @@ function RelTable() {
     }, []);
 
     const handleConsulta = (p) => {
-        navigate('/relatorio', { state: { id: p}})
+        navigate('/relatorio', { state: { id: p } })
     }
 
     const loadUsersData = async (
@@ -53,7 +53,7 @@ function RelTable() {
                 setSortValue("");
                 return await axios
                     .get(
-                        `http://localhost:3001/users?q=${value}&_start=${start}&_end=${end}`
+                        ip.backend_ip + 'searchrel/' + value
                     )
                     .then((response) => {
                         setData(response.data);
@@ -65,19 +65,7 @@ function RelTable() {
                 setSortFilterValue(filterOrSortValue);
                 return await axios
                     .get(
-                        `http://localhost:5000/users?_sort=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
-                    )
-                    .then((response) => {
-                        setData(response.data);
-                        setCurrentPage(currentPage + increase);
-                    })
-                    .catch((err) => console.log(err));
-            case "filter":
-                setOperation(optType);
-                setSortFilterValue(filterOrSortValue);
-                return await axios
-                    .get(
-                        `http://localhost:5000/users?status=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
+                        ip.backend_ip + 'reslsort/' + filterOrSortValue
                     )
                     .then((response) => {
                         setData(response.data);
@@ -86,7 +74,7 @@ function RelTable() {
                     .catch((err) => console.log(err));
             default:
                 return await axios
-                    .get(ip.backend_ip + 'relatorios')
+                    .get(ip.backend_ip + 'relatorios/' + start + '/' + end)
                     .then((response) => {
                         setData(response.data);
                         setCurrentPage(currentPage + increase);
@@ -98,9 +86,9 @@ function RelTable() {
     console.log("data", data);
 
 
-    const parentToChild = (id)  => {
-        <Relatorio id={id}/>
-      }
+    const parentToChild = (id) => {
+        <Relatorio id={id} />
+    }
 
     const handleReset = () => {
         setOperation("");
@@ -134,15 +122,6 @@ function RelTable() {
         //   .catch((err) => console.log(err));
     };
 
-    const handleFilter = async (value) => {
-        loadUsersData(0, 4, 0, "filter", value);
-        // return await axios
-        //   .get(`http://localhost:5000/users?status=${value}`)
-        //   .then((response) => {
-        //     setData(response.data);
-        //   })
-        //   .catch((err) => console.log(err));
-    };
 
 
     const renderPagination = () => {
