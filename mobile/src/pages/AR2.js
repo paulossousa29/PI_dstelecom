@@ -8,17 +8,21 @@ import SceneAR from '../scenes/SceneAR';
 import colors from '../config/colors';
 import ip from '../config/ip';
 
-const AR = ({route, navigation}) => {
-  const {intervention, username} = route.params;
-  const [startDate, setStartDate] = useState(new Date());
-  const [step1Result, setStep1Result] = useState(null);
-  const [step3Result, setStep3Result] = useState(null);
-  const [step5Result, setStep5Result] = useState(null);
-  const [step7Result, setStep7Result] = useState(null);
-  const [step9Result, setStep9Result] = useState(null);
-  const [step11Result, setStep11Result] = useState(null);
-  const [step13Result, setStep13Result] = useState(null);
-  const [step, setStep] = useState(1);
+const AR2 = ({route, navigation}) => {
+  const {intervention, startDate, step1} = route.params;
+  const steps = [2, 3, 4, 5, 7, 9, 11, 12, 13];
+
+  const [step, setStep] = useState(2);
+  const [uriConnector, setUriConnector] = useState('https://picsum.photos/200');
+  const [uriDrop, setUriDrop] = useState('https://picsum.photos/200');
+
+  const [step3, setStep3] = useState(null);
+  const [step5, setStep5] = useState(null);
+  const [step7, setStep7] = useState(null);
+  const [step9, setStep9] = useState(step9);
+  const [step11, setStep11] = useState(step11);
+  const [step12, setStep12] = useState(step12);
+  const [step13, setStep13] = useState(step13);
 
   const fetchAccess = async () => {
     try {
@@ -34,7 +38,7 @@ const AR = ({route, navigation}) => {
 
   const fetchConnector = async () => {
     try {
-      const res = await axios.post(backend_ip + 'conetor', {
+      const res = await axios.post(ip.backend_ip + 'conetor', {
         id_intervention: intervention,
       });
 
@@ -47,9 +51,8 @@ const AR = ({route, navigation}) => {
   const fetchAI = async image => {
     const imageData = new FormData();
 
-    if (step == 9) {
+    if (step == 2) {
       connector = await fetchConnector();
-      console.log(connector);
       imageData.append('connector', connector);
     }
 
@@ -67,76 +70,96 @@ const AR = ({route, navigation}) => {
         },
       });
 
-      return res.data;
+      return res;
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleNextStep = async () => {
-    if (step % 2 === 1) {
+    if (steps.includes(step)) {
       const image = await launchCamera();
-
       if (image.didCancel) return;
 
       res = await fetchAI(image);
-
-      if (res.image) {
-        navigation.push('ShowImage', {uri: res.image.uri});
+      if (res === undefined) {
+        Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
+        return;
+      }
+      if (res.data.error) {
+        Alert.alert('Erro', res.data.error, [{text: 'Cancel'}]);
+        return;
       }
 
-      res = true;
-
-      if (step === 1) {
+      if (step === 2) {
+        setUriConnector(res.data.image.uri);
+      } else if (step === 3) {
+        if (res.data.power1490 > -26 && res.data.power1550 > -15)
+          setStep3(true);
+        else {
+          Alert.alert('Erro técnico', 'Potência Inválida', [
+            {text: 'Cancelar'},
+          ]);
+          setStep3(false);
+        }
+      } else if (step === 4) {
+        setUriDrop(res.data.image.uri);
+      } else if (step === 5) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Slot de Drop Inválido', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep5(res.data.result);
+      } else if (step === 7) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Tabuleiro Inválido', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep7(res.data.result);
+      } else if (step === 9) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Conetor Inválido', [{text: 'Cancelar'}]);
+        }
+        setStep9(res.data.result);
+      } else if (step === 11) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Revestimento dos Cabos Incorreto', [
+            {text: 'Cancelar'},
+          ]);
+        }
+        setStep11(res.data.result);
+      } else if (step === 12) {
+        if (!res.data.result) {
+          Alert.alert('Erro técnico', 'Tabuleiro Aberto', [{text: 'Cancelar'}]);
+        }
+        setStep12(res.data.result);
+      } else if (step === 13) {
         access = await fetchAccess();
 
-        compare = true;
-
-        if (compare) {
-          setStep1Result(true);
-        } else {
-          navigation.push('NewReference', {intervention: intervention});
+        if (access !== res.data.access) {
+          Alert.alert('Erro técnico', 'Nome do Acesso Errado', [
+            {text: 'Cancelar'},
+          ]);
         }
-      } else if (step === 3) {
-        setStep3Result(res);
-      } else if (step === 5) {
-        setStep5Result(res);
-      } else if (step === 7) {
-        setStep7Result(res);
-      } else if (step === 9) {
-        setStep9Result(res);
-      } else if (step === 11) {
-        setStep11Result(res);
-      } else if (step === 13) {
-        setStep13Result(res);
-
-        var pad = function (num) {
-          return ('00' + num).slice(-2);
-        };
-
-        navigation.push('Notes', {
-          intervention: intervention,
-          startDate:
-            startDate.getUTCFullYear() +
-            '-' +
-            pad(startDate.getUTCMonth() + 1) +
-            '-' +
-            pad(startDate.getUTCDate()) +
-            ' ' +
-            pad(startDate.getUTCHours()) +
-            ':' +
-            pad(startDate.getUTCMinutes()) +
-            ':' +
-            pad(startDate.getUTCSeconds()),
-          step1: step1Result,
-          step3: step3Result,
-          step5: step5Result,
-          step7: step7Result,
-          step9: step9Result,
-          step11: step11Result,
-          step13: step13Result,
-        });
+        setStep13(access === res.data.access);
       }
+    }
+
+    if (step === 14) {
+      navigation.push('Notes', {
+        intervention: intervention,
+        startDate: startDate,
+        step1: step1,
+        step3: step3,
+        step5: step5,
+        step7: step7,
+        step9: step9,
+        step11: step11,
+        step12: step12,
+        step13: step13,
+      });
     }
 
     setStep(step + 1);
@@ -149,7 +172,7 @@ const AR = ({route, navigation}) => {
       },
       {
         text: 'Sair',
-        onPress: () => navigation.pop(),
+        onPress: () => navigation.popToTop(),
       },
     ]);
   };
@@ -159,17 +182,17 @@ const AR = ({route, navigation}) => {
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{scene: SceneAR}}
-        viroAppProps={{step: step}}
+        viroAppProps={{
+          step: step,
+          uriConnector: uriConnector,
+          uriDrop: uriDrop,
+        }}
         style={styles.ar}
       />
       <View style={styles.controls}>
-        <Text style={styles.text}>Passo {step}/13</Text>
+        <Text style={styles.text}>Passo {step}/14</Text>
         <TouchableOpacity style={styles.button} onPress={handleNextStep}>
-          {step < 13 ? (
-            <Text style={styles.buttonText}>Próximo Passo</Text>
-          ) : (
-            <Text style={styles.buttonText}>Concluir</Text>
-          )}
+          <Text style={styles.buttonText}>Próximo Passo</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonQuit} onPress={handleQuit}>
           <Text style={styles.buttonText}>Sair</Text>
@@ -179,7 +202,7 @@ const AR = ({route, navigation}) => {
   );
 };
 
-export default AR;
+export default AR2;
 
 const styles = StyleSheet.create({
   container: {

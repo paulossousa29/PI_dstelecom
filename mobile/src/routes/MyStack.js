@@ -5,14 +5,14 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {AuthContext} from '../components/AuthContext';
 
 import Login from '../pages/Login';
-import AR from '../pages/AR';
+import AR1 from '../pages/AR1';
+import AR2 from '../pages/AR2';
 import Home from '../pages/Home';
 import Notes from '../pages/Notes';
 import NewReference from '../pages/NewReference';
 import Done from '../pages/Done';
 import UserExperience from '../pages/UserExperience';
 import ResultReference from '../pages/ResultReference';
-import ShowImage from '../pages/ShowImage';
 import Splash from '../pages/Splash';
 
 const HomeStack = createStackNavigator();
@@ -61,7 +61,8 @@ const MyStack = () => {
               component={Home}
               initialParams={{username: username}}
             />
-            <HomeStack.Screen name="AR" component={AR} />
+            <HomeStack.Screen name="AR1" component={AR1} />
+            <HomeStack.Screen name="AR2" component={AR2} />
             <HomeStack.Screen name="Notes" component={Notes} />
             <HomeStack.Screen name="NewReference" component={NewReference} />
             <HomeStack.Screen
@@ -73,7 +74,6 @@ const MyStack = () => {
               name="UserExperience"
               component={UserExperience}
             />
-            <HomeStack.Screen name="ShowImage" component={ShowImage} />
           </HomeStack.Navigator>
         ) : (
           <AuthStack.Navigator

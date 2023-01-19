@@ -2,8 +2,20 @@ import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 
 import colors from '../config/colors';
 
-const ShowImage = ({route, navigation}) => {
-  const {uri} = route.params;
+const ShowImageConnector = ({route, navigation}) => {
+  const {intervention, startDate, step1, step3, step5, step7, uriConnector} =
+    route.params;
+
+  const handleNext = async () => {
+    navigation.push('AR4', {
+      intervention: intervention,
+      startDate: startDate,
+      step1: step1,
+      step3: step3,
+      step5: step5,
+      step7: step7,
+    });
+  };
 
   return (
     <View style={styles.background}>
@@ -12,20 +24,31 @@ const ShowImage = ({route, navigation}) => {
         source={require('../assets/logo-black.png')}></Image>
 
       <View style={styles.container}>
-        <Image source={{uri: uri}} style={styles.image} />
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={() => {
-            navigation.pop();
-          }}>
-          <Text style={styles.buttonText}>Sair</Text>
+        <Text style={styles.text}>Conetor a utilizar</Text>
+        <View style={styles.image}>
+          <Image
+            source={{uri: uriConnector}}
+            style={{width: 280, height: 350, borderRadius: 15}}
+          />
+        </View>
+        <TouchableOpacity style={styles.startButton} onPress={handleNext}>
+          <Text style={styles.buttonText}>Continuar</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
+export default ShowImageConnector;
+
 const styles = StyleSheet.create({
+  text: {
+    alignItems: 'center',
+    paddingTop: 30,
+    paddingLeft: 50,
+    color: colors.logoGreyDark,
+    fontWeight: 'bold',
+  },
   image: {
     width: 250,
     height: 250,
@@ -54,19 +77,22 @@ const styles = StyleSheet.create({
     height: '30%',
     resizeMode: 'contain',
   },
-  logoutButton: {
-    position: 'absolute',
-    bottom: 0,
+  startButton: {
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
-    backgroundColor: colors.logoGreyDark,
+    backgroundColor: colors.red,
     paddingTop: 14,
     paddingBottom: 14,
     marginVertical: 30,
     marginHorizontal: 20,
   },
+  image: {
+    flex: 1,
+    marginTop: 15,
+    paddingTop: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
 });
-
-export default ShowImage;

@@ -4,7 +4,7 @@ import ip from '../config/ip';
 import axios from 'axios';
 
 const ResultReference = ({route, navigation}) => {
-  const {intervention} = route.params;
+  const {intervention, startDate} = route.params;
 
   const fetchNewReferenceStatus = async () => {
     try {
@@ -21,8 +21,20 @@ const ResultReference = ({route, navigation}) => {
   const handleVerify = async () => {
     const status = await fetchNewReferenceStatus();
 
-    if (status === 1 || status === 2) {
-      navigation.pop(); // Tem que voltar dois pops mas estoura
+    if (status === 1) {
+      Alert.alert('Alteração autorizada', res.data.error, [{text: 'Cancelar'}]);
+      navigation.push('AR2', {
+        intervention: intervention,
+        startDate: startDate,
+        step1: false,
+      });
+    } else if (status === 2) {
+      Alert.alert(
+        'Alteração não autorizada. A cancelar trabalho',
+        res.data.error,
+        [{text: 'Cancelar'}],
+      );
+      navigation.popToTop();
     }
   };
 
@@ -40,9 +52,14 @@ const ResultReference = ({route, navigation}) => {
           <Text style={styles.text}>Aguarde pela resposta do adminstrador</Text>
         </View>
         <TouchableOpacity
-          style={styles.startButton}
+          style={styles.loginButton}
           onPress={() => handleVerify()}>
           <Text style={styles.buttonText}>Verificar estado do pedido</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={() => navigation.popToTop()}>
+          <Text style={styles.buttonText}>Cancelar</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -56,12 +73,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  startButton: {
+  container: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'flex-start',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: colors.lightGrey,
+  },
+  loginButton: {
+    bottom: 40,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
     backgroundColor: colors.red,
+    paddingTop: 14,
+    paddingBottom: 14,
+    marginVertical: 30,
+    marginHorizontal: 20,
+  },
+  logoutButton: {
+    position: 'absolute',
+    bottom: -15,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%',
+    backgroundColor: colors.logoGreyDark,
     paddingTop: 14,
     paddingBottom: 14,
     marginVertical: 30,
@@ -84,15 +124,7 @@ const styles = StyleSheet.create({
     height: '30%',
     resizeMode: 'contain',
   },
-  container: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'flex-start',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    backgroundColor: colors.lightGrey,
-  },
+
   text: {
     alignItems: 'center',
     paddingTop: 15,
