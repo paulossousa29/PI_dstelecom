@@ -236,6 +236,18 @@ app.get("/relsort/:sort", async (req, res) => {
 			console.error(err.message);
 		}
 	}
+	if (sort == "Duração") {
+		try {
+			pool.connect();
+			const allTodos = await pool.query(
+				"SELECT r.id, r.id_intervencao, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY duracao ASC"
+			);
+			console.log(allTodos.rows[0]);
+			res.json(allTodos.rows);
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
 }
 );
 
