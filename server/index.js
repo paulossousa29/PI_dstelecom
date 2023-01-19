@@ -366,13 +366,13 @@ app.post("/conetor", async (req, res) => {
 		pool.connect();
 
 		query =
-			"SELECT conetor FROM intervencoes WHERE id='" +
+			"SELECT conector FROM intervencoes WHERE id='" +
 			id_intervention +
 			"'";
 
 		const result = await pool.query(query);
 
-		res.json({ connector: result.rows[0].conetor });
+		res.json({ connector: result.rows[0].conector });
 	} catch (err) {
 		console.error(err.messag);
 	}
