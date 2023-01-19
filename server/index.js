@@ -467,6 +467,7 @@ app.post("/report", async (req, res) => {
 		step_7,
 		step_9,
 		step_11,
+		step_12,
 		step_13,
 		observations,
 		date_start,
@@ -477,7 +478,7 @@ app.post("/report", async (req, res) => {
 		pool.connect();
 
 		query =
-			"INSERT INTO relatorios(id_intervencao, passo_1, passo_3, passo_5, passo_7, passo_9, passo_11, passo_13, observacoes, data_inicio, data_fim) VALUES ('" +
+			"INSERT INTO relatorios(id_intervencao, passo_1, passo_3, passo_5, passo_7, passo_9, passo_11, passo_12, passo_13, observacoes, data_inicio, data_fim) VALUES ('" +
 			id_intervention +
 			"', " +
 			step_1 +
@@ -491,6 +492,8 @@ app.post("/report", async (req, res) => {
 			step_9 +
 			", " +
 			step_11 +
+			", " +
+			step_12 +
 			", " +
 			step_13 +
 			", '" +
