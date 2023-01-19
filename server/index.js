@@ -465,7 +465,7 @@ app.get("/pedidos/:start/:end", async (req, res) => {
 	}
 });
 
-app.get("/pedidosaceites/:id/:start/:end", async (req, res) => {
+app.get("/pedidosaceites/:id", async (req, res) => {
 	console.log("request pedidos aceites");
 	const id = req.params.id;
 	/* const start = req.params.start;
