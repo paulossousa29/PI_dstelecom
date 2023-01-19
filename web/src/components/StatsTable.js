@@ -126,6 +126,41 @@ function StatsTable() {
     //   .catch((err) => console.log(err));
   };
 
+  const horas = (item) => {
+    if (item.media_tempo.hours == null) {
+      item.media_tempo.hours = 0
+    }
+    else {
+      item.media_tempo.hours = item.media_tempo.hours
+    }
+
+
+    if (item.media_tempo.days == null) {
+      item.media_tempo.days = 0
+    }
+    else {
+      item.media_tempo.days = item.media_tempo.days
+    }
+
+    if (item.media_tempo.minutes == null) {
+      item.media_tempo.minutes = 0
+    }
+    else {
+      item.media_tempo.minutes = item.media_tempo.minutes
+    }
+
+    if (item.media_tempo.seconds == null) {
+      item.media_tempo.seconds = 0
+    }
+    else {
+      item.media_tempo.seconds = item.media_tempo.seconds
+    }
+
+
+    return item.media_tempo.days + ' d :' + item.media_tempo.hours + ' h :' + item.media_tempo.minutes + ' min :' + item.media_tempo.seconds + ' s'
+  }
+
+
   const renderPagination = () => {
     if (data.length < 4 && currentPage === 0) return null;
     if (currentPage === 0) {
@@ -288,7 +323,7 @@ function StatsTable() {
                       <td>{item.total_jobs}</td>
                       <td>{item.total_mistakes}</td>
                       <td>{item.media_erro}</td>
-                      <td>{item.media_tempo.days} </td>
+                      <td>{horas(item)} </td>
                       <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar Equipa </button>
                     </tr>
                   </MDBTableBody>

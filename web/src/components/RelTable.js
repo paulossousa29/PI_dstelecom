@@ -151,7 +151,7 @@ function RelTable() {
         }
 
 
-        return item.duracao.days + ':' + item.duracao.hours + ':' + item.duracao.minutes + ':' + item.duracao.seconds
+        return item.duracao.days + ' d :' + item.duracao.hours + ' h :' + item.duracao.minutes + ' min :' + item.duracao.seconds + ' s'
     }
 
 
