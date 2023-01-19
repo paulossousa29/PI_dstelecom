@@ -121,10 +121,10 @@ function RelTable() {
     };
 
     const horas = (item) => {
-        if (item.duracao.hours == undefined) { item.duracao.hours = 0 }
-        if (item.duracao.days == undefined) { item.duracao.days = 0 }
-        if (item.duracao.minutes == undefined) { item.duracao.minutes = 0 }
-        if (item.duracao.seconds == undefined) { item.duracao.seconds = 0 }
+        if (item.duracao.hours == null) { item.duracao.hours = 0 }
+        if (item.duracao.days == null) { item.duracao.days = 0 }
+        if (item.duracao.minutes == null) { item.duracao.minutes = 0 }
+        if (item.duracao.seconds == null) { item.duracao.seconds = 0 }
     }
 
 
