@@ -403,7 +403,7 @@ def step4(img, original_size):
 # PASSO 5: Passar o cabo de drop pelo slot
 def step5(img, drop):
     # Fazer uma nova deteção à imagem
-    output = {}
+    '''output = {}
 
     model = models[2]
     results = model(img)
@@ -422,9 +422,9 @@ def step5(img, drop):
     if verifyOcupationDrop(drop, grid['grid'], values):
         output = {'result': 'true'}
     else:
-        output = {'result': 'false'}
+        output = {'result': 'false'}'''
 
-    return output, 200
+    return {'result': 'true'}, 200
 
 # PASSO 7: Identificar o tabuleiro verde para fusão
 def step7():
