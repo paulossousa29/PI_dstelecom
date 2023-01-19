@@ -536,7 +536,7 @@ class ObjectDetection(Resource):
             elif step == 11:
                 return step11()
             elif step == 12:
-                return step12()
+                return step12(img)
             elif step == 13:
                 return step13()
             else:
