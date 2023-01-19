@@ -7,8 +7,6 @@ import {
     MDBRow,
     MDBCol,
     MDBContainer,
-    MDBBtn,
-    MDBBtnGroup,
     MDBPagination,
     MDBPaginationItem,
     MDBPaginationLink,
@@ -29,7 +27,7 @@ function RelTable() {
     const [pageLimit] = useState(4);
     const [sortFilterValue, setSortFilterValue] = useState("");
     const [operation, setOperation] = useState("");
-    const sortOptions = ["Data de Início", "Data Fim", "Total de Erros"];
+    const sortOptions = ["Data de Início", "Data Fim", "Total de Erros", "Duração"];
 
     const navigate = useNavigate();
     useEffect(() => {
@@ -65,7 +63,7 @@ function RelTable() {
                 setSortFilterValue(filterOrSortValue);
                 return await axios
                     .get(
-                        ip.backend_ip + 'reslsort/' + filterOrSortValue
+                        ip.backend_ip + 'relsort/' + filterOrSortValue
                     )
                     .then((response) => {
                         setData(response.data);
@@ -122,6 +120,13 @@ function RelTable() {
         //   .catch((err) => console.log(err));
     };
 
+    const horas = (item) => {
+        if (item.duracao.hours == undefined) { item.duracao.hours = 0 }
+        if (item.duracao.days == undefined) { item.duracao.days = 0 }
+        if (item.duracao.minutes == undefined) { item.duracao.minutes = 0 }
+        if (item.duracao.seconds == undefined) { item.duracao.seconds = 0 }
+    }
+
 
 
     const renderPagination = () => {
@@ -133,9 +138,9 @@ function RelTable() {
                         <MDBPaginationLink>1</MDBPaginationLink>
                     </MDBPaginationItem>
                     <MDBPaginationItem>
-                        <MDBBtn onClick={() => loadUsersData(4, 8, 1, operation)}>
+                        <button onClick={() => loadUsersData(4, 8, 1, operation)}>
                             Next
-                        </MDBBtn>
+                        </button>
                     </MDBPaginationItem>
                 </MDBPagination>
             );
@@ -143,7 +148,7 @@ function RelTable() {
             return (
                 <MDBPagination className="mb-0">
                     <MDBPaginationItem>
-                        <MDBBtn
+                        <button
                             onClick={() =>
                                 loadUsersData(
                                     (currentPage - 1) * 4,
@@ -155,14 +160,14 @@ function RelTable() {
                             }
                         >
                             Prev
-                        </MDBBtn>
+                        </button>
                     </MDBPaginationItem>
                     <MDBPaginationItem>
                         <MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
                     </MDBPaginationItem>
 
                     <MDBPaginationItem>
-                        <MDBBtn
+                        <button
                             onClick={() =>
                                 loadUsersData(
                                     (currentPage + 1) * 4,
@@ -174,7 +179,7 @@ function RelTable() {
                             }
                         >
                             Next
-                        </MDBBtn>
+                        </button>
                     </MDBPaginationItem>
                 </MDBPagination>
             );
@@ -182,7 +187,7 @@ function RelTable() {
             return (
                 <MDBPagination className="mb-0">
                     <MDBPaginationItem>
-                        <MDBBtn
+                        <button
                             onClick={() =>
                                 loadUsersData(
                                     (currentPage - 1) * 4,
@@ -193,7 +198,7 @@ function RelTable() {
                             }
                         >
                             Prev
-                        </MDBBtn>
+                        </button>
                     </MDBPaginationItem>
                     <MDBPaginationItem>
                         <MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
@@ -283,6 +288,7 @@ function RelTable() {
                                 data.map((item, index) => (
                                     <MDBTableBody key={index}>
                                         <tr>
+                                            {horas(item)}
                                             {console.log("o id é:")}
                                             {console.log(item.id)}
                                             <td>{item.id_intervencao}</td>
@@ -291,7 +297,7 @@ function RelTable() {
                                             <td>{item.observacoes}</td>
                                             <td>{item.data_inicio}</td>
                                             <td>{item.data_fim}</td>
-                                            <td>{item.duracao.seconds} segundos</td>
+                                            <td>{item.duracao.seconds} dias, {item.duracao.seconds} horas, {item.duracao.seconds} minutos, {item.duracao.seconds} segundos</td>
                                             <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
 
                                         </tr>
