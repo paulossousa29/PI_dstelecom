@@ -7,8 +7,6 @@ import {
 	MDBRow,
 	MDBCol,
 	MDBContainer,
-	button,
-	buttonGroup,
 	MDBPagination,
 	MDBPaginationItem,
 	MDBPaginationLink,
@@ -71,7 +69,7 @@ function RelTable() {
 			.get(ip.backend_ip + 'pedidosaceites/' + p)
 			.then((response) => {
 				setData(response.data);
-				setCurrentPage(currentPage + increase);
+				//setCurrentPage(currentPage + increase);
 			})
 			.catch((err) => console.log(err));
 	}
@@ -81,7 +79,7 @@ function RelTable() {
 			.get(ip.backend_ip + 'pedidosrecusados/' + p)
 			.then((response) => {
 				setData(response.data);
-				setCurrentPage(currentPage + increase);
+				//setCurrentPage(currentPage + increase);
 			})
 			.catch((err) => console.log(err));
 	}
