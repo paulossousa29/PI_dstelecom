@@ -64,11 +64,11 @@ function RelTable() {
 		}
 	};
 
-	console.log("data", data);
+
 
 	const handleAceitar = (p) => {
 		return axios
-			.get(ip.backend_ip + 'pedidosaceites/' + p + '/' + start + '/' + end)
+			.get(ip.backend_ip + 'pedidosaceites/' + p)
 			.then((response) => {
 				setData(response.data);
 				setCurrentPage(currentPage + increase);
@@ -78,7 +78,7 @@ function RelTable() {
 
 	const handleRecusar = (p) => {
 		return axios
-			.get(ip.backend_ip + 'pedidosrecusados/' + p + '/' + start + '/' + end)
+			.get(ip.backend_ip + 'pedidosrecusados/' + p)
 			.then((response) => {
 				setData(response.data);
 				setCurrentPage(currentPage + increase);
