@@ -121,10 +121,37 @@ function RelTable() {
     };
 
     const horas = (item) => {
-        if (item.duracao.hours == null) { item.duracao.hours = 0 }
-        if (item.duracao.days == null) { item.duracao.days = 0 }
-        if (item.duracao.minutes == null) { item.duracao.minutes = 0 }
-        if (item.duracao.seconds == null) { item.duracao.seconds = 0 }
+        if (item.duracao.hours == null) {
+            item.duracao.hours = 0
+        }
+        else {
+            item.duracao.hours = item.duracao.hours
+        }
+
+
+        if (item.duracao.days == null) {
+            item.duracao.days = 0
+        }
+        else {
+            item.duracao.days = item.duracao.days
+        }
+
+        if (item.duracao.minutes == null) {
+            item.duracao.minutes = 0
+        }
+        else {
+            item.duracao.minutes = item.duracao.minutes
+        }
+
+        if (item.duracao.seconds == null) {
+            item.duracao.seconds = 0
+        }
+        else {
+            item.duracao.seconds = item.duracao.seconds
+        }
+
+
+        return item.duracao.days + ':' + item.duracao.hours + ':' + item.duracao.minutes + ':' + item.duracao.seconds
     }
 
 
@@ -296,7 +323,7 @@ function RelTable() {
                                             <td>{item.observacoes}</td>
                                             <td>{item.data_inicio}</td>
                                             <td>{item.data_fim}</td>
-                                            <td>{item.duracao.days} dias</td>
+                                            <td>{horas(item)}</td>
                                             <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
 
                                         </tr>
