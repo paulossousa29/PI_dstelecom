@@ -49,11 +49,10 @@ function StatsTable() {
         setOperation(optType);
         setSortValue("");
         return await axios
-          /* + '/' + start + '/' + end */
           .get(ip.backend_ip + 'searchstat/' + value)
           .then((response) => {
             setData(response.data);
-            setCurrentPage(currentPage + increase);
+            //setCurrentPage(currentPage + increase);
           })
           .catch((err) => console.log(err));
       case "sort":
@@ -65,7 +64,7 @@ function StatsTable() {
           )
           .then((response) => {
             setData(response.data);
-            setCurrentPage(currentPage + increase);
+            //setCurrentPage(currentPage + increase);
           })
           .catch((err) => console.log(err));
       default:
@@ -73,7 +72,7 @@ function StatsTable() {
           .get(ip.backend_ip + 'stats')
           .then((response) => {
             setData(response.data);
-            setCurrentPage(currentPage + increase);
+            //setCurrentPage(currentPage + increase);
           })
           .catch((err) => console.log(err));
     }
@@ -340,7 +339,6 @@ function StatsTable() {
             alignContent: "center",
           }}
         >
-          {renderPagination()}
         </div>
       </div>
     </MDBContainer >

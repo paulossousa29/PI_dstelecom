@@ -55,7 +55,7 @@ function RelTable() {
                     )
                     .then((response) => {
                         setData(response.data);
-                        setCurrentPage(currentPage + increase);
+                        //setCurrentPage(currentPage + increase);
                     })
                     .catch((err) => console.log(err));
             case "sort":
@@ -67,7 +67,7 @@ function RelTable() {
                     )
                     .then((response) => {
                         setData(response.data);
-                        setCurrentPage(currentPage + increase);
+                        //setCurrentPage(currentPage + increase);
                     })
                     .catch((err) => console.log(err));
             default:
@@ -75,18 +75,13 @@ function RelTable() {
                     .get(ip.backend_ip + 'relatorios')
                     .then((response) => {
                         setData(response.data);
-                        setCurrentPage(currentPage + increase);
+                        //setCurrentPage(currentPage + increase);
                     })
                     .catch((err) => console.log(err));
         }
     };
 
     console.log("data", data);
-
-
-    const parentToChild = (id) => {
-        <Relatorio id={id} />
-    }
 
     const handleReset = () => {
         setOperation("");
@@ -341,7 +336,6 @@ function RelTable() {
                         alignContent: "center",
                     }}
                 >
-                    {renderPagination()}
                 </div>
             </div>
         </MDBContainer >
