@@ -54,7 +54,7 @@ app.get("/todos", async (req, res) => {
 	}
 });
 
-app.get("relatorio/:id/valid", async(req,res) => {
+app.get("relatorio/valid/:id", async(req,res) => {
 	console.log("request pedidos aceites");
 	const id = req.params.id;
 	try {
