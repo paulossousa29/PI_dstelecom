@@ -149,6 +149,14 @@ function RelTable() {
         return item.duracao.days + ' d :' + item.duracao.hours + ' h :' + item.duracao.minutes + ' min :' + item.duracao.seconds + ' s'
     }
 
+    const verifica = (i) => {
+
+        if (i == "0") {
+            return "Não verificado"
+        }
+        else return "Verificado"
+    }
+
 
 
     const renderPagination = () => {
@@ -295,6 +303,7 @@ function RelTable() {
                                     <th scope="col">Data de Início</th>
                                     <th scope="col">Data do Fim</th>
                                     <th scope="col">Duração Total</th>
+                                    <th scope="col">Verificação</th>
                                     <th scope="col"></th>
                                 </tr>
                             </MDBTableHead>
@@ -319,6 +328,7 @@ function RelTable() {
                                             <td>{item.data_inicio}</td>
                                             <td>{item.data_fim}</td>
                                             <td>{horas(item)}</td>
+                                            <td>{verifica(item.verificar)}</td>
                                             <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
 
                                         </tr>
