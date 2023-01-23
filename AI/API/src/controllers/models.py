@@ -100,7 +100,7 @@ def pil2datauri(img):
     return u'data:img/jpeg;base64,'+data64.decode('utf-8')
 
 
-def getFirstAvailableDrop(grid, values):
+def getFirstAvailableDrop(grid, values, num_ocupados):
 
     for grid_box in grid:
         box_list = [grid_box['xmin'], grid_box['ymin'],
@@ -108,10 +108,9 @@ def getFirstAvailableDrop(grid, values):
         id = getDropId(box_list, values)
         row = values[id]
         label = row[6]
-        num_drop = grid_box['label']
 
         if label == 'DropLivre':
-            return np.append(row, [num_drop], axis=0)
+            return np.append(row, [str(num_ocupados + 1)], axis=0)
 
 def verifyOcupationDrop(num_drop, grid, values):
   grid_box = grid[num_drop-1]
@@ -141,15 +140,22 @@ def verifyOcupationConnector(num_connector, grid, values):
 def step1(img):
     output = {}
     model_ids = [0, 4]
+
     # 1. Verificar se o PDO está fechado com o modelo de Object Detection
     # Se não reconhecer um PDO fechado apontamos essa falha no relatório final
 
     print('Modelo de deteção do estado do PDO!')
+
+    original_size = img.size
+    img = img.resize((640, 640))
+
     model = models[model_ids[0]]
     results = model(img)
     outputs = results.pandas().xyxy[0]
     outputs['class'] = outputs.index
     labels = outputs[['class', 'name']]
+
+    img = img.resize(original_size)
 
     '''if 'PDOFechado' in labels['name'].unique():
     print('PDO está fechado')
@@ -248,7 +254,7 @@ def step2(img, original_size, connector):
         results = model(img)
         outputs = results.pandas().xyxy[0]
 
-        outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+        outputs.drop(outputs[outputs['confidence'] < 0.55].index, inplace=True)
         values = outputs.values
         print(values[:3])
 
@@ -299,7 +305,7 @@ def step2(img, original_size, connector):
                                       boxes=boxes,
                                       labels=labels,
                                       colors=colors,
-                                      width=3)
+                                      width=4)
 
             '''img = draw_bounding_boxes(img,
                               boxes=boxes,
@@ -336,7 +342,8 @@ def step4(img, original_size):
     results = model(img)
     outputs = results.pandas().xyxy[0]
 
-    outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+    outputs.drop(outputs[outputs['confidence'] < 0.55].index, inplace=True)
+    num_ocupados = len(outputs.loc[outputs['name'] == 'DropOcupado'].values)
     values = outputs.values
     print(values[:3])
 
@@ -347,7 +354,7 @@ def step4(img, original_size):
 
     if len(values) > 0:
         # Get available drop
-        d = getFirstAvailableDrop(grid['grid'], values)
+        d = getFirstAvailableDrop(grid['grid'], values, num_ocupados)
 
         # Identificar na imagem
         transform = transforms.Compose([
@@ -380,7 +387,7 @@ def step4(img, original_size):
                                   boxes=boxes,
                                   labels=labels,
                                   colors=colors,
-                                  width=3)
+                                  width=4)
 
         img = torchvision.transforms.ToPILImage()(img)
         img = img.resize(original_size)
@@ -439,7 +446,7 @@ def step9(img, connector):
     results = model(img)
     outputs = results.pandas().xyxy[0]
 
-    outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+    outputs.drop(outputs[outputs['confidence'] < 0.55].index, inplace=True)
     values = outputs.values
     print(values[:3])
 
@@ -513,8 +520,10 @@ class ObjectDetection(Resource):
             print(f'Uploaded file: {uploaded_file}')
 
             img = Image.open(uploaded_file)
-            original_size = img.size
-            img = img.resize((640, 640))
+
+            if step != 1:
+                original_size = img.size
+                img = img.resize((640, 640))
 
             if step == 1:
                 return step1(img)
