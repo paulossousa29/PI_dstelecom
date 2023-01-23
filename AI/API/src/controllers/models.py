@@ -393,7 +393,7 @@ def step4(img, original_size):
         img = torchvision.transforms.ToPILImage()(img)
         img = img.resize(original_size)
 
-        server.setDrop(num_drop)
+        server.setDrop(int(num_drop))
 
         img_uri = pil2datauri(img)
 
@@ -434,6 +434,8 @@ def step5(img):
         output = {'result': 'true'}
     else:
         output = {'result': 'false'}
+
+    server.setDrop(None)
 
     return output, 200
 
