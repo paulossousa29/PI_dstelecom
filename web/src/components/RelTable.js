@@ -160,12 +160,12 @@ function RelTable() {
     const cores = (i) => {
 
         if (i.total_erros == "0") {
-            cor = "style={{ color: 'green' }}"
+            return cor = <React.Fragment>style={{ color: 'green' }}"</React.Fragment>
         }
         if (i.total_erros == "2") {
-            cor = "style={{ color: 'yellow' }}"
+            cor = <React.Fragment>style={{ color: 'yellow' }}"</React.Fragment>
         }
-        else cor = "style={{ color: 'red' }}"
+        else cor = <React.Fragment>style={{ color: 'red' }}"</React.Fragment>
 
 
         return cor
@@ -331,23 +331,61 @@ function RelTable() {
                                     </tr>
                                 </MDBTableBody>
                             ) : (
-                                data.map((item, index) => (
-                                    <MDBTableBody key={index}>
-                                        <tr>
-                                            {cores(item)}
-                                            <td {...cor}>{item.id_intervencao}</td>
-                                            <td {...cor}>{item.id_equipa}</td>
-                                            <td {...cor}>{item.total_erros}</td>
-                                            <td {...cor}>{item.observacoes}</td>
-                                            <td {...cor}>{item.data_inicio}</td>
-                                            <td {...cor}>{item.data_fim}</td>
-                                            <td {...cor}>{horas(item)}</td>
-                                            <td {...cor}>{verifica(item.verificar)}</td>
-                                            <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
+                                data.map((item, index) => {
+                                    if (item.total_erros == "0") {
+                                        return <React.Fragment>
+                                            <MDBTableBody key={index}>
+                                                <tr>
+                                                    <td style={{ color: "green" }}>{item.id_intervencao}</td>
+                                                    <td style={{ color: "green" }}>{item.id_equipa}</td>
+                                                    <td style={{ color: "green" }}>{item.total_erros}</td>
+                                                    <td style={{ color: "green" }}>{item.observacoes}</td>
+                                                    <td style={{ color: "green" }}>{item.data_inicio}</td>
+                                                    <td style={{ color: "green" }}>{item.data_fim}</td>
+                                                    <td style={{ color: "green" }}>{horas(item)}</td>
+                                                    <td style={{ color: "green" }}>{verifica(item.verificar)}</td>
+                                                    <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
+                                                </tr>
+                                            </MDBTableBody>
+                                        </React.Fragment>
+                                    }
 
-                                        </tr>
-                                    </MDBTableBody>
-                                ))
+                                    else if (item.total_erros == "1") {
+                                        return <React.Fragment>
+                                            <MDBTableBody key={index}>
+                                                <tr>
+                                                    <td style={{ color: "yellow" }}>{item.id_intervencao}</td>
+                                                    <td style={{ color: "yellow" }}>{item.id_equipa}</td>
+                                                    <td style={{ color: "yellow" }}>{item.total_erros}</td>
+                                                    <td style={{ color: "yellow" }}>{item.observacoes}</td>
+                                                    <td style={{ color: "yellow" }}>{item.data_inicio}</td>
+                                                    <td style={{ color: "yellow" }}>{item.data_fim}</td>
+                                                    <td style={{ color: "yellow" }}>{horas(item)}</td>
+                                                    <td style={{ color: "yellow" }}>{verifica(item.verificar)}</td>
+                                                    <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
+                                                </tr>
+                                            </MDBTableBody>
+                                        </React.Fragment>
+                                    }
+                                    else {
+                                        return <React.Fragment>
+                                            <MDBTableBody key={index}>
+                                                <tr>
+                                                    <td style={{ color: "red" }}>{item.id_intervencao}</td>
+                                                    <td style={{ color: "red" }}>{item.id_equipa}</td>
+                                                    <td style={{ color: "red" }}>{item.total_erros}</td>
+                                                    <td style={{ color: "red" }}>{item.observacoes}</td>
+                                                    <td style={{ color: "red" }}>{item.data_inicio}</td>
+                                                    <td style={{ color: "red" }}>{item.data_fim}</td>
+                                                    <td style={{ color: "red" }}>{horas(item)}</td>
+                                                    <td style={{ color: "red" }}>{verifica(item.verificar)}</td>
+                                                    <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
+                                                </tr>
+                                            </MDBTableBody>
+                                        </React.Fragment>
+                                    }
+
+                                })
                             )}
                         </MDBTable>
                     </MDBCol>
