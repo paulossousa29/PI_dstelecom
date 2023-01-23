@@ -17,6 +17,8 @@ from torchvision.io import read_image
 from torchvision.utils import draw_bounding_boxes
 import torchvision.transforms as transforms
 import numpy as np
+import glob 
+import webcolors
 
 from src.server.instance import server
 from src.database.db import db
@@ -135,6 +137,48 @@ def verifyOcupationConnector(num_connector, grid, values):
     print('Erro: conetor diferente do suposto')
   
   return label == 'ConectorOcupado'
+
+def most_common_used_color(img):
+    # Get width and height of Image
+    width, height = img.size
+ 
+    # Initialize Variable
+    r_total = 0
+    g_total = 0
+    b_total = 0
+ 
+    count = 0
+ 
+    # Iterate through each pixel
+    for x in range(0, width):
+        for y in range(0, height):
+            # r,g,b value of pixel
+            r, g, b = img.getpixel((x, y))
+ 
+            r_total += r
+            g_total += g
+            b_total += b
+            count += 1
+ 
+    return (r_total/count, g_total/count, b_total/count)
+
+def closest_colour(requested_colour):
+    min_colours = {}
+    for key, name in webcolors.CSS3_HEX_TO_NAMES.items():
+        r_c, g_c, b_c = webcolors.hex_to_rgb(key)
+        rd = (r_c - requested_colour[0]) ** 2
+        gd = (g_c - requested_colour[1]) ** 2
+        bd = (b_c - requested_colour[2]) ** 2
+        min_colours[(rd + gd + bd)] = name
+    return min_colours[min(min_colours.keys())]
+
+def get_colour_name(requested_colour):
+    try:
+        closest_name = actual_name = webcolors.rgb_to_name(requested_colour)
+    except ValueError:
+        closest_name = closest_colour(requested_colour)
+        actual_name = None
+    return actual_name, closest_name
 
 # PASSO 1: Identificar a referencia do PDO e verificar se coincide com a ordem de trabalho
 def step1(img):
@@ -394,6 +438,7 @@ def step4(img, original_size):
         img = img.resize(original_size)
 
         server.setDrop(int(num_drop))
+        print('Drop alterado para: ', num_drop)
 
         img_uri = pil2datauri(img)
 
@@ -415,6 +460,7 @@ def step5(img):
     # Fazer uma nova deteção à imagem
     output = {}
     drop = server.getDrop()
+    print('Drop a ser verificado: ', str(drop))
 
     model = models[2]
     results = model(img)
@@ -440,8 +486,31 @@ def step5(img):
     return output, 200
 
 # PASSO 7: Identificar o tabuleiro verde para fusão
-def step7():
-    return {'result': 'true'}, 200
+def step7(img):
+    output = {}
+
+    model = models[0]
+    results = model(img)
+    _ = results.crop(save=True, save_dir='static/crops')
+
+    path = 'static/crops/crops/TabuleiroAberto'
+    images = []
+    for filename in glob.glob(path + '/*.jpg'):
+        i = Image.open(filename) 
+        images.append(i)
+    print('Número de crops: ', str(len(images)))
+
+    img = images[0]
+    img = img.convert('RGB')
+    common_color = most_common_used_color(img)
+    _, closest_name = get_colour_name(common_color)
+
+    if 'green' in closest_name:
+        output = {'result': 'true'}
+    else:
+        output = {'result': 'false'}
+
+    return output, 200
 
 # PASSO 9: Ligar no conetor
 def step9(img, connector):
@@ -542,7 +611,7 @@ class ObjectDetection(Resource):
             elif step == 5:
                 return step5(img)
             elif step == 7:
-                return step7()
+                return step7(img)
             elif step == 9:
                 return step9(img, connector)
             elif step == 11:
