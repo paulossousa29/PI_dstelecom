@@ -156,19 +156,19 @@ function RelTable() {
         }
         else return "Verificado"
     }
-
+    let cor
     const cores = (i) => {
 
-        if (i == "0") {
-            return <span style={{ color: 'green' }}> {i} </span>
+        if (i.total_erros == "0") {
+            cor = "style={{ color: 'green' }}"
         }
-
-        if (i == "2") {
-            return <span style={{ color: 'yellow' }}> {i} </span>;
+        if (i.total_erros == "2") {
+            cor = "style={{ color: 'yellow' }}"
         }
+        else cor = "style={{ color: 'red' }}"
 
 
-        else return <span style={{ color: 'red' }}> {i} </span>;
+        return cor
 
     }
 
@@ -334,16 +334,15 @@ function RelTable() {
                                 data.map((item, index) => (
                                     <MDBTableBody key={index}>
                                         <tr>
-                                            {console.log("o id é:")}
-                                            {console.log(item.id)}
-                                            <td>{item.id_intervencao}</td>
-                                            <td>{item.id_equipa}</td>
-                                            <td>{cores(item.total_erros)}</td>
-                                            <td>{item.observacoes}</td>
-                                            <td>{item.data_inicio}</td>
-                                            <td>{item.data_fim}</td>
-                                            <td>{horas(item)}</td>
-                                            <td>{verifica(item.verificar)}</td>
+                                            {cores(item)}
+                                            <td {...cor}>{item.id_intervencao}</td>
+                                            <td {...cor}>{item.id_equipa}</td>
+                                            <td {...cor}>{item.total_erros}</td>
+                                            <td {...cor}>{item.observacoes}</td>
+                                            <td {...cor}>{item.data_inicio}</td>
+                                            <td {...cor}>{item.data_fim}</td>
+                                            <td {...cor}>{horas(item)}</td>
+                                            <td {...cor}>{verifica(item.verificar)}</td>
                                             <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
 
                                         </tr>
