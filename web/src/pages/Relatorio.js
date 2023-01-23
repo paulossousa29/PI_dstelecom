@@ -37,7 +37,8 @@ const Relatorio = () => {
   }
 
   async function handleValidacao(id){
-    const res = await fetch(ip.backend_ip + "relatorio/valid/" + idRel);
+    console.log(id);
+    const res = await fetch(ip.backend_ip + "valid/" + id);
     const relatorioValido = await res.json();
     setRelatorio(relatorioValido);
   }
