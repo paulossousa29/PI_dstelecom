@@ -166,15 +166,13 @@ app.get("/equipa/delete/:id", async (req, res) => {
 
 
 
-app.get("/relatorios/:start/:end", async (req, res) => {
+app.get("/relatorios", async (req, res) => {
 	console.log("request relatorios");
-	const start = req.params.start;
-	const end = req.params.end;
 	obj = [];
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
-			" SELECT r.id, r.id_intervencao, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao LIMIT " + end + "OFFSET " + start + ";"
+			" SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ;"
 		);
 		res.json(allTodos.rows);
 	} catch (err) {
@@ -378,14 +376,12 @@ app.post("/conetor", async (req, res) => {
 	}
 });
 
-app.get("/searchstat/:search/:start/:end", async (req, res) => {
+app.get("/searchstat/:search", async (req, res) => {
 	const search = req.params.search;
-	const start = req.params.start;
-	const end = req.params.end;
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
-			"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id WHERE e.id LIKE '" + search + "%' GROUP BY e.id LIMIT " + end + "OFFSET " + start + ";"
+			"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id WHERE e.id LIKE '" + search + "%' GROUP BY e.id;"
 		);
 		console.log(allTodos.rows[0]);
 		res.json(allTodos.rows);
@@ -394,16 +390,14 @@ app.get("/searchstat/:search/:start/:end", async (req, res) => {
 	}
 });
 
-app.get("/sortstat/:sort/:start/:end", async (req, res) => {
+app.get("/sortstat/:sort", async (req, res) => {
 	const sort = req.params.sort;
-	const start = req.params.start;
-	const end = req.params.end;
 	console.log(sort)
 	if (sort == "Total de Trabalhos") {
 		try {
 			pool.connect();
 			const allTodos = await pool.query(
-				"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id ORDER BY total_jobs ASC LIMIT " + end + "OFFSET " + start + ";"
+				"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id ORDER BY total_jobs ASC;"
 
 			);
 			console.log(allTodos.rows[0]);
@@ -416,7 +410,7 @@ app.get("/sortstat/:sort/:start/:end", async (req, res) => {
 		try {
 			pool.connect();
 			const allTodos = await pool.query(
-				"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id ORDER BY media_erro ASC LIMIT " + end + "OFFSET " + start + ";"
+				"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id ORDER BY media_erro ASC;"
 			);
 			console.log(allTodos.rows[0]);
 			res.json(allTodos.rows);
@@ -428,7 +422,7 @@ app.get("/sortstat/:sort/:start/:end", async (req, res) => {
 		try {
 			pool.connect();
 			const allTodos = await pool.query(
-				"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id ORDER BY media_tempo ASC LIMIT " + end + "OFFSET " + start + ";"
+				"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id ORDER BY media_tempo ASC ;"
 			);
 			console.log(allTodos.rows[0]);
 			res.json(allTodos.rows);
@@ -439,15 +433,13 @@ app.get("/sortstat/:sort/:start/:end", async (req, res) => {
 }
 );
 
-app.get("/stats/:start/:end", async (req, res) => {
+app.get("/stats", async (req, res) => {
 	console.log("request stats");
-	const start = req.params.start;
-	const end = req.params.end;
 	obj = [];
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
-			"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id LIMIT " + end + "OFFSET " + start + ";"
+			"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id;"
 		);
 		console.log(allTodos.rows);
 		res.json(allTodos.rows);
@@ -512,7 +504,7 @@ app.post("/report", async (req, res) => {
 });
 
 
-app.get("/pedidos/:start/:end", async (req, res) => {
+app.get("/pedidos", async (req, res) => {
 	console.log("request pedidos");
 	const start = req.params.start;
 	const end = req.params.end;
@@ -521,7 +513,7 @@ app.get("/pedidos/:start/:end", async (req, res) => {
 		pool.connect();
 
 		const allTodos = await pool.query(
-			"SELECT * FROM pedidos WHERE estado = 0 LIMIT " + end + "OFFSET " + start + ";"
+			"SELECT * FROM pedidos WHERE estado = 0;"
 		);
 		console.log(allTodos.rows);
 		allTodos.rows.forEach((c) => {
@@ -542,8 +534,7 @@ app.get("/pedidos/:start/:end", async (req, res) => {
 app.get("/pedidosaceites/:id", async (req, res) => {
 	console.log("request pedidos aceites");
 	const id = req.params.id;
-	/* const start = req.params.start;
-	const end = req.params.end; */
+	obj = [];
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
@@ -552,7 +543,15 @@ app.get("/pedidosaceites/:id", async (req, res) => {
 		const final = await pool.query(
 			"SELECT * FROM pedidos WHERE estado = 0 ;"
 		);
-		res.json(final.rows);
+		final.rows.forEach((c) => {
+			obj.push({
+				id_intervencao: c.id_intervencao,
+				estado: "Suspenso",
+				descricao: c.descricao,
+				id: c.id,
+			});
+		});
+		res.json(obj);
 		console.log(final);
 	} catch (err) {
 		console.error(err.message);
@@ -572,7 +571,15 @@ app.get("/pedidosrecusados/:id", async (req, res) => {
 		const final = await pool.query(
 			"SELECT * FROM pedidos WHERE estado = 0;"
 		);
-		res.json(final.rows);
+		final.rows.forEach((c) => {
+			obj.push({
+				id_intervencao: c.id_intervencao,
+				estado: "Suspenso",
+				descricao: c.descricao,
+				id: c.id,
+			});
+		});
+		res.json(obj);
 		console.log(final);
 	} catch (err) {
 		console.error(err.message);
