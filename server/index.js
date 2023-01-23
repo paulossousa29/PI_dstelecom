@@ -64,7 +64,7 @@ app.get("valid/:id", async(req,res) => {
 		const final = await pool.query("SELECT * FROM relatorios WHERE id = " + id + ";");
 		res.json(final.rows);
 	} catch (err) {
-		console.error(err.message);		
+		console.error(err.message);
 	}
 })
 
@@ -575,6 +575,7 @@ app.get("/pedidosaceites/:id", async (req, res) => {
 app.get("/pedidosrecusados/:id", async (req, res) => {
 	console.log("request pedidos recusados");
 	const id = req.params.id;
+	obj = [];
 	/* const start = req.params.start;
 	const end = req.params.end; */
 	try {
