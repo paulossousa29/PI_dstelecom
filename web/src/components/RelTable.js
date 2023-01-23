@@ -261,42 +261,6 @@ function RelTable() {
             }}>
                 <div className= "row">
                     <div className="col">
-                        <form
-                            style={{
-                                width: "50%", borderRadius: "2px", height: "35px", marginBottom: "20px",
-                                margin: "auto",
-                                padding: "30px",
-                                maxWidth: "500px",
-                                alignContent: "start",
-                            }}
-                            className="d-flex input-group w-auto"
-                            onSubmit={handleSearch}
-                        >
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Pesquisa "
-                                value={value}
-                                onChange={(e) => setValue(e.target.value)}
-                            />
-                            <div class='parent'>
-                                <div className="row">
-                                    <div className="col">
-                                        <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" type="submit" color="light">
-                                            Search
-                                        </button>
-                                    </div>
-                                    <div className="col">
-                                        <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" color="info" onClick={() => handleReset()}>
-                                            Reset
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </form>
-                    </div>
-                    <div className="col">
                         {data.length > 0 && (
                             <MDBRow>
                                 <MDBCol size="8">
@@ -316,6 +280,31 @@ function RelTable() {
                                 </MDBCol>
                             </MDBRow>
                         )}
+                    </div>
+                    <div className="col">
+                        <form
+                            style={{
+                                width: "50%", borderRadius: "2px", height: "35px", marginBottom: "20px",
+                                margin: "auto",
+                                padding: "30px",
+                                maxWidth: "500px",
+                                alignContent: "start",
+                            }}
+                            className="d-flex input-group w-auto"
+                            onSubmit={handleSearch}
+                        >
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Pesquisa "
+                                value={value}
+                                onChange={(e) => setValue(e.target.value)}
+                            />
+                            <div class='parent'>
+                                <button icon="fas fa-sign-out-alt" type="submit" className="child btn btn-outline-dark"> Pesquisar </button>
+                                <button icon="fas fa-sign-out-alt" className="child btn btn-outline-dark" onClick={() => handleReset()}> Reset </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <MDBRow>
