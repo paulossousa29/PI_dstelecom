@@ -11,11 +11,18 @@ class Server():
             doc='/docs'
         )
         self.drop = None 
+        self.crop_size = 0
 
     def getDrop(self,):
         return self.drop 
     
     def setDrop(self,drop):
         self.drop = drop
+
+    def getCropSize(self,):
+        return self.crop_size 
+    
+    def setCropSize(self,size):
+        self.crop_size = size
 
 server = Server()

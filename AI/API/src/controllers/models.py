@@ -437,6 +437,7 @@ def step4(img, original_size):
         img = torchvision.transforms.ToPILImage()(img)
         img = img.resize(original_size)
 
+        print('Drop devolvido pela função: ', num_drop)
         server.setDrop(int(num_drop))
         print('Drop alterado para: ', str(server.getDrop()))
 
@@ -491,9 +492,14 @@ def step7(img):
 
     model = models[0]
     results = model(img)
-    _ = results.crop(save=True, save_dir='static/crops')
+    _ = results.crop(save=True, save_dir='static')
+    crop_size = server.getCropSize()
+    print('Crop size: ', crop_size)
+    crop = 'crops' + str(crop_size)
+    server.setCropSize(crop_size + 1)
+    print('Novo crop size: ', str(server.getCropSize()))
 
-    path = 'static/crops/crops/TabuleiroAberto'
+    path = 'static/' + crop + '/TabuleiroAberto'
     images = []
     for filename in glob.glob(path + '/*.jpg'):
         i = Image.open(filename) 
