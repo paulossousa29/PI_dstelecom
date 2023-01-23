@@ -53,7 +53,7 @@ function RelTable() {
 					.catch((err) => console.log(err));
 			default:
 				return await axios
-					.get(ip.backend_ip + 'pedidos/' + start + '/' + end)
+					.get(ip.backend_ip + 'pedidos')
 					.then((response) => {
 						setData(response.data);
 						setCurrentPage(currentPage + increase);

@@ -72,7 +72,7 @@ function RelTable() {
                     .catch((err) => console.log(err));
             default:
                 return await axios
-                    .get(ip.backend_ip + 'relatorios/' + start + '/' + end)
+                    .get(ip.backend_ip + 'relatorios')
                     .then((response) => {
                         setData(response.data);
                         setCurrentPage(currentPage + increase);
