@@ -157,6 +157,21 @@ function RelTable() {
         else return "Verificado"
     }
 
+    const cores = (i) => {
+
+        if (i == "0") {
+            return <span style={{ color: 'green' }}> {i} </span>
+        }
+
+        if (i == "2") {
+            return <span style={{ color: 'yellow' }}> {i} </span>;
+        }
+
+
+        else return <span style={{ color: 'red' }}> {i} </span>;
+
+    }
+
 
 
     const renderPagination = () => {
@@ -323,7 +338,7 @@ function RelTable() {
                                             {console.log(item.id)}
                                             <td>{item.id_intervencao}</td>
                                             <td>{item.id_equipa}</td>
-                                            <td>{item.total_erros}</td>
+                                            <td>{cores(item.total_erros)}</td>
                                             <td>{item.observacoes}</td>
                                             <td>{item.data_inicio}</td>
                                             <td>{item.data_fim}</td>
