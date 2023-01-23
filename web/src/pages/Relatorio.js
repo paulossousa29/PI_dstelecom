@@ -36,6 +36,12 @@ const Relatorio = () => {
     }
   }
 
+  async function handleValidacao(id){
+    const res = await fetch(ip.backend_ip + "relatorio/" + id + "/valid");
+    const relatorioValido = await res.json();
+    setRelatorio(relatorioValido);
+  }
+
   function isValid (status){
     if (status === 0){
       // Não verificado
@@ -44,7 +50,7 @@ const Relatorio = () => {
           <b>Não verificado</b>
         </div>
         <div className='col'>
-          <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark"> Validar </button>
+          <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleValidacao(idRel)}> Validar </button>
         </div>
       </React.Fragment>
     }
