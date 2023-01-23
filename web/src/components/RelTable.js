@@ -255,63 +255,69 @@ function RelTable() {
 
     return (
         <MDBContainer>
-            <form
-                style={{
-                    width: "50%", borderRadius: "2px", height: "35px", marginBottom: "20px",
-                    margin: "auto",
-                    padding: "30px",
-                    maxWidth: "500px",
-                    alignContent: "start",
-                }}
-                className="d-flex input-group w-auto"
-                onSubmit={handleSearch}
-            >
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Pesquisa "
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                />
-                <div class='parent'>
-                    <div className="row">
-                        <div className="col">
-                            <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" type="submit" color="light">
-                                Search
-                            </button>
-                        </div>
-                        <div className="col">
-                            <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" color="info" onClick={() => handleReset()}>
-                                Reset
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-            </form>
             <div style={{
                 marginTop: "50px",
                 padding: "20px"
             }}>
-                {data.length > 0 && (
-                    <MDBRow>
-                        <MDBCol size="8">
-                            <h5>Filtrar por:</h5>
-                            <select
-                                style={{ width: "50%", borderRadius: "12px", height: "35px", marginBottom: "20px" }}
-                                onChange={handleSort}
-                                value={sortValue}
-                            >
-                                <option>Selecione um Valor</option>
-                                {sortOptions.map((item, index) => (
-                                    <option value={item} key={index}>
-                                        {item}
-                                    </option>
-                                ))}
-                            </select>
-                        </MDBCol>
-                    </MDBRow>
-                )}
+                <div className= "row">
+                    <div className="col">
+                        <form
+                            style={{
+                                width: "50%", borderRadius: "2px", height: "35px", marginBottom: "20px",
+                                margin: "auto",
+                                padding: "30px",
+                                maxWidth: "500px",
+                                alignContent: "start",
+                            }}
+                            className="d-flex input-group w-auto"
+                            onSubmit={handleSearch}
+                        >
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Pesquisa "
+                                value={value}
+                                onChange={(e) => setValue(e.target.value)}
+                            />
+                            <div class='parent'>
+                                <div className="row">
+                                    <div className="col">
+                                        <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" type="submit" color="light">
+                                            Search
+                                        </button>
+                                    </div>
+                                    <div className="col">
+                                        <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" color="info" onClick={() => handleReset()}>
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div className="col">
+                        {data.length > 0 && (
+                            <MDBRow>
+                                <MDBCol size="8">
+                                    <h5>Filtrar por:</h5>
+                                    <select
+                                        style={{ width: "50%", borderRadius: "12px", height: "35px", marginBottom: "20px" }}
+                                        onChange={handleSort}
+                                        value={sortValue}
+                                    >
+                                        <option>Selecione um Valor</option>
+                                        {sortOptions.map((item, index) => (
+                                            <option value={item} key={index}>
+                                                {item}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </MDBCol>
+                            </MDBRow>
+                        )}
+                    </div>
+                </div>
                 <MDBRow>
                     <MDBCol size="12">
                         <MDBTable>
