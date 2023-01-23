@@ -54,19 +54,17 @@ app.get("/todos", async (req, res) => {
 	}
 });
 
-app.get("valid/:id", async(req,res) => {
-	console.log("request pedidos aceites");
+app.get("/valid/:id", async (req, res) => {
 	const id = req.params.id;
-	console.log(id)
 	try {
 		pool.connect();
-		await pool.query("UPDATE relatorios SET verificar = 1 WHERE id = " + id + ";");
+		const relatorio = await pool.query("UPDATE relatorios SET verificar = 1 WHERE id = " + id + ";");
 		const final = await pool.query("SELECT * FROM relatorios WHERE id = " + id + ";");
 		res.json(final.rows);
 	} catch (err) {
-		console.error(err.message);
+		console.log(err.message);
 	}
-})
+});
 
 app.get("/relatorio/:id", async (req, res) => {
 	const id = req.params.id;
