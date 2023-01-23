@@ -54,9 +54,10 @@ app.get("/todos", async (req, res) => {
 	}
 });
 
-app.get("relatorio/valid/:id", async(req,res) => {
+app.get("valid/:id", async(req,res) => {
 	console.log("request pedidos aceites");
 	const id = req.params.id;
+	console.log(id)
 	try {
 		pool.connect();
 		await pool.query("UPDATE relatorios SET verificar = 1 WHERE id = " + id + ";");
