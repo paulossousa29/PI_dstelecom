@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { isValidElement, useState } from "react";
 import SlideShow from "../components/SlideShow";
 import NavBar from "../components/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -36,6 +36,32 @@ const Relatorio = () => {
     }
   }
 
+  async function handleValidacao(id){
+    const res = await fetch(ip.backend_ip + "relatorio/" + id + "/valid");
+    const relatorioValido = await res.json();
+    setRelatorio(relatorioValido);
+  }
+
+  function isValid (status){
+    if (status === 0){
+      // Não verificado
+      return <React.Fragment>
+        <div className='col'>
+          <b>Não verificado</b>
+        </div>
+        <div className='col'>
+          <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleValidacao(idRel)}> Validar </button>
+        </div>
+      </React.Fragment>
+    }
+    else{
+      return <React.Fragment>
+        <div className='col'>
+          <b>Verificado</b>
+        </div>
+      </React.Fragment>
+    }
+  }
 
   return (
     <React.Fragment>
@@ -49,6 +75,11 @@ const Relatorio = () => {
                 <ul className="list-group">
                   {relatorio.map((e) => (
                     <React.Fragment>
+                      <li className="list-group-item">
+                        <div className='row'>
+                          {isValid(e.verificar)}
+                        </div>
+                      </li>
                       <li className="list-group-item">
                         <div className='row'>
                           <div className='col'>
