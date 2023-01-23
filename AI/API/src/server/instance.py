@@ -10,11 +10,12 @@ class Server():
             description='API with Machine Learning models deployed',
             doc='/docs'
         )
-        self.drop_identificado = None
+        self.drop = None 
 
-    '''def run(self,):
-        self.app.run(
-            debug=True
-        )'''
+    def getDrop(self,):
+        return self.drop 
+    
+    def setDrop(self,drop):
+        self.drop = drop
 
 server = Server()

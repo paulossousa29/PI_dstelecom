@@ -21,7 +21,7 @@ class Database():
                 "description": "Deteção de drops ocupados e livres"
             }
         ]
-    
+
     def getModels(self,):
         return self.models 
 

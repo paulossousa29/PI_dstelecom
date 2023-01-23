@@ -286,6 +286,7 @@ def step2(img, original_size, connector):
         if len(values) > 0:
             row = values[id_escolhido]
 
+            label = row[6]
             xmin = row[0]
             ymin = row[1]
             xmax = row[2]
@@ -392,6 +393,8 @@ def step4(img, original_size):
         img = torchvision.transforms.ToPILImage()(img)
         img = img.resize(original_size)
 
+        server.setDrop(num_drop)
+
         img_uri = pil2datauri(img)
 
         print('imagem detetada no passo 4')
@@ -405,18 +408,19 @@ def step4(img, original_size):
     else:
         output = {'error': 'O resultado da deteção não teve sucesso!'}
 
-    return output, int(num_drop)
+    return output, 200
 
 # PASSO 5: Passar o cabo de drop pelo slot
-def step5(img, drop):
+def step5(img):
     # Fazer uma nova deteção à imagem
-    '''output = {}
+    output = {}
+    drop = server.getDrop()
 
     model = models[2]
     results = model(img)
     outputs = results.pandas().xyxy[0]
 
-    outputs.drop(outputs[outputs['confidence'] < 0.5].index, inplace=True)
+    outputs.drop(outputs[outputs['confidence'] < 0.55].index, inplace=True)
     values = outputs.values
     print(values[:3])
 
@@ -429,9 +433,9 @@ def step5(img, drop):
     if verifyOcupationDrop(drop, grid['grid'], values):
         output = {'result': 'true'}
     else:
-        output = {'result': 'false'}'''
+        output = {'result': 'false'}
 
-    return {'result': 'true'}, 200
+    return output, 200
 
 # PASSO 7: Identificar o tabuleiro verde para fusão
 def step7():
@@ -532,12 +536,9 @@ class ObjectDetection(Resource):
             elif step == 3:
                 return step3()
             elif step == 4:
-                output, drop = step4(img, original_size)
-                server.drop_identificado = drop 
-                return output, 200
+                return step4(img, original_size)
             elif step == 5:
-                output = step5(img, server.drop_identificado)
-                return output
+                return step5(img)
             elif step == 7:
                 return step7()
             elif step == 9:
