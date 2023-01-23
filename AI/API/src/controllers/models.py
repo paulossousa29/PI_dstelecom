@@ -438,7 +438,7 @@ def step4(img, original_size):
         img = img.resize(original_size)
 
         server.setDrop(int(num_drop))
-        print('Drop alterado para: ', num_drop)
+        print('Drop alterado para: ', str(server.getDrop()))
 
         img_uri = pil2datauri(img)
 
@@ -500,15 +500,18 @@ def step7(img):
         images.append(i)
     print('Número de crops: ', str(len(images)))
 
-    img = images[0]
-    img = img.convert('RGB')
-    common_color = most_common_used_color(img)
-    _, closest_name = get_colour_name(common_color)
+    if len(images) > 0:
+        img = images[0]
+        img = img.convert('RGB')
+        common_color = most_common_used_color(img)
+        _, closest_name = get_colour_name(common_color)
 
-    if 'green' in closest_name:
-        output = {'result': 'true'}
+        if 'green' in closest_name:
+            output = {'result': 'true'}
+        else:
+            output = {'result': 'false'}
     else:
-        output = {'result': 'false'}
+        output = {'error': 'Não foi encontrado qualquer tabuleiro aberto'}
 
     return output, 200
 
