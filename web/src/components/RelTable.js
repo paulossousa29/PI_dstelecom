@@ -274,12 +274,18 @@ function RelTable() {
                     onChange={(e) => setValue(e.target.value)}
                 />
                 <div class='parent'>
-                    <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" type="submit" color="light">
-                        Search
-                    </button>
-                    <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" color="info" onClick={() => handleReset()}>
-                        Reset
-                    </button>
+                    <div className="row">
+                        <div className="col">
+                            <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" type="submit" color="light">
+                                Search
+                            </button>
+                        </div>
+                        <div className="col">
+                            <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" color="info" onClick={() => handleReset()}>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
 
                 </div>
             </form>
