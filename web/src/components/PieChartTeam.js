@@ -49,6 +49,9 @@ const Pie = () => {
   console.log("RELATORIOS")
   console.log(relatorios)
 
+  console.log("DATA");
+  console.log(data)
+
 
   //console.log(data);
   React.useEffect(() => {
