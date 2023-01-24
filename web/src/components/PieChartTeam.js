@@ -23,6 +23,8 @@ const Pie = () => {
     let i ;
     let passo_1 = 0, passo_3 = 0, passo_5 = 0, passo_7 = 0, passo_9 = 0, passo_11 = 0, passo_12 = 0, passo_13 = 0;
     for (i = 0; i < relatorios.length; i++){
+      console.log("Relatorio" + i)
+      console.log(relatorios[i])
       passo_1 += relatorios[i].passo_1
       passo_3 += relatorios[i].passo_3
       passo_5 += relatorios[i].passo_5
@@ -46,11 +48,11 @@ const Pie = () => {
     setData(aux);
   }
 
-  console.log("RELATORIOS")
+ /*  console.log("RELATORIOS")
   console.log(relatorios)
 
   console.log("DATA");
-  console.log(data)
+  console.log(data) */
 
 
   //console.log(data);
