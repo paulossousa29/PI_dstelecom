@@ -31,7 +31,7 @@ function StatsTable() {
   const navigate = useNavigate();
 
 
-  const sortOptions = ["Total de Trabalhos", "Média de Erros", "Média de Tempo/Trabalho"];
+  const sortOptions = ["Total de Trabalhos", "Média de Erros", "Média de Tempo"];
 
   useEffect(() => {
     loadUsersData(0, 4, 0);
