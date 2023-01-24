@@ -20,8 +20,6 @@ const Pie = () => {
     const res = await fetch(ip.backend_ip + "equiRel/" + id);
     const relatoriosAux = await res.json();
     setRelatorio(relatoriosAux);
-    console.log("RELATORIOS")
-    console.log(relatoriosAux)
     let i ;
     let passo_1, passo_3, passo_5, passo_7, passo_9, passo_11, passo_12, passo_13;
     for (i = 0; i < relatorios.length; i++){
@@ -48,8 +46,11 @@ const Pie = () => {
     setData(aux);
   }
 
+  console.log("RELATORIOS")
+  console.log(relatorios)
 
-  console.log(data);
+
+  //console.log(data);
   React.useEffect(() => {
     getRelatorios(id);
   }, []);
