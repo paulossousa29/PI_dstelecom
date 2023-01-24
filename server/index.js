@@ -75,7 +75,7 @@ app.get("/equiRel/:id", async (req, res) => {
 		const inter = intervencoes.rows
 		let query = "SELECT * FROM relatorios WHERE id_intervencao = '"
 		let i;
-		for (i = 0; i < inter.length-1; i++){
+		for (i = 0; i < inter.length - 1; i++) {
 			query += inter[i].id + "' or id_intervencao = '"
 		}
 		query += inter[i].id + "';"
@@ -451,7 +451,7 @@ app.get("/sortstat/:sort", async (req, res) => {
 			console.error(err.message);
 		}
 	}
-	if (sort == "Média de Tempo/Trabalho") {
+	if (sort == "Média de Tempo") {
 		try {
 			pool.connect();
 			const allTodos = await pool.query(
