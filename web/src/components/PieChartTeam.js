@@ -5,11 +5,14 @@ import ip from '../config/ip';
 
 
 const Pie = () => {
+  console.log("entrei")
   const id ="CGO0027"
   const options = {
     title: "Estatísticas Equipa 1",
     is3D: true,
   };
+
+  const [data, setData] = useState([]);
 
   const [relatorios, setRelatorio] = useState([]);
 
@@ -17,9 +20,6 @@ const Pie = () => {
     const res = await fetch(ip.backend_ip + "equiRel/" + id);
     const relatoriosAux = await res.json();
     setRelatorio(relatoriosAux);
-  }
-
-  function estatistica (){
     let i ;
     let passo_1, passo_3, passo_5, passo_7, passo_9, passo_11, passo_12, passo_13;
     for (i = 0; i < relatorios.length; i++){
@@ -32,7 +32,7 @@ const Pie = () => {
       passo_12 += relatorios[i].passo_12
       passo_13 += relatorios[i].passo_13
     }
-    const data = [
+    const aux = [
       ["Passos", "Numero de erros"],
       ["Passo 1", passo_1],
       ["Passo 3", passo_3],
@@ -43,10 +43,11 @@ const Pie = () => {
       ["Passo 12", passo_12],
       ["Passo 13", passo_13],
     ];
-    return data;
+    setData(aux);
   }
 
 
+  console.log(data);
   React.useEffect(() => {
     getRelatorios(id);
   }, []);
@@ -55,7 +56,7 @@ const Pie = () => {
   return (
     <Chart
       chartType="PieChart"
-      data={estatistica()}
+      data={data}
       options={options}
       width={"100%"}
       height={"400px"}
