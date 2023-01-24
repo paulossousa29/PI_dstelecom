@@ -208,16 +208,6 @@ function RelTable() {
 						</MDBTable>
 					</MDBCol>
 				</MDBRow>
-				<div
-					style={{
-						margin: "auto",
-						padding: "15px",
-						maxWidth: "250px",
-						alignContent: "center",
-					}}
-				>
-					{renderPagination()}
-				</div>
 			</div>
 		</MDBContainer >
 	);
