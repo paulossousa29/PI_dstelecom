@@ -495,12 +495,10 @@ def step7(img):
     _ = results.crop(save=True, save_dir='static/crops')
     crop_size = server.getCropSize()
     print('Crop size: ', crop_size)
-    if crop_size == 0:
+    if crop_size > 0:
         crop = 'crops' + str(crop_size)
     else:
         crop = 'crops'
-    server.setCropSize(crop_size + 1)
-    print('Novo crop size: ', str(server.getCropSize()))
 
     path = 'static/' + crop + '/crops/TabuleiroAberto'
     images = []
@@ -510,6 +508,9 @@ def step7(img):
     print('Número de crops: ', str(len(images)))
 
     if len(images) > 0:
+        server.setCropSize(crop_size + 1)
+        print('Novo crop size: ', str(server.getCropSize()))
+
         img = images[0]
         img = img.convert('RGB')
         common_color = most_common_used_color(img)
