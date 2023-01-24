@@ -33,6 +33,7 @@ parser = api.parser()
 parser.add_argument('image', type=FileStorage, location='files', required=True)
 parser.add_argument('step', type=int, required=True)
 parser.add_argument('connector', type=int)
+parser.add_argument('drop', type=int)
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 
 
@@ -438,18 +439,19 @@ def step4(img, original_size):
         img = img.resize(original_size)
 
         print('Drop devolvido pela função: ', num_drop)
-        server.setDrop(int(num_drop))
-        print('Drop guardado no servidor: ', str(server.getDrop()))
 
         img_uri = pil2datauri(img)
 
         print('imagem detetada no passo 4')
         #print('image uri: ', img_uri)
-        output = {'image': {
-            'uri': img_uri,
-            'type': 'image/jpeg',
-            'name': 'image.jpeg'
-        }}
+        output = {
+            'image': {
+                'uri': img_uri,
+                'type': 'image/jpeg',
+                'name': 'image.jpeg'
+            },
+            'drop': int(num_drop)
+        }
 
     else:
         output = {'error': 'O resultado da deteção não teve sucesso!'}
@@ -457,10 +459,9 @@ def step4(img, original_size):
     return output, 200
 
 # PASSO 5: Passar o cabo de drop pelo slot
-def step5(img):
+def step5(img, drop):
     # Fazer uma nova deteção à imagem
     output = {}
-    drop = server.getDrop()
     print('Drop a ser verificado: ', str(drop))
 
     model = models[2]
@@ -481,8 +482,6 @@ def step5(img):
         output = {'result': 'true'}
     else:
         output = {'result': 'false'}
-
-    server.setDrop(None)
 
     return output, 200
 
@@ -584,8 +583,10 @@ class ObjectDetection(Resource):
         uploaded_file = args['image']  # This is FileStorage instance
         step = args['step']
         connector = args['connector']
+        drop = args['drop']
         print('Step: ', step)
         print('Connector: ', connector)
+        print('Drop: ', drop)
 
         if step == None:
             return {'error': 'Erro ao reconhecer o passo do trabalho.'}, 500
@@ -608,7 +609,7 @@ class ObjectDetection(Resource):
             elif step == 4:
                 return step4(img, original_size)
             elif step == 5:
-                return step5(img)
+                return step5(img, drop)
             elif step == 7:
                 return step7(img)
             elif step == 9:
