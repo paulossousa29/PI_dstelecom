@@ -234,7 +234,7 @@ app.get("/relsort/:sort", async (req, res) => {
 		try {
 			pool.connect();
 			const allTodos = await pool.query(
-				"SELECT r.id, r.id_intervencao, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY r.data_inicio ASC"
+				"SELECT r.id, r.id_intervencao, r.verficar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY r.data_inicio ASC"
 			);
 			console.log(allTodos.rows[0]);
 			res.json(allTodos.rows);
@@ -246,7 +246,7 @@ app.get("/relsort/:sort", async (req, res) => {
 		try {
 			pool.connect();
 			const allTodos = await pool.query(
-				"SELECT r.id, r.id_intervencao, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY r.data_fim ASC"
+				"SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY r.data_fim ASC"
 
 			);
 			console.log(allTodos.rows[0]);
@@ -259,7 +259,7 @@ app.get("/relsort/:sort", async (req, res) => {
 		try {
 			pool.connect();
 			const allTodos = await pool.query(
-				"SELECT r.id, r.id_intervencao, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY total_erros ASC"
+				"SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY total_erros ASC"
 			);
 			console.log(allTodos.rows[0]);
 			res.json(allTodos.rows);
@@ -271,7 +271,7 @@ app.get("/relsort/:sort", async (req, res) => {
 		try {
 			pool.connect();
 			const allTodos = await pool.query(
-				"SELECT r.id, r.id_intervencao, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY duracao ASC"
+				"SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY duracao ASC"
 			);
 			console.log(allTodos.rows[0]);
 			res.json(allTodos.rows);
