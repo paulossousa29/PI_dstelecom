@@ -110,7 +110,7 @@ const Equipa = ({ route }) => {
                     </div>
                 </div>
             </div>
-            <div className='row' style={{marginTop:"50%"}}>
+            <div className='row' style={{marginTop:"10%"}}>
                 < Pie id ={id}/>
             </div>
         </React.Fragment>
