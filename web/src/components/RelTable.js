@@ -351,14 +351,14 @@ function RelTable() {
                                     return <React.Fragment>
                                         <MDBTableBody key={index}>
                                             <tr>
-                                                <td style={{ color: "yellow" }}>{item.id_intervencao}</td>
-                                                <td style={{ color: "yellow" }}>{item.id_equipa}</td>
-                                                <td style={{ color: "yellow" }}>{item.total_erros}</td>
-                                                <td style={{ color: "yellow" }}>{item.observacoes}</td>
-                                                <td style={{ color: "yellow" }}>{item.data_inicio}</td>
-                                                <td style={{ color: "yellow" }}>{item.data_fim}</td>
-                                                <td style={{ color: "yellow" }}>{horas(item)}</td>
-                                                <td style={{ color: "yellow" }}>{verifica(item.verificar)}</td>
+                                                <td style={{ color: "#F1A01D " }}>{item.id_intervencao}</td>
+                                                <td style={{ color: "#F1A01D " }}>{item.id_equipa}</td>
+                                                <td style={{ color: "#F1A01D " }}>{item.total_erros}</td>
+                                                <td style={{ color: "#F1A01D " }}>{item.observacoes}</td>
+                                                <td style={{ color: "#F1A01D " }}>{item.data_inicio}</td>
+                                                <td style={{ color: "#F1A01D " }}>{item.data_fim}</td>
+                                                <td style={{ color: "#F1A01D " }}>{horas(item)}</td>
+                                                <td style={{ color: "#F1A01D " }}>{verifica(item.verificar)}</td>
                                                 <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar </button>
                                             </tr>
                                         </MDBTableBody>

@@ -49,11 +49,6 @@ const Pie = ({id}) => {
 
 
 const data = passos()
- /*  console.log("RELATORIOS")
-  console.log(relatorios)
-
-  console.log("DATA");
-  console.log(data) */
 
 
   //console.log(data);
