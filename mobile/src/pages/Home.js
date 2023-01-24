@@ -62,7 +62,7 @@ const Home = ({route, navigation}) => {
       } else if (res.status === 200) {
         navigation.push('AR1', {
           intervention: intervention,
-          date: newDate(),
+          startDate: newDate(),
         });
       } else if (res.status === 401) {
         setErrorMsgIntervention('ID da Intervenção inválido!');

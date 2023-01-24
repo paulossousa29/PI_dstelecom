@@ -46,7 +46,7 @@ const SceneAR = props => {
         )}
         {step === 9 && (
           <ViroImage
-            position={[-0.25, 0.05, 0]}
+          position={[0.1, 0.05, 0.03]}
             scale={[0.1, 0.1, 0.1]}
             rotation={[-90, 0, 0]}
             placeholderSource={require('../assets/redCheck.jpg')}

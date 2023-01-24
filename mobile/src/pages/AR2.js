@@ -13,6 +13,7 @@ const AR2 = ({route, navigation}) => {
   const steps = [2, 3, 4, 5, 7, 9, 11, 12, 13];
 
   const [step, setStep] = useState(2);
+  const [drop, setDrop] = useState(null);
   const [uriConnector, setUriConnector] = useState('https://picsum.photos/200');
   const [uriDrop, setUriDrop] = useState('https://picsum.photos/200');
 
@@ -51,9 +52,11 @@ const AR2 = ({route, navigation}) => {
   const fetchAI = async image => {
     const imageData = new FormData();
 
-    if (step == 2) {
+    if (step == 2 || step == 9) {
       connector = await fetchConnector();
       imageData.append('connector', connector);
+    } else if (step == 5) {
+      imageData.append('drop', drop);
     }
 
     imageData.append('step', step);
@@ -104,6 +107,7 @@ const AR2 = ({route, navigation}) => {
         }
       } else if (step === 4) {
         setUriDrop(res.data.image.uri);
+        setDrop(res.data.drop);
       } else if (step === 5) {
         if (!res.data.result) {
           Alert.alert('Erro técnico', 'Slot de Drop Inválido', [

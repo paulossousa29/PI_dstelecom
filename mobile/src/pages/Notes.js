@@ -43,6 +43,7 @@ const Notes = ({route, navigation}) => {
 
             await axios.post(ip.backend_ip + 'report', {
               id_intervention: intervention,
+              verificar: 0,
               observations: notes,
               step_1: step1 ? 1 : 0,
               step_3: step3 ? 1 : 0,
