@@ -439,7 +439,7 @@ def step4(img, original_size):
 
         print('Drop devolvido pela função: ', num_drop)
         server.setDrop(int(num_drop))
-        print('Drop alterado para: ', str(server.getDrop()))
+        print('Drop guardado no servidor: ', str(server.getDrop()))
 
         img_uri = pil2datauri(img)
 
@@ -492,36 +492,22 @@ def step7(img):
 
     model = models[0]
     results = model(img)
-    _ = results.crop(save=True, save_dir='static/crops')
-    crop_size = server.getCropSize()
-    print('Crop size: ', crop_size)
-    if crop_size > 0:
-        crop = 'crops' + str(crop_size)
-    else:
-        crop = 'crops'
 
-    path = 'static/' + crop + '/crops/TabuleiroAberto'
-    images = []
-    for filename in glob.glob(path + '/*.jpg'):
-        i = Image.open(filename) 
-        images.append(i)
-    print('Número de crops: ', str(len(images)))
+    crops = results.crop()
+    if len(crops) > 0:
+        array = crops[0]['im']
+        img = cv2.cvtColor(array, cv2.COLOR_BGR2RGB)
+        img = Image.fromarray(img)
 
-    if len(images) > 0:
-        server.setCropSize(crop_size + 1)
-        print('Novo crop size: ', str(server.getCropSize()))
-
-        img = images[0]
-        img = img.convert('RGB')
         common_color = most_common_used_color(img)
         _, closest_name = get_colour_name(common_color)
-
-        if 'green' in closest_name:
-            output = {'result': 'true'}
-        else:
-            output = {'result': 'false'}
     else:
-        output = {'error': 'Não foi encontrado qualquer tabuleiro aberto'}
+        output = {'error': 'Nenhum tabuleiro aberto detetado!'}
+
+    if 'green' in closest_name:
+        output = {'result': 'true'}
+    else:
+        output = {'result': 'false'}
 
     return output, 200
 
