@@ -219,7 +219,7 @@ app.get("/searchrel/:search", async (req, res) => {
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
-			"SELECT r.id, r.id_intervencao, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao WHERE r.id_intervencao LIKE '" + search + "%' OR i.id_equipa LIKE '" + search + "%';"
+			"SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao WHERE r.id_intervencao LIKE '" + search + "%' OR i.id_equipa LIKE '" + search + "%';"
 		);
 		res.json(allTodos.rows);
 	} catch (err) {
