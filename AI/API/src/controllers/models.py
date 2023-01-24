@@ -102,17 +102,17 @@ def pil2datauri(img):
     return u'data:img/jpeg;base64,'+data64.decode('utf-8')
 
 
-def getFirstAvailableDrop(grid, values, num_ocupados):
+def getFirstAvailableDrop(grid, values):
 
-    for grid_box in grid:
-        box_list = [grid_box['xmin'], grid_box['ymin'],
-                    grid_box['xmax'], grid_box['ymax']]
-        id = getDropId(box_list, values)
-        row = values[id]
-        label = row[6]
+ for grid_box in grid:
+  box_list = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
+  id = getDropId(box_list, values)
+  row = values[id]
+  label = row[6]
+  num_drop = grid_box['label']
 
-        if label == 'DropLivre':
-            return np.append(row, [str(num_ocupados + 1)], axis=0)
+  if label == 'DropLivre':
+    return np.append(row, [num_drop], axis=0)
 
 def verifyOcupationDrop(num_drop, grid, values):
   grid_box = grid[num_drop-1]
@@ -387,8 +387,8 @@ def step4(img, original_size):
     results = model(img)
     outputs = results.pandas().xyxy[0]
 
-    outputs.drop(outputs[outputs['confidence'] < 0.55].index, inplace=True)
-    num_ocupados = len(outputs.loc[outputs['name'] == 'DropOcupado'].values)
+    #outputs.drop(outputs[outputs['confidence'] < 0.55].index, inplace=True)
+    #num_ocupados = len(outputs.loc[outputs['name'] == 'DropOcupado'].values)
     values = outputs.values
     print(values[:3])
 
@@ -399,7 +399,7 @@ def step4(img, original_size):
 
     if len(values) > 0:
         # Get available drop
-        d = getFirstAvailableDrop(grid['grid'], values, num_ocupados)
+        d = getFirstAvailableDrop(grid['grid'], values)
 
         # Identificar na imagem
         transform = transforms.Compose([
