@@ -66,6 +66,27 @@ app.get("/valid/:id", async (req, res) => {
 	}
 });
 
+
+app.get("/equiRel/:id", async (req, res) => {
+	const id = req.params.id;
+	try {
+		pool.connect();
+		const intervencoes = await pool.query("SELECT id from intervencoes WHERE id_equipa = '" + id + "';");
+		const inter = intervencoes.rows
+		let query = "SELECT * FROM relatorios WHERE id_intervencao = '"
+		let i;
+		for (i = 0; i < inter.length-1; i++){
+			query += inter[i].id + "' or id_intervencao = '"
+		}
+		query += inter[i].id + "';"
+		const final = await pool.query(query);
+		res.json(final.rows);
+	} catch (err) {
+		console.log(err.message);
+	}
+});
+
+
 app.get("/relatorio/:id", async (req, res) => {
 	const id = req.params.id;
 	try {
