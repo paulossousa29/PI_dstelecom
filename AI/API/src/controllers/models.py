@@ -493,7 +493,14 @@ def step7(img):
     results = model(img)
 
     crops = results.crop()
-    if len(crops) > 0:
+    crop = None
+    
+    for elem in crops:
+        if 'TabuleiroAberto' in elem['label']:
+            crop = elem
+            break
+
+    if crop != None:
         array = crops[0]['im']
         img = cv2.cvtColor(array, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(img)
