@@ -20,21 +20,21 @@ const Pie = () => {
     setRelatorio(relatoriosAux);
   }
 
-  const data = () => {
-    let i ;
-    let passo_1 = 0, passo_3 = 0, passo_5 = 0, passo_7 = 0, passo_9 = 0, passo_11 = 0, passo_12 = 0, passo_13 = 0;
-    for (i = 0; i < relatorios.length; i++){
-      console.log("Relatorio" + i)
-      console.log(relatorios[i])
-      passo_1 += relatorios[i].passo_1
-      passo_3 += relatorios[i].passo_3
-      passo_5 += relatorios[i].passo_5
-      passo_7 += relatorios[i].passo_7
-      passo_9 += relatorios[i].passo_9
-      passo_11 += relatorios[i].passo_11
-      passo_12 += relatorios[i].passo_12
-      passo_13 += relatorios[i].passo_13
-    }
+
+  let passo_1 = 0, passo_3 = 0, passo_5 = 0, passo_7 = 0, passo_9 = 0, passo_11 = 0, passo_12 = 0, passo_13 = 0;
+  function passos(){
+    relatorios.map(e => {
+      console.log(e)
+      console.log(e.passo_1)
+      passo_1 += e.passo_1
+      passo_3 += e.passo_3
+      passo_5 += e.passo_5
+      passo_7 += e.passo_7
+      passo_9 += e.passo_9
+      passo_11 += e.passo_11
+      passo_12 += e.passo_12
+      passo_13 += e.passo_13
+    })
     return [
       ["Passos", "Numero de erros"],
       ["Passo 1", passo_1],
@@ -46,7 +46,10 @@ const Pie = () => {
       ["Passo 12", passo_12],
       ["Passo 13", passo_13],
     ];
-}
+  }
+
+
+const data = passos()
  /*  console.log("RELATORIOS")
   console.log(relatorios)
 
