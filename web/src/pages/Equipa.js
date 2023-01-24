@@ -5,6 +5,7 @@ import axios from "axios";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import ip from '../config/ip';
+import Pie from '../components/PieChartTeam'
 
 
 const Equipa = ({ route }) => {
@@ -106,6 +107,7 @@ const Equipa = ({ route }) => {
                                 </button>
                             </div>
                         </form>
+                        <Pie id = {id}/>
                     </div>
                 </div>
             </div>
