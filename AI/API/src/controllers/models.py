@@ -501,13 +501,13 @@ def step7(img):
 
         common_color = most_common_used_color(img)
         _, closest_name = get_colour_name(common_color)
+
+        if 'green' in closest_name:
+            output = {'result': 'true'}
+        else:
+            output = {'result': 'false'}
     else:
         output = {'error': 'Nenhum tabuleiro aberto detetado!'}
-
-    if 'green' in closest_name:
-        output = {'result': 'true'}
-    else:
-        output = {'result': 'false'}
 
     return output, 200
 
