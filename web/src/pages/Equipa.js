@@ -109,7 +109,7 @@ const Equipa = ({ route }) => {
                         </form>
                     </div>
                 </div>
-                <Pie />
+                <Pie id ={id}/>
             </div>
         </React.Fragment>
     );
