@@ -508,7 +508,7 @@ app.post("/report", async (req, res) => {
 			id_intervention +
 			"', " +
 			verificar +
-			"', " +
+			", " +
 			step_1 +
 			", " +
 			step_3 +
