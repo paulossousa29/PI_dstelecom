@@ -4,7 +4,8 @@ import { Chart } from "react-google-charts";
 import ip from '../config/ip';
 
 
-const Pie = ({id}) => {
+const Pie = () => {
+  const id ="CGO0027"
   const options = {
     title: "Estatísticas Equipa 1",
     is3D: true,

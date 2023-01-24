@@ -107,7 +107,7 @@ const Equipa = ({ route }) => {
                                 </button>
                             </div>
                         </form>
-                        <Pie id = {id}/>
+                        <Pie />
                     </div>
                 </div>
             </div>
