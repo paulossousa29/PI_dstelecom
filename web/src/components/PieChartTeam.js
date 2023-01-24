@@ -12,14 +12,15 @@ const Pie = () => {
     is3D: true,
   };
 
-  const [data, setData] = useState([]);
-
   const [relatorios, setRelatorio] = useState([]);
 
   async function getRelatorios(id){
     const res = await fetch(ip.backend_ip + "equiRel/" + id);
     const relatoriosAux = await res.json();
     setRelatorio(relatoriosAux);
+  }
+
+  const data = () => {
     let i ;
     let passo_1 = 0, passo_3 = 0, passo_5 = 0, passo_7 = 0, passo_9 = 0, passo_11 = 0, passo_12 = 0, passo_13 = 0;
     for (i = 0; i < relatorios.length; i++){
@@ -34,7 +35,7 @@ const Pie = () => {
       passo_12 += relatorios[i].passo_12
       passo_13 += relatorios[i].passo_13
     }
-    const aux = [
+    return [
       ["Passos", "Numero de erros"],
       ["Passo 1", passo_1],
       ["Passo 3", passo_3],
@@ -45,9 +46,7 @@ const Pie = () => {
       ["Passo 12", passo_12],
       ["Passo 13", passo_13],
     ];
-    setData(aux);
-  }
-
+}
  /*  console.log("RELATORIOS")
   console.log(relatorios)
 
