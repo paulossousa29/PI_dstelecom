@@ -10,10 +10,11 @@ import ip from '../config/ip';
 
 const AR2 = ({route, navigation}) => {
   const {intervention, startDate, step1} = route.params;
-  const steps = [2, 3, 4, 5, 7, 9, 11, 12, 13];
+  const steps = [2, 4, 5, 7, 9, 12]; //3, 11 e 13 não estão implementados
 
   const [step, setStep] = useState(2);
   const [drop, setDrop] = useState(null);
+
   const [uriConnector, setUriConnector] = useState('https://picsum.photos/200');
   const [uriDrop, setUriDrop] = useState('https://picsum.photos/200');
 
@@ -86,25 +87,25 @@ const AR2 = ({route, navigation}) => {
 
       res = await fetchAI(image);
       if (res === undefined) {
-        Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
+        Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancelar'}]);
         return;
       }
       if (res.data.error) {
-        Alert.alert('Erro', res.data.error, [{text: 'Cancel'}]);
+        Alert.alert('Erro', res.data.error, [{text: 'Cancelar'}]);
         return;
       }
 
       if (step === 2) {
         setUriConnector(res.data.image.uri);
-      } else if (step === 3) {
-        if (res.data.power1490 > -26 && res.data.power1550 > -15)
-          setStep3(true);
-        else {
-          Alert.alert('Erro técnico', 'Potência Inválida', [
-            {text: 'Cancelar'},
-          ]);
-          setStep3(false);
-        }
+        // } else if (step === 3) {
+        //   if (res.data.power1490 > -26 && res.data.power1550 > -15)
+        //     setStep3(true);
+        //   else {
+        //     Alert.alert('Erro técnico', 'Potência Inválida', [
+        //       {text: 'Cancelar'},
+        //     ]);
+        //     setStep3(false);
+        //   }
       } else if (step === 4) {
         setUriDrop(res.data.image.uri);
         setDrop(res.data.drop);
@@ -113,6 +114,10 @@ const AR2 = ({route, navigation}) => {
           Alert.alert('Erro técnico', 'Slot de Drop Inválido', [
             {text: 'Cancelar'},
           ]);
+        } else {
+          Alert.alert('Passo efetuado corretamente', 'Slot de Drop Correto', [
+            {text: 'Continuar'},
+          ]);
         }
         setStep5(res.data.result);
       } else if (step === 7) {
@@ -120,34 +125,48 @@ const AR2 = ({route, navigation}) => {
           Alert.alert('Erro técnico', 'Tabuleiro Inválido', [
             {text: 'Cancelar'},
           ]);
+        } else {
+          Alert.alert(
+            'Passo efetuado corretamente',
+            'Tabuleiro verde reconhecido',
+            [{text: 'Continuar'}],
+          );
         }
         setStep7(res.data.result);
       } else if (step === 9) {
         if (!res.data.result) {
           Alert.alert('Erro técnico', 'Conetor Inválido', [{text: 'Cancelar'}]);
-        }
-        setStep9(res.data.result);
-      } else if (step === 11) {
-        if (!res.data.result) {
-          Alert.alert('Erro técnico', 'Revestimento dos Cabos Incorreto', [
-            {text: 'Cancelar'},
+        } else {
+          Alert.alert('Passo efetuado corretamente', 'Conetor conectado', [
+            {text: 'Continuar'},
           ]);
         }
+        setStep9(res.data.result);
+        // } else if (step === 11) {
+        //   if (!res.data.result) {
+        //     Alert.alert('Erro técnico', 'Revestimento dos Cabos Incorreto', [
+        //       {text: 'Cancelar'},
+        //     ]);
+        //   }
         setStep11(res.data.result);
       } else if (step === 12) {
         if (!res.data.result) {
-          Alert.alert('Erro técnico', 'Tabuleiro Aberto', [{text: 'Cancelar'}]);
-        }
-        setStep12(res.data.result);
-      } else if (step === 13) {
-        access = await fetchAccess();
-
-        if (access !== res.data.access) {
-          Alert.alert('Erro técnico', 'Nome do Acesso Errado', [
-            {text: 'Cancelar'},
+          Alert.alert('Erro técnico', 'Elemento Aberto', [{text: 'Cancelar'}]);
+        } else {
+          Alert.alert('Passo efetuado corretamente', 'Elemento fechado', [
+            {text: 'Continuar'},
           ]);
         }
-        setStep13(access === res.data.access);
+        setStep12(res.data.result);
+        // } else if (step === 13) {
+        //   access = await fetchAccess();
+
+        //   if (access !== res.data.access) {
+        //     Alert.alert('Erro técnico', 'Nome do Acesso Errado', [
+        //       {text: 'Cancelar'},
+        //     ]);
+        //   }
+        //   setStep13(access === res.data.access);
       }
     }
 

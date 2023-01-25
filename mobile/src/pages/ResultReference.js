@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import colors from '../config/colors';
 import ip from '../config/ip';
 import axios from 'axios';
@@ -22,7 +29,11 @@ const ResultReference = ({route, navigation}) => {
     const status = await fetchNewReferenceStatus();
 
     if (status === 1) {
-      Alert.alert('Alteração autorizada', res.data.error, [{text: 'Cancelar'}]);
+      Alert.alert(
+        'Alteração autorizada',
+        'O administrador autorizou a alteração',
+        [{text: 'Continuar'}],
+      );
       navigation.push('AR2', {
         intervention: intervention,
         startDate: startDate,
@@ -30,8 +41,8 @@ const ResultReference = ({route, navigation}) => {
       });
     } else if (status === 2) {
       Alert.alert(
-        'Alteração não autorizada. A cancelar trabalho',
-        res.data.error,
+        'Alteração não autorizada',
+        'O administrador não autorizou a alteração. A cancelar trabalho',
         [{text: 'Cancelar'}],
       );
       navigation.popToTop();

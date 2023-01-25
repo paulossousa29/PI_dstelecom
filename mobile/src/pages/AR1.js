@@ -52,27 +52,37 @@ const AR1 = ({route, navigation}) => {
 
     res = await fetchAI(image);
     if (res === undefined) {
-      Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
+      Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancelar'}]);
       return;
     }
     if (res.status !== 200) {
-      Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancel'}]);
+      Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancelar'}]);
       return;
     }
     if (res.data.error) {
-      Alert.alert('Erro', res.data.error, [{text: 'Cancel'}]);
+      Alert.alert('Erro', res.data.error, [{text: 'Cancelar'}]);
       return;
     }
 
     const element = await fetchElement();
 
     if (!(element === res.data.element)) {
+      Alert.alert(
+        'Referência de Elemento Errada',
+        'Poderá pedir ao administrador para mudar de elemento',
+        [{text: 'Continuar'}],
+      );
       navigation.push('NewReference', {
         intervention: intervention,
         startDate: startDate,
         element: res.data.element,
       });
     } else {
+      Alert.alert(
+        'Referência de Elemento Reconhecida',
+        'Poderá avançar para o processo de intervenção',
+        [{text: 'Continuar'}],
+      );
       navigation.push('AR2', {
         intervention: intervention,
         startDate: startDate,
