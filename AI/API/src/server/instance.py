@@ -11,9 +11,4 @@ class Server():
             doc='/docs'
         )
 
-    '''def run(self,):
-        self.app.run(
-            debug=True
-        )'''
-
 server = Server()
