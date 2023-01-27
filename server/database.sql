@@ -20,3 +20,66 @@ INSERT INTO relatorios (id_intervencao,passo_1 ,passo_3 ,passo_5 ,passo_7 ,passo
 INSERT INTO pedidos (id_intervencao,estado,descricao) VALUES ('ULO18Y',0,'Mudar PDO de localização');
 
 INSERT INTO equipas (id, password, role) VALUES ('user1', 'user1', 0)
+
+
+
+
+table equipas {
+  id varchar [pk, not null] 
+  password VARCHAR
+  role INT
+  
+}
+
+table skill {
+  id INT [pk]
+  id_equipa VARCHAR 
+  ap VARCHAR
+}
+
+Ref: equipas.id < skill.id
+
+TABLE intervencoes {
+  id VARCHAR [pk]
+  acesso VARCHAR
+  elemento VARCHAR(255) 
+  conector INT 
+} 
+
+Ref: equipas.id < intervencoes.id
+
+
+table relatorios {
+  id INT [pk]
+  id_intervencao VARCHAR
+  passo_1 INT
+  passo_3 INT
+  passo_5 INT
+  passo_7 INT 
+  passo_9 INT 
+  passo_11 INT 
+  passo_12  INT 
+  passo_13 INT
+  observacoes VARCHAR
+  data_inicio timestamp
+  data_fim timestamp
+  verificar INT
+} 
+
+Ref: relatorios.id - intervencoes.id
+
+table pedidos {
+    id INT [pk]
+    id_intervencao VARCHAR
+    estado INT
+    descricao VARCHAR
+}
+
+Ref: intervencoes.id < pedidos.id
+
+table avaliacoes {
+    id INT [pk]
+    avaliacao_usabilidade INT 
+    avaliacao_aspeto INT 
+    avaliacao_global INT 
+}
