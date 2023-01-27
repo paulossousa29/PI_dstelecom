@@ -4,6 +4,8 @@ import NavBar from '../components/Navbar';
 import axios from "axios";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import ip from '../config/ip';
+import Pie from '../components/PieChartTeam'
 
 
 const Equipa = ({ route }) => {
@@ -17,14 +19,14 @@ const Equipa = ({ route }) => {
     const [value, setValue] = React.useState("");
 
     async function getSkills(id) {
-        const res = await fetch("http://localhost:3001/equipa/" + id);
+        const res = await fetch(ip.backend_ip + "equipa/" + id);
         const equipaAux = await res.json();
         setEquipa(equipaAux);
     }
 
     const deleteSkill = (id, idEquipa) => {
         return axios
-            .get("http://localhost:3001/equipa/delete/" + id + "/" + idEquipa)
+            .get(ip.backend_ip + "equipa/delete/" + id + "/" + idEquipa)
             .then((response) => {
                 setEquipa(response.data);
                 //setCurrentPage(currentPage + increase);
@@ -33,7 +35,7 @@ const Equipa = ({ route }) => {
     }
 
     const handleAdd = (ap, idEquipa) => {
-        axios.get("http://localhost:3001/equipa/add/" + ap + "/" + idEquipa)
+        axios.get(ip.backend_ip + "equipa/add/" + ap + "/" + idEquipa)
             .then(
                 navigate('/stats')
             )
@@ -107,6 +109,9 @@ const Equipa = ({ route }) => {
                         </form>
                     </div>
                 </div>
+            </div>
+            <div className='row' style={{marginTop:"10%"}}>
+                < Pie id ={id}/>
             </div>
         </React.Fragment>
     );

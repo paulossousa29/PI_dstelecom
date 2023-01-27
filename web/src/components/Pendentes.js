@@ -7,12 +7,12 @@ import {
 	MDBRow,
 	MDBCol,
 	MDBContainer,
-	MDBBtn,
-	MDBBtnGroup,
 	MDBPagination,
 	MDBPaginationItem,
 	MDBPaginationLink,
 } from "mdb-react-ui-kit";
+
+import ip from "../config/ip";
 
 
 function RelTable() {
@@ -39,30 +39,6 @@ function RelTable() {
 		filterOrSortValue
 	) => {
 		switch (optType) {
-			case "search":
-				setOperation(optType);
-				setSortValue("");
-				return await axios
-					.get(
-						`http://localhost:3001/users?q=${value}&_start=${start}&_end=${end}`
-					)
-					.then((response) => {
-						setData(response.data);
-						setCurrentPage(currentPage + increase);
-					})
-					.catch((err) => console.log(err));
-			case "sort":
-				setOperation(optType);
-				setSortFilterValue(filterOrSortValue);
-				return await axios
-					.get(
-						`http://localhost:5000/users?_sort=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
-					)
-					.then((response) => {
-						setData(response.data);
-						setCurrentPage(currentPage + increase);
-					})
-					.catch((err) => console.log(err));
 			case "filter":
 				setOperation(optType);
 				setSortFilterValue(filterOrSortValue);
@@ -77,7 +53,7 @@ function RelTable() {
 					.catch((err) => console.log(err));
 			default:
 				return await axios
-					.get(`http://localhost:3001/pedidos`)
+					.get(ip.backend_ip + 'pedidos')
 					.then((response) => {
 						setData(response.data);
 						setCurrentPage(currentPage + increase);
@@ -86,11 +62,11 @@ function RelTable() {
 		}
 	};
 
-	console.log("data", data);
+
 
 	const handleAceitar = (p) => {
 		return axios
-			.get(`http://localhost:3001/pedidosaceites/` + p)
+			.get(ip.backend_ip + 'pedidosaceites/' + p)
 			.then((response) => {
 				setData(response.data);
 				//setCurrentPage(currentPage + increase);
@@ -100,7 +76,7 @@ function RelTable() {
 
 	const handleRecusar = (p) => {
 		return axios
-			.get(`http://localhost:3001/pedidosrecusados/` + p)
+			.get(ip.backend_ip + 'pedidosrecusados/' + p)
 			.then((response) => {
 				setData(response.data);
 				//setCurrentPage(currentPage + increase);
@@ -108,47 +84,6 @@ function RelTable() {
 			.catch((err) => console.log(err));
 	}
 
-	const handleReset = () => {
-		setOperation("");
-		setValue("");
-		setSortFilterValue("");
-		setSortValue("");
-		loadUsersData(0, 4, 0);
-	};
-	const handleSearch = async (e) => {
-		e.preventDefault();
-		loadUsersData(0, 4, 0, "search");
-		// return await axios
-		//   .get(`http://localhost:5000/users?q=${value}`)
-		//   .then((response) => {
-		//     setData(response.data);
-		//     setValue("");
-		//   })
-		//   .catch((err) => console.log(err));
-	};
-
-	const handleSort = async (e) => {
-		let value = e.target.value;
-		loadUsersData(0, 4, 0, "sort", value);
-		setSortValue(value);
-
-		// return await axios
-		//   .get(`http://localhost:5000/users?_sort=${value}&_order=asc`)
-		//   .then((response) => {
-		//     setData(response.data);
-		//   })
-		//   .catch((err) => console.log(err));
-	};
-
-	const handleFilter = async (value) => {
-		loadUsersData(0, 4, 0, "filter", value);
-		// return await axios
-		//   .get(`http://localhost:5000/users?status=${value}`)
-		//   .then((response) => {
-		//     setData(response.data);
-		//   })
-		//   .catch((err) => console.log(err));
-	};
 
 	const renderPagination = () => {
 		if (data.length < 4 && currentPage === 0) return null;
@@ -159,9 +94,9 @@ function RelTable() {
 						<MDBPaginationLink>1</MDBPaginationLink>
 					</MDBPaginationItem>
 					<MDBPaginationItem>
-						<MDBBtn onClick={() => loadUsersData(4, 8, 1, operation)}>
+						<button onClick={() => loadUsersData(4, 8, 1, operation)}>
 							Next
-						</MDBBtn>
+						</button>
 					</MDBPaginationItem>
 				</MDBPagination>
 			);
@@ -169,7 +104,7 @@ function RelTable() {
 			return (
 				<MDBPagination className="mb-0">
 					<MDBPaginationItem>
-						<MDBBtn
+						<button
 							onClick={() =>
 								loadUsersData(
 									(currentPage - 1) * 4,
@@ -181,14 +116,14 @@ function RelTable() {
 							}
 						>
 							Prev
-						</MDBBtn>
+						</button>
 					</MDBPaginationItem>
 					<MDBPaginationItem>
 						<MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
 					</MDBPaginationItem>
 
 					<MDBPaginationItem>
-						<MDBBtn
+						<button
 							onClick={() =>
 								loadUsersData(
 									(currentPage + 1) * 4,
@@ -200,7 +135,7 @@ function RelTable() {
 							}
 						>
 							Next
-						</MDBBtn>
+						</button>
 					</MDBPaginationItem>
 				</MDBPagination>
 			);
@@ -208,7 +143,7 @@ function RelTable() {
 			return (
 				<MDBPagination className="mb-0">
 					<MDBPaginationItem>
-						<MDBBtn
+						<button
 							onClick={() =>
 								loadUsersData(
 									(currentPage - 1) * 4,
@@ -219,7 +154,7 @@ function RelTable() {
 							}
 						>
 							Prev
-						</MDBBtn>
+						</button>
 					</MDBPaginationItem>
 					<MDBPaginationItem>
 						<MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
@@ -235,25 +170,6 @@ function RelTable() {
 				marginTop: "50px",
 				padding: "20px"
 			}}>
-				{data.length > 0 && (
-					<MDBRow>
-						<MDBCol size="4">
-							<h5>Filter By Status:</h5>
-							<MDBBtnGroup>
-								<MDBBtn color="success" onClick={() => handleFilter("Active")}>
-									Ativos
-								</MDBBtn>
-								<MDBBtn
-									color="danger"
-									style={{ marginLeft: "2px" }}
-									onClick={() => handleFilter("Inactive")}
-								>
-									Encerrados
-								</MDBBtn>
-							</MDBBtnGroup>
-						</MDBCol>
-					</MDBRow>
-				)}
 				<MDBRow>
 					<MDBCol size="12">
 						<MDBTable>
@@ -292,16 +208,6 @@ function RelTable() {
 						</MDBTable>
 					</MDBCol>
 				</MDBRow>
-				<div
-					style={{
-						margin: "auto",
-						padding: "15px",
-						maxWidth: "250px",
-						alignContent: "center",
-					}}
-				>
-					{renderPagination()}
-				</div>
 			</div>
 		</MDBContainer >
 	);

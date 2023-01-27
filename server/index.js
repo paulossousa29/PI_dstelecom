@@ -5,7 +5,7 @@ const cors = require("cors");
 const pool = require("./db");
 
 //middleware
-//app.use(cors());
+app.use(cors());
 app.use(cors({ withCredentials: true }));
 app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
@@ -47,12 +47,73 @@ app.get("/todos", async (req, res) => {
 	console.log("request todos");
 	try {
 		pool.connect();
-		const allTodos = await pool.query("SELECT * FROM equipas");
+		const allTodos = await pool.query("SELECT * FROM equipas;");
 		res.json(allTodos.rows);
 	} catch (err) {
 		console.error(err.message);
 	}
 });
+
+
+
+app.get("/valid/:id", async (req, res) => {
+	const id = req.params.id;
+	try {
+		pool.connect();
+		const relatorio = await pool.query("UPDATE relatorios SET verificar = 1 WHERE id = " + id + ";");
+		const final = await pool.query("SELECT * FROM relatorios WHERE id = " + id + ";");
+		res.json(final.rows);
+	} catch (err) {
+		console.log(err.message);
+	}
+});
+
+
+app.get("/equiRel/:id", async (req, res) => {
+	const id = req.params.id;
+	try {
+		pool.connect();
+		const intervencoes = await pool.query("SELECT id from intervencoes WHERE id_equipa = '" + id + "';");
+		const inter = intervencoes.rows
+		let query = "SELECT * FROM relatorios WHERE id_intervencao = '"
+		let i;
+		for (i = 0; i < inter.length - 1; i++) {
+			query += inter[i].id + "' or id_intervencao = '"
+		}
+		query += inter[i].id + "';"
+		const final = await pool.query(query);
+		res.json(final.rows);
+	} catch (err) {
+		console.log(err.message);
+	}
+});
+
+
+app.get("/relatorio/:id", async (req, res) => {
+	const id = req.params.id;
+	try {
+		pool.connect();
+		const relatorio = await pool.query(
+			"SELECT * FROM relatorios where id=" + id + ";"
+		);
+		res.json(relatorio.rows);
+	} catch (err) {
+		console.log(err.message);
+	}
+});
+
+app.get("/ava", async (req, res) => {
+	console.log("request avaliacao");
+	try {
+		pool.connect();
+		const allAva = await pool.query("SELECT * FROM avaliacoes;");
+		console.log(allAva)
+		res.json(allAva.rows);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
 
 app.get("/equipa/delete/:id/:idEquipa", async (req, res) => {
 	const id = req.params.id;
@@ -62,10 +123,10 @@ app.get("/equipa/delete/:id/:idEquipa", async (req, res) => {
 		pool.connect();
 		await pool.query(
 			"DELETE FROM skill where (id = '" +
-				id +
-				"' AND id_equipa = '" +
-				idEquipa +
-				"');"
+			id +
+			"' AND id_equipa = '" +
+			idEquipa +
+			"');"
 		);
 		const skillUpdate = await pool.query(
 			"SELECT * FROM skill where (id_equipa = '" + idEquipa + "');"
@@ -75,6 +136,7 @@ app.get("/equipa/delete/:id/:idEquipa", async (req, res) => {
 		console.error(err.message);
 	}
 });
+
 
 app.get("/equipa/add/:ap/:idEquipa", async (req, res) => {
 	const ap = req.params.ap;
@@ -89,6 +151,11 @@ app.get("/equipa/add/:ap/:idEquipa", async (req, res) => {
 				"', '" +
 				ap +
 				"');"
+
+			idEquipa +
+			"', '" +
+			ap +
+			"');"
 		);
 		const skillUpdate = await pool.query("SELECT * FROM skill;");
 		//console.log(skillUpdate.rows)
@@ -137,20 +204,94 @@ app.get("/equipa/delete/:id", async (req, res) => {
 		.catch((err) => console.log(err));
 });
 
+
+
+
 app.get("/relatorios", async (req, res) => {
 	console.log("request relatorios");
 	obj = [];
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
-			" SELECT r.id_intervencao, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao;"
+			" SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ;"
 		);
-		console.log(allTodos.rows[0]);
 		res.json(allTodos.rows);
 	} catch (err) {
 		console.error(err.message);
 	}
 });
+
+app.get("/searchrel/:search", async (req, res) => {
+	console.log("request relatorios");
+	const search = req.params.search;
+	try {
+		pool.connect();
+		const allTodos = await pool.query(
+			"SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao WHERE r.id_intervencao LIKE '" + search + "%' OR i.id_equipa LIKE '" + search + "%';"
+		);
+		res.json(allTodos.rows);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.get("/relsort/:sort", async (req, res) => {
+	const sort = req.params.sort;
+	console.log(sort)
+	if (sort == "Data de Início") {
+		try {
+			pool.connect();
+			const allTodos = await pool.query(
+				"SELECT r.id, r.id_intervencao, r.verficar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY r.data_inicio ASC"
+			);
+			console.log(allTodos.rows[0]);
+			res.json(allTodos.rows);
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
+	if (sort == "Data Fim") {
+		try {
+			pool.connect();
+			const allTodos = await pool.query(
+				"SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY r.data_fim ASC"
+
+			);
+			console.log(allTodos.rows[0]);
+			res.json(allTodos.rows);
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
+	if (sort == "Total de Erros") {
+		try {
+			pool.connect();
+			const allTodos = await pool.query(
+				"SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY total_erros ASC"
+			);
+			console.log(allTodos.rows[0]);
+			res.json(allTodos.rows);
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
+	if (sort == "Duração") {
+		try {
+			pool.connect();
+			const allTodos = await pool.query(
+				"SELECT r.id, r.id_intervencao, r.verificar, i.id_equipa, (r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_erros, r.observacoes,r.data_inicio, r.data_fim, r.data_fim - r.data_inicio as duracao FROM relatorios r JOIN intervencoes i ON i.id = r.id_intervencao ORDER BY duracao ASC"
+			);
+			console.log(allTodos.rows[0]);
+			res.json(allTodos.rows);
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
+}
+);
+
+
+
 
 app.post("/access", async (req, res) => {
 	console.log("request access");
@@ -204,30 +345,6 @@ app.post("/element", async (req, res) => {
 	}
 });
 
-app.get("/pedidos", async (req, res) => {
-	console.log("request pedidos");
-	obj = [];
-	try {
-		pool.connect();
-
-		const allTodos = await pool.query(
-			"SELECT * FROM pedidos WHERE estado = 0;"
-		);
-		console.log(allTodos.rows);
-		allTodos.rows.forEach((c) => {
-			obj.push({
-				id_intervencao: c.id_intervencao,
-				estado: "Suspenso",
-				descricao: c.descricao,
-				id: c.id,
-			});
-		});
-
-		res.json(obj);
-	} catch (err) {
-		console.error(err.message);
-	}
-});
 
 app.post("/new_reference", async (req, res) => {
 	console.log("request new reference");
@@ -288,17 +405,74 @@ app.post("/conetor", async (req, res) => {
 		pool.connect();
 
 		query =
-			"SELECT conetor FROM intervencoes WHERE id='" +
+			"SELECT conector FROM intervencoes WHERE id='" +
 			id_intervention +
 			"'";
 
 		const result = await pool.query(query);
 
-		res.json({ connector: result.rows[0].conetor });
+		res.json({ connector: result.rows[0].conector });
 	} catch (err) {
 		console.error(err.messag);
 	}
 });
+
+app.get("/searchstat/:search", async (req, res) => {
+	const search = req.params.search;
+	try {
+		pool.connect();
+		const allTodos = await pool.query(
+			"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id WHERE e.id LIKE '" + search + "%' GROUP BY e.id;"
+		);
+		console.log(allTodos.rows[0]);
+		res.json(allTodos.rows);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
+app.get("/sortstat/:sort", async (req, res) => {
+	const sort = req.params.sort;
+	console.log(sort)
+	if (sort == "Total de Trabalhos") {
+		try {
+			pool.connect();
+			const allTodos = await pool.query(
+				"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id ORDER BY total_jobs ASC;"
+
+			);
+			console.log(allTodos.rows[0]);
+			res.json(allTodos.rows);
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
+	if (sort == "Média de Erros") {
+		try {
+			pool.connect();
+			const allTodos = await pool.query(
+				"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id ORDER BY media_erro ASC;"
+			);
+			console.log(allTodos.rows[0]);
+			res.json(allTodos.rows);
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
+	if (sort == "Média de Tempo") {
+		try {
+			pool.connect();
+			const allTodos = await pool.query(
+				"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id ORDER BY media_tempo ASC ;"
+			);
+			console.log(allTodos.rows[0]);
+			res.json(allTodos.rows);
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
+}
+);
 
 app.get("/stats", async (req, res) => {
 	console.log("request stats");
@@ -306,7 +480,7 @@ app.get("/stats", async (req, res) => {
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
-			"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3) as total_mistakes, (SUM(r.passo_1 + r.passo_3)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id"
+			"SELECT e.id, COUNT(i.id) as total_jobs, SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13) as total_mistakes, (SUM(r.passo_1 + r.passo_3 + r.passo_5 + r.passo_7 + r.passo_9 + r.passo_11 + r.passo_12 +r.passo_13)/COUNT(i.id)) as media_erro, AVG(r.data_fim - r.data_inicio) as media_tempo FROM equipas e JOIN intervencoes i ON i.id_equipa = e.id JOIN relatorios r ON r.id_intervencao = i.id GROUP BY e.id;"
 		);
 		console.log(allTodos.rows);
 		res.json(allTodos.rows);
@@ -320,12 +494,14 @@ app.post("/report", async (req, res) => {
 	console.log(req.body);
 	const {
 		id_intervention,
+		verificar,
 		step_1,
 		step_3,
 		step_5,
 		step_7,
 		step_9,
 		step_11,
+		step_12,
 		step_13,
 		observations,
 		date_start,
@@ -336,9 +512,11 @@ app.post("/report", async (req, res) => {
 		pool.connect();
 
 		query =
-			"INSERT INTO relatorios(id_intervencao, passo_1, passo_3, passo_5, passo_7, passo_9, passo_11, passo_13, observacoes, data_inicio, data_fim) VALUES ('" +
+			"INSERT INTO relatorios(id_intervencao, verificar, passo_1, passo_3, passo_5, passo_7, passo_9, passo_11, passo_12, passo_13, observacoes, data_inicio, data_fim) VALUES ('" +
 			id_intervention +
 			"', " +
+			verificar +
+			", " +
 			step_1 +
 			", " +
 			step_3 +
@@ -350,6 +528,8 @@ app.post("/report", async (req, res) => {
 			step_9 +
 			", " +
 			step_11 +
+			", " +
+			step_12 +
 			", " +
 			step_13 +
 			", '" +
@@ -367,9 +547,40 @@ app.post("/report", async (req, res) => {
 	}
 });
 
+
+app.get("/pedidos", async (req, res) => {
+	console.log("request pedidos");
+	const start = req.params.start;
+	const end = req.params.end;
+	obj = [];
+	try {
+		pool.connect();
+
+		const allTodos = await pool.query(
+			"SELECT * FROM pedidos WHERE estado = 0;"
+		);
+		console.log(allTodos.rows);
+		allTodos.rows.forEach((c) => {
+			obj.push({
+				id_intervencao: c.id_intervencao,
+				estado: "Suspenso",
+				descricao: c.descricao,
+				id: c.id,
+			});
+		});
+
+		res.json(obj);
+	} catch (err) {
+		console.error(err.message);
+	}
+});
+
 app.get("/pedidosaceites/:id", async (req, res) => {
 	console.log("request pedidos aceites");
 	const id = req.params.id;
+
+	obj = [];
+
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
@@ -379,6 +590,15 @@ app.get("/pedidosaceites/:id", async (req, res) => {
 			"SELECT * FROM pedidos WHERE estado = 0;"
 		);
 		res.json(final.rows);
+		final.rows.forEach((c) => {
+			obj.push({
+				id_intervencao: c.id_intervencao,
+				estado: "Suspenso",
+				descricao: c.descricao,
+				id: c.id,
+			});
+		});
+		res.json(obj);
 		console.log(final);
 	} catch (err) {
 		console.error(err.message);
@@ -388,6 +608,11 @@ app.get("/pedidosaceites/:id", async (req, res) => {
 app.get("/pedidosrecusados/:id", async (req, res) => {
 	console.log("request pedidos recusados");
 	const id = req.params.id;
+
+	obj = [];
+	/* const start = req.params.start;
+	const end = req.params.end; */
+
 	try {
 		pool.connect();
 		const allTodos = await pool.query(
@@ -396,7 +621,19 @@ app.get("/pedidosrecusados/:id", async (req, res) => {
 		const final = await pool.query(
 			"SELECT * FROM pedidos WHERE estado = 0;"
 		);
+
 		res.json(final.rows);
+
+		final.rows.forEach((c) => {
+			obj.push({
+				id_intervencao: c.id_intervencao,
+				estado: "Suspenso",
+				descricao: c.descricao,
+				id: c.id,
+			});
+		});
+		res.json(obj);
+
 		console.log(final);
 	} catch (err) {
 		console.error(err.message);
