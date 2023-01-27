@@ -1,21 +1,27 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, Switch } from "react-router-dom";
+import React, { useState } from "react";
 
-import Home from "./pages/Home";
-import Login from "./pages/Login";
+// import Home from "./pages/Home";
+import Main from "./pages/Main";
+import Relatorios from "./pages/Relatorios";
+import Relatorio from "./pages/Relatorio";
+import Estatistica from "./pages/Estatistica";
+import Pendentes from "./pages/Pendentes";
+import Equipa from "./pages/Equipa";
+import Login from "./components/Login";
+import Protected from "./components/Protected";
 
-const App = () => {
+function App() {
+
 	return (
 		<BrowserRouter>
-			<nav>
-				<div>
-					<h1>Hello World</h1>
-					<Link to="/">Página Inicial</Link>
-					<Link to="/login">Login</Link>
-				</div>
-			</nav>
 			<Routes>
-				<Route path="/" element={<Home />} />
-				<Route path="/login" element={<Login />} />
+				<Route exact path="/" element={<Login />} />
+				<Route path="/stats" element={<Protected> <Estatistica /> </Protected>} />
+				<Route exact path="/relatorios" element={<Protected> <Relatorios /> </Protected>} />
+				<Route exact path="/relatorio" element={<Protected>  <Relatorio /> </Protected>} />
+				<Route exact path="/pendentes" element={<Protected> <Pendentes /> </Protected>} />
+				<Route exact path="/equipa" element={<Protected> <Equipa /></Protected>} />
 			</Routes>
 		</BrowserRouter>
 	);
