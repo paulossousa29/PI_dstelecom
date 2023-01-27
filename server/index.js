@@ -5,7 +5,7 @@ const cors = require("cors");
 const pool = require("./db");
 
 //middleware
-//app.use(cors());
+app.use(cors());
 app.use(cors({ withCredentials: true }));
 app.use(express.json()); //req.body
 app.use(express.urlencoded({ extended: false }));
@@ -47,12 +47,13 @@ app.get("/todos", async (req, res) => {
 	console.log("request todos");
 	try {
 		pool.connect();
-		const allTodos = await pool.query("SELECT * FROM equipas");
+		const allTodos = await pool.query("SELECT * FROM equipas;");
 		res.json(allTodos.rows);
 	} catch (err) {
 		console.error(err.message);
 	}
 });
+
 
 app.get("/valid/:id", async (req, res) => {
 	const id = req.params.id;

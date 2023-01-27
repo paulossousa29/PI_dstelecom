@@ -7,12 +7,12 @@ import {
   MDBRow,
   MDBCol,
   MDBContainer,
-  MDBBtn,
-  MDBBtnGroup,
+  buttonGroup,
   MDBPagination,
   MDBPaginationItem,
   MDBPaginationLink,
 } from "mdb-react-ui-kit";
+import ip from "../config/ip";
 
 
 import { useNavigate } from "react-router-dom";
@@ -31,7 +31,7 @@ function StatsTable() {
   const navigate = useNavigate();
 
 
-  const sortOptions = ["Total de Trabalhos", "Média de Erros", "Média de Tempo/Trabalho"];
+  const sortOptions = ["Total de Trabalhos", "Média de Erros", "Média de Tempo"];
 
   useEffect(() => {
     loadUsersData(0, 4, 0);
@@ -49,12 +49,10 @@ function StatsTable() {
         setOperation(optType);
         setSortValue("");
         return await axios
-          .get(
-            `http://localhost:3001/users?q=${value}&_start=${start}&_end=${end}`
-          )
+          .get(ip.backend_ip + 'searchstat/' + value)
           .then((response) => {
             setData(response.data);
-            setCurrentPage(currentPage + increase);
+            //setCurrentPage(currentPage + increase);
           })
           .catch((err) => console.log(err));
       case "sort":
@@ -62,31 +60,19 @@ function StatsTable() {
         setSortFilterValue(filterOrSortValue);
         return await axios
           .get(
-            `http://localhost:5000/users?_sort=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
+            ip.backend_ip + 'sortstat/' + filterOrSortValue
           )
           .then((response) => {
             setData(response.data);
-            setCurrentPage(currentPage + increase);
-          })
-          .catch((err) => console.log(err));
-      case "filter":
-        setOperation(optType);
-        setSortFilterValue(filterOrSortValue);
-        return await axios
-          .get(
-            `http://localhost:5000/users?status=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`
-          )
-          .then((response) => {
-            setData(response.data);
-            setCurrentPage(currentPage + increase);
+            //setCurrentPage(currentPage + increase);
           })
           .catch((err) => console.log(err));
       default:
         return await axios
-          .get(`http://localhost:3001/stats`)
+          .get(ip.backend_ip + 'stats')
           .then((response) => {
             setData(response.data);
-            setCurrentPage(currentPage + increase);
+            //setCurrentPage(currentPage + increase);
           })
           .catch((err) => console.log(err));
     }
@@ -129,7 +115,6 @@ function StatsTable() {
     //   })
     //   .catch((err) => console.log(err));
   };
-
   const handleFilter = async (value) => {
     loadUsersData(0, 4, 0, "filter", value);
     // return await axios
@@ -140,6 +125,41 @@ function StatsTable() {
     //   .catch((err) => console.log(err));
   };
 
+  const horas = (item) => {
+    if (item.media_tempo.hours == null) {
+      item.media_tempo.hours = 0
+    }
+    else {
+      item.media_tempo.hours = item.media_tempo.hours
+    }
+
+
+    if (item.media_tempo.days == null) {
+      item.media_tempo.days = 0
+    }
+    else {
+      item.media_tempo.days = item.media_tempo.days
+    }
+
+    if (item.media_tempo.minutes == null) {
+      item.media_tempo.minutes = 0
+    }
+    else {
+      item.media_tempo.minutes = item.media_tempo.minutes
+    }
+
+    if (item.media_tempo.seconds == null) {
+      item.media_tempo.seconds = 0
+    }
+    else {
+      item.media_tempo.seconds = item.media_tempo.seconds
+    }
+
+
+    return item.media_tempo.days + ' d :' + item.media_tempo.hours + ' h :' + item.media_tempo.minutes + ' min :' + item.media_tempo.seconds + ' s'
+  }
+
+
   const renderPagination = () => {
     if (data.length < 4 && currentPage === 0) return null;
     if (currentPage === 0) {
@@ -149,9 +169,9 @@ function StatsTable() {
             <MDBPaginationLink>1</MDBPaginationLink>
           </MDBPaginationItem>
           <MDBPaginationItem>
-            <MDBBtn onClick={() => loadUsersData(4, 8, 1, operation)}>
+            <button onClick={() => loadUsersData(4, 8, 1, operation)}>
               Next
-            </MDBBtn>
+            </button>
           </MDBPaginationItem>
         </MDBPagination>
       );
@@ -159,7 +179,7 @@ function StatsTable() {
       return (
         <MDBPagination className="mb-0">
           <MDBPaginationItem>
-            <MDBBtn
+            <button
               onClick={() =>
                 loadUsersData(
                   (currentPage - 1) * 4,
@@ -171,14 +191,14 @@ function StatsTable() {
               }
             >
               Prev
-            </MDBBtn>
+            </button>
           </MDBPaginationItem>
           <MDBPaginationItem>
             <MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
           </MDBPaginationItem>
 
           <MDBPaginationItem>
-            <MDBBtn
+            <button
               onClick={() =>
                 loadUsersData(
                   (currentPage + 1) * 4,
@@ -190,7 +210,7 @@ function StatsTable() {
               }
             >
               Next
-            </MDBBtn>
+            </button>
           </MDBPaginationItem>
         </MDBPagination>
       );
@@ -198,7 +218,7 @@ function StatsTable() {
       return (
         <MDBPagination className="mb-0">
           <MDBPaginationItem>
-            <MDBBtn
+            <button
               onClick={() =>
                 loadUsersData(
                   (currentPage - 1) * 4,
@@ -209,7 +229,7 @@ function StatsTable() {
               }
             >
               Prev
-            </MDBBtn>
+            </button>
           </MDBPaginationItem>
           <MDBPaginationItem>
             <MDBPaginationLink>{currentPage + 1}</MDBPaginationLink>
@@ -240,13 +260,14 @@ function StatsTable() {
           onChange={(e) => setValue(e.target.value)}
         />
         <div class='parent'>
-          <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" type="submit" color="light">
-            Search
-          </button>
-          <button style={{ borderRadius: "12px", backgroundColor: "gray" }} className="child" color="info" onClick={() => handleReset()}>
-            Reset
-          </button>
-
+          <div className="row">
+            <div className="col">
+              <button icon="fas fa-sign-out-alt" type="submit" className="child btn btn-outline-dark"> Pesquisar </button>
+            </div>
+            <div className="col">
+              <button icon="fas fa-sign-out-alt" className="child btn btn-outline-dark" onClick={() => handleReset()}> Reset </button>
+            </div>
+          </div>
         </div>
       </form>
       <div style={{
@@ -289,7 +310,7 @@ function StatsTable() {
                 <MDBTableBody className="align-center mb-0">
                   <tr>
                     <td colSpan={8} className="text-center mb-0">
-                      No Data Found
+                      Sem dados encontrados
                     </td>
                   </tr>
                 </MDBTableBody>
@@ -302,7 +323,7 @@ function StatsTable() {
                       <td>{item.total_jobs}</td>
                       <td>{item.total_mistakes}</td>
                       <td>{item.media_erro}</td>
-                      <td>{item.media_tempo.hours}:{item.media_tempo.minutes}:{item.media_tempo.seconds} </td>
+                      <td>{horas(item)} </td>
                       <button icon="fas fa-sign-out-alt" type="button" class="btn btn-outline-dark" onClick={() => handleConsulta(item.id)}> Consultar Equipa </button>
                     </tr>
                   </MDBTableBody>
@@ -319,7 +340,6 @@ function StatsTable() {
             alignContent: "center",
           }}
         >
-          {renderPagination()}
         </div>
       </div>
     </MDBContainer >

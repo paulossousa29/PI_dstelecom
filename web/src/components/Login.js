@@ -5,6 +5,7 @@ import logo from "../assets/dstelecomlogo.png";
 
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import ip from "../config/ip";
 
 
 
@@ -19,7 +20,7 @@ const Login = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		axios
-			.post("http://localhost:3001/login", {
+			.post(ip.backend_ip + "login", {
 				headers: { "Accept": "application/json, text/plain, /", "Content-Type": "application/json" },
 				username: values.username,
 				password: values.pass,
