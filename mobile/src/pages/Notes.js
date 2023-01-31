@@ -22,6 +22,7 @@ const Notes = ({route, navigation}) => {
     step7,
     step9,
     step11,
+    step12,
     step13,
   } = route.params;
   const [notes, setNotes] = useState(null);
@@ -42,6 +43,7 @@ const Notes = ({route, navigation}) => {
 
             await axios.post(ip.backend_ip + 'report', {
               id_intervention: intervention,
+              verificar: 0,
               observations: notes,
               step_1: step1 ? 1 : 0,
               step_3: step3 ? 1 : 0,
@@ -49,6 +51,7 @@ const Notes = ({route, navigation}) => {
               step_7: step7 ? 1 : 0,
               step_9: step9 ? 1 : 0,
               step_11: step11 ? 1 : 0,
+              step_12: step12 ? 1 : 0,
               step_13: step13 ? 1 : 0,
               date_start: startDate,
               date_end:

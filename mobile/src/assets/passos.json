@@ -2,7 +2,7 @@
   "1": "Identificar a referencia do PDO e verificar se coincide com a ordem de trabalho",
   "2": "Verificar a disponibilidade do conetor ",
   "3": "Medir a potencia ótica no conetor",
-  "4": "Identificar o slot para a saída do cabo de drop",
+  "4": "Verificar o slot para a saída do cabo de drop",
   "5": "Passar o cabo de drop pelo slot",
   "6": "Identificar o comprimento do cabo a utilizar",
   "7": "Identificar o tabuleiro verde para fusão",

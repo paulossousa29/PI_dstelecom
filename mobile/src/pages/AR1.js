@@ -8,25 +8,16 @@ import SceneAR from '../scenes/SceneAR';
 import colors from '../config/colors';
 import ip from '../config/ip';
 
-const AR = ({route, navigation}) => {
-  const {intervention, username} = route.params;
-  const [startDate, setStartDate] = useState(new Date());
-  const [step1Result, setStep1Result] = useState(null);
-  const [step3Result, setStep3Result] = useState(null);
-  const [step5Result, setStep5Result] = useState(null);
-  const [step7Result, setStep7Result] = useState(null);
-  const [step9Result, setStep9Result] = useState(null);
-  const [step11Result, setStep11Result] = useState(null);
-  const [step13Result, setStep13Result] = useState(null);
-  const [step, setStep] = useState(1);
+const AR1 = ({route, navigation}) => {
+  const {intervention, startDate} = route.params;
 
-  const fetchAccess = async () => {
+  const fetchElement = async () => {
     try {
-      const res = await axios.post(ip.backend_ip + 'access', {
+      const res = await axios.post(ip.backend_ip + 'element', {
         intervention: intervention,
       });
 
-      return res.data.access;
+      return res.data.element;
     } catch (error) {
       console.log(error.message);
     }
@@ -34,6 +25,8 @@ const AR = ({route, navigation}) => {
 
   const fetchAI = async image => {
     const imageData = new FormData();
+
+    imageData.append('step', 1);
     imageData.append('image', {
       uri: image.assets[0].uri,
       type: 'image/jpeg',
@@ -47,75 +40,55 @@ const AR = ({route, navigation}) => {
         },
       });
 
-      return res.data;
+      return res;
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleNextStep = async () => {
-    if (step % 2 === 1) {
-      const image = await launchCamera();
+    const image = await launchCamera();
+    if (image.didCancel) return;
 
-      if (image.didCancel) return;
-
-      res = await fetchAI(image);
-      console.log(res);
-      res = true;
-
-      if (step === 1) {
-        access = await fetchAccess();
-
-        compare = false;
-
-        if (compare) {
-          setStep1Result(true);
-        } else {
-          navigation.push('NewReference', {intervention: intervention});
-        }
-      } else if (step === 3) {
-        setStep3Result(res);
-      } else if (step === 5) {
-        setStep5Result(res);
-      } else if (step === 7) {
-        setStep7Result(res);
-      } else if (step === 9) {
-        setStep9Result(res);
-      } else if (step === 11) {
-        setStep11Result(res);
-      } else if (step === 13) {
-        setStep13Result(res);
-
-        var pad = function (num) {
-          return ('00' + num).slice(-2);
-        };
-
-        navigation.push('Notes', {
-          intervention: intervention,
-          startDate:
-            startDate.getUTCFullYear() +
-            '-' +
-            pad(startDate.getUTCMonth() + 1) +
-            '-' +
-            pad(startDate.getUTCDate()) +
-            ' ' +
-            pad(startDate.getUTCHours()) +
-            ':' +
-            pad(startDate.getUTCMinutes()) +
-            ':' +
-            pad(startDate.getUTCSeconds()),
-          step1: step1Result,
-          step3: step3Result,
-          step5: step5Result,
-          step7: step7Result,
-          step9: step9Result,
-          step11: step11Result,
-          step13: step13Result,
-        });
-      }
+    res = await fetchAI(image);
+    if (res === undefined) {
+      Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancelar'}]);
+      return;
+    }
+    if (res.status !== 200) {
+      Alert.alert('Erro', 'Problemas de Rede', [{text: 'Cancelar'}]);
+      return;
+    }
+    if (res.data.error) {
+      Alert.alert('Erro', res.data.error, [{text: 'Cancelar'}]);
+      return;
     }
 
-    setStep(step + 1);
+    const element = await fetchElement();
+
+    if (!(element === res.data.element)) {
+      Alert.alert(
+        'Referência de Elemento Errada',
+        'Poderá pedir ao administrador para mudar de elemento',
+        [{text: 'Continuar'}],
+      );
+      navigation.push('NewReference', {
+        intervention: intervention,
+        startDate: startDate,
+        element: res.data.element,
+      });
+    } else {
+      Alert.alert(
+        'Referência de Elemento Reconhecida',
+        'Poderá avançar para o processo de intervenção',
+        [{text: 'Continuar'}],
+      );
+      navigation.push('AR2', {
+        intervention: intervention,
+        startDate: startDate,
+        step1: true,
+      });
+    }
   };
 
   const handleQuit = () => {
@@ -125,7 +98,7 @@ const AR = ({route, navigation}) => {
       },
       {
         text: 'Sair',
-        onPress: () => navigation.pop(),
+        onPress: () => navigation.popToTop(),
       },
     ]);
   };
@@ -135,17 +108,13 @@ const AR = ({route, navigation}) => {
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{scene: SceneAR}}
-        viroAppProps={{step: step}}
+        viroAppProps={{step: 1, uriDrop: 'empty', uriConnector: 'empty'}}
         style={styles.ar}
       />
       <View style={styles.controls}>
-        <Text style={styles.text}>Passo {step}/13</Text>
+        <Text style={styles.text}>Passo 1/14</Text>
         <TouchableOpacity style={styles.button} onPress={handleNextStep}>
-          {step < 13 ? (
-            <Text style={styles.buttonText}>Próximo Passo</Text>
-          ) : (
-            <Text style={styles.buttonText}>Concluir</Text>
-          )}
+          <Text style={styles.buttonText}>Próximo Passo</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonQuit} onPress={handleQuit}>
           <Text style={styles.buttonText}>Sair</Text>
@@ -155,7 +124,7 @@ const AR = ({route, navigation}) => {
   );
 };
 
-export default AR;
+export default AR1;
 
 const styles = StyleSheet.create({
   container: {

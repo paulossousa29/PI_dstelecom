@@ -13,8 +13,8 @@ import ip from '../config/ip';
 import axios from 'axios';
 
 const NewReference = ({route, navigation}) => {
-  const {intervention} = route.params;
-  const [reference, setReference] = useState('mudar depois');
+  const {intervention, startDate, element} = route.params;
+  const [reference, setReference] = useState(element);
   const [errorMsgRef, setErrorMsgRef] = useState(null);
   const invalid = [null, ''];
 
@@ -25,7 +25,7 @@ const NewReference = ({route, navigation}) => {
         description: reference,
       });
 
-      return res.status === 200;
+      return res;
     } catch (err) {
       console.log(err.message);
     }
@@ -34,10 +34,15 @@ const NewReference = ({route, navigation}) => {
   const validationRef = async () => {
     if (!invalid.includes(reference)) {
       setReference(null);
-      const status = await fetchNewReference();
+      const res = await fetchNewReference();
 
-      if (status) {
-        navigation.push('ResultReference', {intervention: intervention});
+      if (res === undefined) {
+        setErrorMsgRef('Erro de Rede. Tente outra vez!');
+      } else if (res.status === 200) {
+        navigation.push('ResultReference', {
+          intervention: intervention,
+          startDate: startDate,
+        });
       }
     } else {
       setErrorMsgRef('Necessário o nº da referência');
@@ -70,9 +75,7 @@ const NewReference = ({route, navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.logoutButton}
-          onPress={() => {
-            navigation.pop();
-          }}>
+          onPress={() => navigation.popToTop()}>
           <Text style={styles.buttonText}>Cancelar</Text>
         </TouchableOpacity>
       </View>
