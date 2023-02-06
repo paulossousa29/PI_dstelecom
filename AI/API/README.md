@@ -1,7 +1,6 @@
 Rotas de acesso à API:
-    - GET https://api-dst.herokuapp.com/detect -> Devolve um JSON com uma descrição dos modelos existentes na API.
-    - POST https://api-dst.herokuapp.com/detect -> Utilizada para enviar uma imagem à API. No body deste POST deve ser incluída a imagem,
-    a indicação do passo em que se está no trabalho, e se necessário o conector que se pretende identificar.
+* GET https://api-dst.herokuapp.com/detect -> Devolve um JSON com uma descrição dos modelos existentes na API.
+* POST https://api-dst.herokuapp.com/detect -> Utilizada para enviar uma imagem à API. No body deste POST deve ser incluída a imagem, a indicação do passo em que se está no trabalho, e se necessário o conector que se pretende identificar.
     
 Ficheiros mais importantes:
     - main.py: Ficheiro responsável por iniciar a execução de todo o código que diz respeito à API.
