@@ -29,6 +29,8 @@ models = db.getModels()
 models_info = db.getModelsInfo()
 
 # vars globais
+# Aqui a API está a ser preparada para receber uma imagem, o passo em que se está e possivelmente a indicação do drop ou do conector a serem processados.
+# Estes parâmetros serão enviados através de um POST.
 parser = api.parser()
 parser.add_argument('image', type=FileStorage, location='files', required=True)
 parser.add_argument('step', type=int, required=True)
@@ -36,7 +38,7 @@ parser.add_argument('connector', type=int)
 parser.add_argument('drop', type=int)
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 
-
+# Cálculo do centro de uma caixa específica
 def box_center(box):
     xmin = box[0]
     ymin = box[1]
@@ -48,7 +50,8 @@ def box_center(box):
 
     return xmin + center_x, ymin + center_y
 
-
+# Função que devolve o id do drop a utilizar. Este id será utilizado para aceder à caixa de referência do grid dos drops.
+# A função recebe uma caixa específica do grid (grid_box), e também as deteções reais executadas na imagem recebida (values). 
 def getDropId(grid_box, values):
     count = 0
     min_id = None
@@ -71,7 +74,8 @@ def getDropId(grid_box, values):
 
     return min_id
 
-
+# Função que devolve o id do conector a utilizar. Este id será utilizado para aceder à caixa de referência do grid dos conectores.
+# A função recebe uma caixa específica do grid (grid_box), e também as deteções reais executadas na imagem recebida (values). 
 def getConectorId(grid_box, values):
     count = 0
     min_id = None
@@ -94,7 +98,7 @@ def getConectorId(grid_box, values):
 
     return min_id
 
-
+# Conversor de uma imagem para o formato uri
 def pil2datauri(img):
     # converts PIL image to datauri
     data = BytesIO()
@@ -102,7 +106,7 @@ def pil2datauri(img):
     data64 = base64.b64encode(data.getvalue())
     return u'data:img/jpeg;base64,'+data64.decode('utf-8')
 
-
+# Função que verifica qual é o primeiro drop que está disponível (seguindo a ordem específica dos drops).
 def getFirstAvailableDrop(grid, values):
 
  for grid_box in grid:
@@ -115,6 +119,7 @@ def getFirstAvailableDrop(grid, values):
   if label == 'DropLivre':
     return np.append(row, [num_drop], axis=0)
 
+# Função que verifica se o drop com o número 'num_drop' está ocupado. Retorna true caso esteja ocupado, e falso caso contrário.
 def verifyOcupationDrop(num_drop, grid, values):
   grid_box = grid[num_drop-1]
   box_list = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
@@ -127,6 +132,7 @@ def verifyOcupationDrop(num_drop, grid, values):
   
   return label == 'DropOcupado'
 
+# Função que verifica se o conector com o número 'num_connector' está ocupado. Retorna true caso esteja ocupado, e falso caso contrário.
 def verifyOcupationConnector(num_connector, grid, values):
   grid_box = grid[num_connector-1]
   box_list = [grid_box['xmin'], grid_box['ymin'], grid_box['xmax'], grid_box['ymax']]
@@ -139,6 +145,7 @@ def verifyOcupationConnector(num_connector, grid, values):
   
   return label == 'ConectorOcupado'
 
+# Função que verifica qual é a cor que mais aparece numa imagem.
 def most_common_used_color(img):
     # Get width and height of Image
     width, height = img.size
@@ -163,6 +170,7 @@ def most_common_used_color(img):
  
     return (r_total/count, g_total/count, b_total/count)
 
+# Verifica qual é a cor mais próxima da cor fornecida.
 def closest_colour(requested_colour):
     min_colours = {}
     for key, name in webcolors.CSS3_HEX_TO_NAMES.items():
@@ -173,6 +181,7 @@ def closest_colour(requested_colour):
         min_colours[(rd + gd + bd)] = name
     return min_colours[min(min_colours.keys())]
 
+# Devolve o nome de uma certa cor. É fornecida à função essa cor em formato RGB.
 def get_colour_name(requested_colour):
     try:
         closest_name = actual_name = webcolors.rgb_to_name(requested_colour)
