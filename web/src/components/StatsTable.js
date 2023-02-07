@@ -100,13 +100,6 @@ function StatsTable() {
     let value = e.target.value;
     loadUsersData(0, 4, 0, "sort", value);
     setSortValue(value);
-
-    // return await axios
-    //   .get(`http://localhost:5000/users?_sort=${value}&_order=asc`)
-    //   .then((response) => {
-    //     setData(response.data);
-    //   })
-    //   .catch((err) => console.log(err));
   };
   const handleFilter = async (value) => {
     loadUsersData(0, 4, 0, "filter", value);
