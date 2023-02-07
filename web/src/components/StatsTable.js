@@ -94,13 +94,6 @@ function StatsTable() {
   const handleSearch = async (e) => {
     e.preventDefault();
     loadUsersData(0, 4, 0, "search");
-    // return await axios
-    //   .get(`http://localhost:5000/users?q=${value}`)
-    //   .then((response) => {
-    //     setData(response.data);
-    //     setValue("");
-    //   })
-    //   .catch((err) => console.log(err));
   };
 
   const handleSort = async (e) => {
